@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -38,6 +38,10 @@ const PlainText = ({
 	setValue,
 	onPress,
 }: PlainTextProps) => {
+	useEffect(() => {
+		console.warn(selected);
+	}, [selected]);
+
 	let [checked, setChecked] = useState(selected);
 	const onRadioPress = () => {
 		setChecked(!checked);

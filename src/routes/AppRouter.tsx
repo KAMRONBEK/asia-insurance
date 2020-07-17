@@ -17,12 +17,12 @@ const AppRouter = () => {
 			<NavigationContainer ref={navigationRef}>
 				<CustomDrawer>
 					<Stack.Navigator headerMode="none">
-						{/* {!isAuthenticated && (
+						{!isAuthenticated && (
 							<Stack.Screen
 								name={SCREENS.auth}
 								component={AuthStack}
 							/>
-						)} */}
+						)}
 						<Stack.Screen
 							name={SCREENS.tabs}
 							component={MainTabs}

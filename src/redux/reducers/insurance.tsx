@@ -2,6 +2,7 @@ import {
 	SET_INSURANCE_DATA,
 	SET_CURRENT_STEP,
 	REMOVE_INSURANCE_DATA,
+	SET_INSURANCE_COST,
 } from "../types";
 
 const initialState = {
@@ -19,6 +20,7 @@ const initialState = {
 		insuredPerson: {},
 	},
 	currentStep: 1,
+	cost: 0,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -46,7 +48,11 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				currentStep: payload,
 			};
-
+		case SET_INSURANCE_COST:
+			return {
+				...state,
+				cost: payload,
+			};
 		default:
 			return state;
 	}

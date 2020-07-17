@@ -16,19 +16,24 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 interface ImageUploadCardProps {
 	name: string;
+	data: never[];
+	setData: any;
 }
 
-const ImageUploadCard = ({ name }: ImageUploadCardProps) => {
+const ImageUploadCard = ({ name, data, setData }: ImageUploadCardProps) => {
 	let [images, setImages] = useState();
 	let [fileName, setFileName] = useState(name);
 
 	const onCameraPress = () => {
 		ImagePicker.openPicker({
 			multiple: true,
-		}).then((images) => {
-			// console.log(images);
-			setImages(images);
-		});
+		})
+			.then((images) => {
+				// console.log(images);
+				setImages(images);
+				setData([...data, { passport: images }]);
+			})
+			.catch((err) => console.warn(err));
 	};
 
 	return (

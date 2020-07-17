@@ -2,6 +2,14 @@ import LocalizedStrings from "react-native-localization";
 
 export let strings = new LocalizedStrings({
 	ru: {
+		deliveryType: "Способ получения",
+		availableViolance: "Наличие страх.случаев",
+		relative: "Родственник",
+		metric: "Метрика/Свидетельство о браке",
+		attorneyPower: "Доверенность",
+		driverLicense: "Водительское удостоверение (2 стороны)",
+		relativePassport: "Паспорт родственника",
+		driverPassport: "Паспорт водителя",
 		ru: "Русский ",
 		uz: "O`zbek",
 		sliderText1: "Страхование ВЗР\n и что это такое",

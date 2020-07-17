@@ -18,6 +18,7 @@ interface InputProps {
 	iconColor?: string;
 	textColor?: string;
 	onSubmit: any;
+	setValue: any;
 }
 
 const Input = ({
@@ -29,6 +30,7 @@ const Input = ({
 	iconColor,
 	textColor,
 	onSubmit,
+	setValue,
 }: InputProps) => {
 	let [text, setText] = useState("");
 	return (
@@ -56,10 +58,15 @@ const Input = ({
 				]}
 				onChangeText={(text) => {
 					setText(text);
+					if (!!setValue) {
+						setValue(text);
+					}
 				}}
 				onSubmitEditing={() => {
 					if (!!text) {
-						onSubmit(text);
+						if (!!onSubmit) {
+							onSubmit(text);
+						}
 					}
 				}}
 			/>

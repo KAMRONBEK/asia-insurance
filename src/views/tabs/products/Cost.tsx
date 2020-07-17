@@ -15,8 +15,9 @@ import Text from "../../../components/common/Text";
 import RoundButton from "../../../components/common/RoundButton";
 import { connect } from "react-redux";
 import { isEmpty, extractTariffs } from "../../../utils/functions";
+import { setInsuranceCost } from "../../../redux/actions";
 
-const Cost = ({ navigation, route, osago, vzr }) => {
+const Cost = ({ navigation, route, osago, vzr, setInsuranceCost }) => {
 	let [loading, setLoading] = useState(true);
 	let { insuranceType } = route.params;
 
@@ -34,6 +35,9 @@ const Cost = ({ navigation, route, osago, vzr }) => {
 	useEffect(() => {
 		setCost(osagoTariff * 40000000);
 		setCostDiscounted(
+			osagoTariff * 40000000 * osago.privilege.availablePrivilege.tariff
+		);
+		setInsuranceCost(
 			osagoTariff * 40000000 * osago.privilege.availablePrivilege.tariff
 		);
 
@@ -206,6 +210,8 @@ const mapStateToProps = ({ insurance: { osago, vzr } }) => ({
 	vzr,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	setInsuranceCost,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cost);

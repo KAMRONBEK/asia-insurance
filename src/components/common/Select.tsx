@@ -16,6 +16,7 @@ interface SelectProps {
 	options: { label: string; value: string }[];
 	icon?: string;
 	placeholder: string;
+	selectValue: any;
 }
 
 const Select = ({
@@ -24,12 +25,16 @@ const Select = ({
 	options,
 	icon,
 	placeholder,
+	selectValue,
 }: SelectProps) => {
 	let [value, setValue] = useState("");
 	let [containerWidth, setContainerWidth] = useState(0);
 	return (
 		<RNPickerSelect
-			onValueChange={(value) => setValue(value)}
+			onValueChange={(value) => {
+				selectValue(value);
+				setValue(value);
+			}}
 			items={options}
 			Icon={() => {}}
 		>
