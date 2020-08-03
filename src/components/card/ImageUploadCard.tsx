@@ -21,16 +21,27 @@ interface ImageUploadCardProps {
 }
 
 const ImageUploadCard = ({ name, data, setData }: ImageUploadCardProps) => {
-	let [images, setImages] = useState();
+	let [images, setImages] = useState([]);
 	let [fileName, setFileName] = useState(name);
 
 	const onCameraPress = () => {
 		ImagePicker.openPicker({
 			multiple: true,
 		})
-			.then((images) => {
-				// console.log(images);
-				setImages(images);
+			.then((pictures) => {
+				console.log(pictures);
+				setImages([...pictures, ...images]);
+				setData([...data, { passport: pictures }]);
+			})
+			.catch((err) => console.warn(err));
+	};
+	const onChoosePress = () => {
+		ImagePicker.openCamera({
+			multiple: true,
+		})
+			.then((picture) => {
+				console.log(picture);
+				setImages([picture, ...images]);
 				setData([...data, { passport: images }]);
 			})
 			.catch((err) => console.warn(err));
@@ -38,17 +49,34 @@ const ImageUploadCard = ({ name, data, setData }: ImageUploadCardProps) => {
 
 	return (
 		<View style={styles.container}>
-			<TouchableWithoutFeedback onPress={onCameraPress}>
-				<View style={styles.row}>
+			<View style={styles.row}>
+				<View
+					style={[
+						{
+							flex: 1,
+							flexDirection: "row",
+							justifyContent: "space-between",
+							alignItems: "center",
+						},
+					]}
+				>
 					<Text style={styles.title}>{fileName}</Text>
-					<Icons
-						name="camera-sick"
-						color={colors.darkBlue}
-						size={40}
-					/>
-				</View>
-			</TouchableWithoutFeedback>
 
+					<TouchableWithoutFeedback onPress={onCameraPress}>
+						<Icons name="form" color={colors.darkBlue} size={28} />
+					</TouchableWithoutFeedback>
+				</View>
+				<TouchableWithoutFeedback onPress={onChoosePress}>
+					<Icons
+						name="camera"
+						color={colors.darkBlue}
+						size={25}
+						style={{
+							paddingLeft: 10,
+						}}
+					/>
+				</TouchableWithoutFeedback>
+			</View>
 			{images && (
 				<View
 					style={[
@@ -62,25 +90,26 @@ const ImageUploadCard = ({ name, data, setData }: ImageUploadCardProps) => {
 						},
 					]}
 				>
-					{images.map((item, index) => {
-						if (index <= 1) {
-							return (
-								<Image
-									source={{
-										uri: item.path,
-									}}
-									style={[
-										styles.image,
-										images.length == 1 && {
-											height: 150,
-											width: 300,
-											resizeMode: "contain",
-										},
-									]}
-								/>
-							);
-						}
-					})}
+					{images.length > 0 &&
+						images.map((item, index) => {
+							if (index <= 1) {
+								return (
+									<Image
+										source={{
+											uri: item.path,
+										}}
+										style={[
+											styles.image,
+											images.length == 1 && {
+												height: 150,
+												width: 300,
+												resizeMode: "contain",
+											},
+										]}
+									/>
+								);
+							}
+						})}
 				</View>
 			)}
 		</View>
@@ -93,15 +122,16 @@ const styles = StyleSheet.create({
 		borderRadius: BORDER_RADIUS,
 		padding: CONTAINER_PADDING,
 		marginTop: 20,
+		flex: 1,
 	},
 	row: {
+		flex: 1,
 		flexDirection: "row",
-		justifyContent: "space-between",
 		alignItems: "center",
 	},
 	title: {
 		fontSize: 16,
-		maxWidth: deviceWidth * 0.7,
+		maxWidth: deviceWidth * 0.6,
 	},
 	image: {
 		height: 100,

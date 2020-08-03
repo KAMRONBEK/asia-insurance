@@ -64,7 +64,7 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 						paddingBottom: 80,
 					}}
 					showsVerticalScrollIndicator={false}
-					style={{}}
+					style={{ flex: 1 }}
 				>
 					<ImageUploadCard
 						name={strings.applicantsPassport}

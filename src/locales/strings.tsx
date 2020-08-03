@@ -2,6 +2,17 @@ import LocalizedStrings from "react-native-localization";
 
 export let strings = new LocalizedStrings({
 	ru: {
+		loadingRequests: "Загрузка запросов на помощь",
+		waitingHelp: "В ожидании",
+		helped: "Помощь найдена",
+		requestSent: "Ваш запрос был успешно отправлен",
+		loadingNews: "Загрузка новостей",
+		loading: "Загрузка данных",
+		wrongPin: "Неверный пин-код",
+		askForCode: "Запросить новый код",
+		enterPinInfo:
+			"Введите пин-код, содержащий уникальную комбинацию из 4 цифр",
+		enterPin: "Введите пин-код",
 		deliveryType: "Способ получения",
 		availableViolance: "Наличие страх.случаев",
 		relative: "Родственник",

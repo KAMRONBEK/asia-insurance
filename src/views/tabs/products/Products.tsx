@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	StatusBar,
@@ -12,6 +12,7 @@ import {
 	CONTAINER_PADDING,
 	SCREENS,
 	aboutDatas,
+	deviceWidth,
 } from "../../../constants";
 import { strings } from "../../../locales/strings";
 import Card from "../../../components/card/Card";
@@ -19,6 +20,9 @@ import images from "../../../assets/images";
 import Text from "../../../components/common/Text";
 import NewsCard from "../../../components/card/NewsCard";
 import { navigate } from "../../../utils/NavigationService";
+import { requests } from "../../../api/requests";
+import { hideLoading, showLoading } from "../../../redux/actions";
+import { connect } from "react-redux";
 
 //example
 const newsList = [
@@ -48,11 +52,28 @@ const newsList = [
 	},
 ];
 
-const Products = ({ navigation }) => {
+const Products = ({ navigation, hideLoading, showLoading }) => {
+	let [newsList, setNewsList] = useState([]);
+
 	useEffect(() => {
 		StatusBar.setBarStyle("light-content");
 		StatusBar.setBackgroundColor(colors.darkBlue);
 	}, [navigation]);
+
+	const bootstrap = async () => {
+		try {
+			let res = await requests.news.newsList();
+			setNewsList(res.data.data);
+		} catch (error) {
+			console.log(error.response.message);
+		} finally {
+			hideLoading();
+		}
+	};
+
+	useEffect(() => {
+		bootstrap();
+	}, []);
 
 	const onCarPress = () => {
 		navigation.navigate(SCREENS.aboutInsurance, {
@@ -64,11 +85,15 @@ const Products = ({ navigation }) => {
 		navigation.navigate(SCREENS.aboutInsurance, { data: aboutDatas[1] });
 	};
 
-	const onNewsPress = () => {
+	const onNewsPress = (id) => {
+		showLoading(strings.loadingNews);
 		navigate(SCREENS.tabs, {
 			name: SCREENS.productsStack,
 			params: {
 				screen: SCREENS.news,
+				params: {
+					id: id,
+				},
 			},
 		});
 	};
@@ -110,12 +135,16 @@ const Products = ({ navigation }) => {
 				</Text>
 			</View>
 			<FlatList
+				pagingEnabled={true}
+				scrollEventThrottle={1}
 				contentContainerStyle={styles.newsWrapper}
+				snapToInterval={deviceWidth - 3 * CONTAINER_PADDING}
+				snapToAlignment="start"
 				data={newsList}
 				renderItem={({ item }) => (
 					<NewsCard
 						item={item}
-						onPress={onNewsPress}
+						onPress={() => onNewsPress(item.id)}
 						navigation={navigation}
 					/>
 				)}
@@ -166,4 +195,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Products;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+	hideLoading,
+	showLoading,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

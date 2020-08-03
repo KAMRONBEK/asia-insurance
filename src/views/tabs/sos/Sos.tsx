@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { strings } from "../../../locales/strings";
@@ -10,13 +10,16 @@ import {
 } from "../../../constants";
 import Touchable from "../../../components/common/Touchable";
 import HelpCard from "../../../components/card/HelpCard";
+import { showLoading, hideLoading } from "../../../redux/actions";
+import { connect } from "react-redux";
+import { requests } from "../../../api/requests";
 
 const helpList = [
 	{
 		title: "Дмитрий",
 		content:
 			"Проколол колесо, а запаски нет. Нахожусь около Алтайского рынка, вдоль дороги. Серая BMW,	01 H 570 GB.  Разбалтовка 5х120, диагональ минимум 19 дюймов",
-		status: "В ожидании",
+		status: "0",
 		time: "17:35",
 		date: "09.05.2020",
 	},
@@ -25,7 +28,7 @@ const helpList = [
 		title: "Дмитрий",
 		content:
 			"Проколол колесо, а запаски нет. Нахожусь около Алтайского рынка, вдоль дороги. Серая BMW,	01 H 570 GB.  Разбалтовка 5х120, диагональ минимум 19 дюймов",
-		status: "Помощь найдена",
+		status: "1",
 		time: "17:35",
 		date: "09.05.2020",
 		buttonText: strings.respondToHelp,
@@ -38,7 +41,7 @@ const helpList = [
 		title: "Дмитрий",
 		content:
 			"Проколол колесо, а запаски нет. Нахожусь около Алтайского рынка, вдоль дороги. Серая BMW,	01 H 570 GB.  Разбалтовка 5х120, диагональ минимум 19 дюймов",
-		status: "Помощь найдена",
+		status: "1",
 		time: "17:35",
 		date: "09.05.2020",
 		buttonText: strings.respondToHelp,
@@ -73,58 +76,96 @@ const helpedList = [
 	},
 ];
 
-const FirstTab = () => (
-	<View style={styles.content}>
-		<FlatList
-			showsVerticalScrollIndicator={false}
-			contentContainerStyle={styles.cardWrapper}
-			data={helpList}
-			renderItem={({ item }) => (
-				<HelpCard
-					onPress={item.onPress}
-					title={item.title}
-					content={item.content}
-					status={item.status}
-					time={item.time}
-					date={item.date}
-					buttonText={item.buttonText || ""}
-					// buttonBackColor={item.buttonBackColor || ""}
-					// buttonTextColor={item.buttonTextColor || ""}
-					// buttonBorderColor={item.buttonBorderColor || ""}
-					number={item.number}
-					helperId={item.helperId || ""}
-				/>
-			)}
-		/>
-	</View>
-);
+const Sos = ({ navigation, showLoading, hideLoading }) => {
+	let [myRequestsList, setMyRequestList] = useState([]);
 
-const SecondTab = () => (
-	<View style={styles.content}>
-		<FlatList
-			showsVerticalScrollIndicator={false}
-			contentContainerStyle={styles.cardWrapper}
-			data={helpedList}
-			renderItem={({ item }) => (
-				<HelpCard
-					onPress={item.onPress}
-					title={item.title}
-					content={item.content}
-					status={item.status}
-					time={item.time}
-					date={item.date}
-					buttonText={item.buttonText || ""}
-					buttonBackColor={item.buttonBackColor || ""}
-					buttonTextColor={item.buttonTextColor || ""}
-					buttonBorderColor={item.buttonBorderColor || ""}
-					helperId={item.helperId || ""}
-				/>
-			)}
-		/>
-	</View>
-);
+	const bootstrap = async () => {
+		try {
+			let res = await requests.help.myRequests();
+			console.log(res.data.data);
+			setMyRequestList(res.data.data);
+		} catch (error) {
+			console.log(error.response);
+		} finally {
+			hideLoading();
+		}
+	};
 
-const Sos = ({ navigation }) => {
+	useEffect(() => {
+		showLoading(strings.loadingRequests);
+		bootstrap();
+	}, []);
+
+	const FirstTab = () => (
+		<View style={styles.content}>
+			<FlatList
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={styles.cardWrapper}
+				data={helpList}
+				keyExtractor={(e) => e.toString()}
+				renderItem={({ item }) => (
+					<HelpCard
+						onPress={item.onPress}
+						title={item.title}
+						content={item.content}
+						status={item.status}
+						time={item.time}
+						date={item.date}
+						buttonText={item.buttonText || ""}
+						// buttonBackColor={item.buttonBackColor || ""}
+						// buttonTextColor={item.buttonTextColor || ""}
+						// buttonBorderColor={item.buttonBorderColor || ""}
+						number={item.number}
+						helperId={item.helperId || ""}
+					/>
+				)}
+			/>
+		</View>
+	);
+
+	let temp = {
+		content: "Sjdisjsjs",
+		date: "2020-08-01 23:03:16",
+		id: 6,
+		lat: "undefined",
+		lng: "undefined",
+		receiver: null,
+		status: 0,
+		user: {
+			device_token: "test123",
+			email: null,
+			id: 385,
+			name: null,
+			phone: "936893665",
+			token: "jf2ouzHJGcZTC-fakoIa6W3TxxTMzd9d",
+		},
+	};
+
+	const SecondTab = () => (
+		<View style={styles.content}>
+			<FlatList
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={styles.cardWrapper}
+				keyExtractor={(e) => e.toString()}
+				data={myRequestsList}
+				renderItem={({ item }) => (
+					<HelpCard
+						// onPress={item.onPress}
+						id={item.id}
+						title={item.content}
+						content={item.content}
+						status={item.status}
+						// time={item.date}
+						date={item.date}
+						buttonText={strings.helpAccepted || ""}
+						buttonBackColor={colors.darkBlue}
+						buttonTextColor={colors.white}
+					/>
+				)}
+			/>
+		</View>
+	);
+
 	const [index, setIndex] = useState(0);
 	const [routes] = useState([
 		{ key: "first", title: strings.inbox },
@@ -220,4 +261,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Sos;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+	showLoading,
+	hideLoading,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sos);

@@ -7,9 +7,23 @@ import {
 
 const initialState = {
 	osago: {
-		car: {},
-		insuranceCases: {},
-		privilege: {},
+		car: {
+			//test
+			// carType: {},
+			// carRegisterPlace: {},
+		},
+		insuranceCases: {
+			//test
+			// availableInsurance: {},
+			// insuranceSeries: {},
+			// haveViolation: {},
+		},
+		privilege: {
+			//test
+			// availablePrivilege: {},
+			// residence: {},
+			// individualStatus: {},
+		},
 		insurancePeriod: {},
 		driver: {},
 	},

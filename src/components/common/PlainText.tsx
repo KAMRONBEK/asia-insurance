@@ -51,7 +51,7 @@ const PlainText = ({
 			onPress={() => {
 				onPress();
 				onRadioPress();
-			}}
+			}}	
 		>
 			<View style={styles.container}>
 				<Text style={styles.text}>{item.name}</Text>

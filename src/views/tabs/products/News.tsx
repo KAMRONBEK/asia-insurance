@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
 import { colors, deviceWidth } from "../../../constants";
+import { connect } from "react-redux";
+import { showLoading, hideLoading } from "../../../redux/actions";
+import { requests } from "../../../api/requests";
+import { url } from "../../../api/config";
 
-const News = ({ navigation }) => {
+const News = ({ navigation, hideLoading, showLoading, route }) => {
 	let imageHeight = 300;
 	let value = new Animated.Value(0);
 	const translateY = value.interpolate({
@@ -14,6 +18,23 @@ const News = ({ navigation }) => {
 		inputRange: [0, imageHeight],
 		outputRange: [1, 1.5],
 	});
+	let id = route.params.id;
+	let [news, setNews] = useState({});
+	const bootstrap = async () => {
+		try {
+			let res = await requests.news.newsIdividual(id);
+			console.log(res.data.data);
+			setNews(res.data.data);
+		} catch (error) {
+			console.log(error.response.message);
+		} finally {
+			hideLoading();
+		}
+	};
+
+	useEffect(() => {
+		bootstrap();
+	}, []);
 
 	return (
 		<React.Fragment>
@@ -22,16 +43,18 @@ const News = ({ navigation }) => {
 				style={{
 					backgroundColor: colors.ultraLightDark,
 				}}
-				onScroll={Animated.event([
-					{
-						nativeEvent: {
-							contentOffset: {
-								y: value,
+				onScroll={Animated.event(
+					[
+						{
+							nativeEvent: {
+								contentOffset: {
+									y: value,
+								},
 							},
 						},
-						
-					},
-				],)}
+					],
+					{ useNativeDriver: true }
+				)}
 			>
 				<View style={{ height: imageHeight }}>
 					<Animated.Image
@@ -40,7 +63,7 @@ const News = ({ navigation }) => {
 							transform: [{ translateY }, { scale }],
 						}}
 						source={{
-							uri: "https://podrobno.uz/upload/iblock/5b3/sp.jpg",
+							uri: url + news.photo,
 						}}
 					/>
 					<View
@@ -66,9 +89,7 @@ const News = ({ navigation }) => {
 								paddingBottom: 20,
 							}}
 						>
-							S&P Global Ratings изменило прогноз по кредитному
-							рейтингу Узбекистана со "стабильного" на
-							"отрицательный"
+							{news.title}
 						</Text>
 					</View>
 					<Text
@@ -78,22 +99,19 @@ const News = ({ navigation }) => {
 							fontWeight: "400",
 						}}
 					>
-						Узбекистан, Ташкент – АН Podrobno.uz. Международное
-						рейтинговое агентство S&P Global Ratings подтвердило
-						суверенный кредитный рейтинг Узбекистана на уровне "BB
-						-", но изменило прогноз со "стабильного" на
-						"отрицательный", сообщает корреспондент Podrobno.uz. "5
-						июня международное рейтинговое агентство S&P Global
-						Ratings опубликовало очередной отчёт по суверенному
-						кредитному рейтингу Узбекистана. Согласно отчёту,
-						агентство сохранило суверенный кредитный рейтинг
-						Узбекистана на уровне "BB-". Вместе с тем, прогноз по
-						рейтингу республики изменен со "стабильного" на
-						"отрицательный", – сообщили в Минфине.
+						{news.content}
 					</Text>
 				</View>
 			</Animated.ScrollView>
 		</React.Fragment>
 	);
 };
-export default News;
+
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+	showLoading,
+	hideLoading,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(News);

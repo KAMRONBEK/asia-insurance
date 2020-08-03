@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import CustomTabbar from "../components/navigation/CustomTabbar";
 import { colors, Icons, SCREENS } from "../constants/index";
-import { Auth, Loader } from "./auth";
+import { Auth, Loader, Pin } from "./auth";
 import { ProductStack } from "./tabs/products";
 import { HistoryStack } from "./tabs/history";
 import { SosStack } from "./tabs/sos";
@@ -14,6 +14,7 @@ import Header from "../components/navigation/Header";
 export type AuthStackParams = {
 	[SCREENS.loader]: undefined;
 	[SCREENS.auth]: undefined;
+	[SCREENS.pin]: undefined;
 };
 
 let Tabs = createBottomTabNavigator();
@@ -22,8 +23,16 @@ let Stack = createStackNavigator<AuthStackParams>();
 export const AuthStack = () => {
 	return (
 		<Stack.Navigator headerMode="none">
+			{/* fix */}
 			<Stack.Screen name={SCREENS.loader} component={Loader} />
 			<Stack.Screen name={SCREENS.auth} component={Auth} />
+		</Stack.Navigator>
+	);
+};
+export const PinStack = () => {
+	return (
+		<Stack.Navigator headerMode="none">
+			<Stack.Screen name={SCREENS.pin} component={Pin} />
 		</Stack.Navigator>
 	);
 };

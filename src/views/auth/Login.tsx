@@ -13,7 +13,7 @@ import { Icons } from "../../constants/index";
 import PreValueInput from "../../components/common/PreValueInput";
 import MultiInputWrapper from "../../components/common/MultiInputWrapper";
 import SingleInput from "../../components/common/SingleInput";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
 let loginData = [
 	{
@@ -30,35 +30,14 @@ let loginData = [
 	},
 ];
 
-export const Login = ({ index, navigation }) => {
-	useEffect(() => {
-		StatusBar.setBarStyle("dark-content");
-		StatusBar.setBackgroundColor(colors.ultraLightDark);
-	}, []);
+export const Login = ({ index, navigation, setPhoneNumber, code, setCode }) => {
 	let [counter, setCounter] = useState(
 		!!loginData[index].countDown ? loginData[index].countDown : 30
 	);
-
 	let [inputMode, setInputMode] = useState(false);
-	const onKeyboardDidShow = (e: KeyboardEvent): void => {
-		// setInputMode(true);
-	};
-
-	const onKeyboardDidHide = (): void => {
-		// setInputMode(false);
-	};
-
-	useEffect(() => {
-		Keyboard.addListener("keyboardDidShow", onKeyboardDidShow);
-		Keyboard.addListener("keyboardDidHide", onKeyboardDidHide);
-		return (): void => {
-			Keyboard.removeListener("keyboardDidShow", onKeyboardDidShow);
-			Keyboard.removeListener("keyboardDidHide", onKeyboardDidHide);
-		};
-	}, []);
 
 	setTimeout(() => {
-		if (counter != 0) {
+		if (counter != 0 && loginData[index].countDown) {
 			setCounter(counter - 1);
 		}
 	}, 1000);
@@ -69,8 +48,14 @@ export const Login = ({ index, navigation }) => {
 		useRef<TextInput>(null),
 		useRef<TextInput>(null),
 		useRef<TextInput>(null),
+		useRef<TextInput>(null),
+		useRef<TextInput>(null),
 	]);
 
+	useEffect(() => {
+		StatusBar.setBarStyle("dark-content");
+		StatusBar.setBackgroundColor(colors.ultraLightDark);
+	}, []);
 	return (
 		<View style={styles.container}>
 			{!inputMode && (
@@ -104,44 +89,95 @@ export const Login = ({ index, navigation }) => {
 				]}
 			>
 				{loginData[index].input && (
-					<PreValueInput preValue="+998" icon="phone" />
+					<PreValueInput
+						preValue="+998"
+						icon="phone"
+						setValue={setPhoneNumber}
+					/>
 				)}
 				{loginData[index].multiInput && (
 					<View style={styles.multiInput}>
 						<SingleInput
+							code={code}
+							setCode={setCode}
 							inputRef={inputRefs[0]}
 							onEnter={() => {
 								inputRefs[1].current.focus();
 							}}
 							onErase={() => inputRefs[0].current.focus()}
+							index={0}
 						/>
 						<SingleInput
+							code={code}
+							setCode={setCode}
 							inputRef={inputRefs[1]}
 							onEnter={() => {
 								inputRefs[2].current.focus();
 							}}
 							onErase={() => inputRefs[0].current.focus()}
+							index={1}
 						/>
 						<SingleInput
+							code={code}
+							setCode={setCode}
 							inputRef={inputRefs[2]}
 							onEnter={() => {
 								inputRefs[3].current.focus();
 							}}
 							onErase={() => inputRefs[1].current.focus()}
+							index={2}
 						/>
 						<SingleInput
+							code={code}
+							setCode={setCode}
 							inputRef={inputRefs[3]}
+							onEnter={() => {
+								inputRefs[4].current.focus();
+							}}
 							onErase={() => inputRefs[2].current.focus()}
+							index={3}
+						/>
+						<SingleInput
+							code={code}
+							setCode={setCode}
+							inputRef={inputRefs[4]}
+							onEnter={() => {
+								inputRefs[5].current.focus();
+							}}
+							onErase={() => inputRefs[3].current.focus()}
+							index={4}
+						/>
+						<SingleInput
+							code={code}
+							setCode={setCode}
+							inputRef={inputRefs[5]}
+							onErase={() => inputRefs[4].current.focus()}
+							index={5}
 						/>
 					</View>
 				)}
-				{loginData[index].countDown && (
+				{loginData[index].countDown && counter != 0 ? (
 					<Text style={styles.count}>
 						{strings.askAnotherCode}{" "}
 						<Text style={styles.countColored}>
 							{counter} {strings.sek}
 						</Text>
 					</Text>
+				) : (
+					loginData[index].countDown && (
+						<TouchableOpacity>
+							<Text
+								style={[
+									styles.count,
+									{
+										color: colors.darkBlue,
+									},
+								]}
+							>
+								{strings.askForCode}
+							</Text>
+						</TouchableOpacity>
+					)
 				)}
 			</View>
 		</View>

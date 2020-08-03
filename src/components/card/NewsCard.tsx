@@ -14,11 +14,13 @@ import {
 } from "../../constants";
 import Text from "../common/Text";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { url } from "../../api/config";
+import moment from "moment";
 
 interface NewsCardProps {
 	navigation: {};
 	item: {
-		banner: ImageSourcePropType;
+		photo: ImageSourcePropType;
 		title: string;
 		date: string;
 		content: string;
@@ -28,14 +30,27 @@ interface NewsCardProps {
 }
 
 const NewsCard = ({ navigation, item, onPress }: NewsCardProps) => {
+	let date = moment(item.date).format("DD/MM/YYYY");
 	return (
 		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={styles.container}>
-				<Image source={{ uri: item.banner }} style={styles.banner} />
+				<Image
+					source={{ uri: url + item.photo }}
+					style={styles.banner}
+				/>
 				<View style={styles.contentWrapper}>
 					<View style={styles.titleAndDate}>
-						<Text style={styles.title}>{item.title}</Text>
-						<Text style={styles.date}>{item.date}</Text>
+						<Text numberOfLines={2} style={styles.title}>
+							{item.title}
+						</Text>
+						<Text style={styles.date}>
+							{/* {moment(
+								new Date(item.date),
+								"DD/MM/YYYY",
+								true
+							).format()} */}
+							{date == "Invalid date" ? "" : date}
+						</Text>
 					</View>
 					<Text style={styles.content} numberOfLines={2}>
 						{item.content}
@@ -75,6 +90,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 15,
 		fontWeight: "bold",
+		width: deviceWidth * 0.5,
 	},
 	date: {
 		color: colors.darkBlue,

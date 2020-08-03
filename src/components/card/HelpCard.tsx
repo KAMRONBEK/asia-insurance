@@ -11,6 +11,7 @@ import { strings } from "../../locales/strings";
 import { TextInput } from "react-native-gesture-handler";
 
 interface HelpCardProps {
+	id: number;
 	onPress?: ((event: GestureResponderEvent) => void) | undefined;
 	title: string;
 	content: string;
@@ -23,6 +24,7 @@ interface HelpCardProps {
 }
 
 const HelpCard = ({
+	id,
 	onPress,
 	title,
 	content,
@@ -40,22 +42,23 @@ const HelpCard = ({
 				<Text
 					style={[
 						styles.status,
-						status === "В ожидании" && {
+						status == "0" && {
 							color: colors.red,
 						},
-						status === "Помощь найдена" && {
+						status == "1" && {
 							color: colors.green,
 						},
 					]}
 				>
-					{status}
+					{status == "0" ? strings.waitingHelp : strings.helped}
 				</Text>
 			</View>
 			<Text style={styles.content}>{content}</Text>
 			<Text style={styles.date}>
-				{time}, {date}
+				{/* {time},  */}
+				{date}
 			</Text>
-			{onPress && (
+			{status == "1" && (
 				<View style={styles.buttonWrapper}>
 					<View style={styles.iconWrapper}>
 						{!helperId ? (

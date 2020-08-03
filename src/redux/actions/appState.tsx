@@ -3,6 +3,8 @@ import {
 	SHOW_FLASH_MESSAGE,
 	SHOW_SELECTION_LOADING,
 	HIDE_SELECTION_LOADING,
+	SHOW_LOADING,
+	HIDE_LOADING,
 } from "../types";
 
 export const toggleMenu = () => ({
@@ -20,4 +22,13 @@ export const showSelectionLoading = () => ({
 
 export const hideSelectionLoading = () => ({
 	type: HIDE_SELECTION_LOADING,
+});
+
+export const showLoading = (payload) => ({
+	type: SHOW_LOADING,
+	payload,
+});
+
+export const hideLoading = () => ({
+	type: HIDE_LOADING,
 });

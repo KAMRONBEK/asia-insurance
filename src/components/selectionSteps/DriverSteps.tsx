@@ -31,13 +31,13 @@ const DriverSteps = ({
 			name: "НЕ ОГРАНИЧЕННО",
 			value: "unlimited",
 			id: 1,
-			tariff: 3,
+			tariff: 0.3,
 		},
 		{
 			name: "ОГРАНИЧЕННО",
 			value: "limited",
 			id: 2,
-			tariff: 1,
+			tariff: 0.1,
 		},
 	]);
 	console.warn(osago);

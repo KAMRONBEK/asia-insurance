@@ -13,10 +13,11 @@ import { colors, SCREENS } from "../../constants";
 import { strings } from "../../locales/strings";
 import Intros, { Intro } from "./Intros";
 import { Login } from "./Login";
-import { toggleMenu } from "../../redux/actions";
+import { toggleMenu, userLoaded, userLoggedIn } from "../../redux/actions";
 import { connect } from "react-redux";
 import images from "../../assets/images";
 import { navigate } from "../../utils/NavigationService";
+import { requests } from "../../api/requests";
 
 //* Our staticly typed intros
 let introsData: Intro[] = [
@@ -34,7 +35,7 @@ let introsData: Intro[] = [
 	},
 ];
 
-const Auth = ({ toggleMenu, navigation }) => {
+const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
 	useEffect(() => {
 		StatusBar.setBarStyle("dark-content");
 		StatusBar.setBackgroundColor(colors.ultraLightDark);
@@ -83,17 +84,59 @@ const Auth = ({ toggleMenu, navigation }) => {
 		}, 350);
 		setCurrent(newValue);
 	};
-	let login = () => {
+
+	let [phoneNumber, setPhoneNumber] = useState("");
+	let [code, setCode] = useState("");
+	let login = async () => {
 		if (loginIndex == 0) {
-			setLoginIndex(1);
+			setLoginIndex(loginIndex + 1);
 			setButtonText(strings.confirm);
-		} else {
-			navigate(SCREENS.tabs, {
-				name: SCREENS.products,
-				params: {},
-			});
+			try {
+				let res = await requests.auth.login({
+					phone: phoneNumber,
+					device_token: "test123",
+				});
+				console.log(res.data.data);
+				let profileRes = await requests.user.profile(
+					res.data.data.token
+				);
+				if (profileRes) {
+					userLoaded(profileRes.data.data);
+				}
+				console.log(profileRes.data.data);
+			} catch (error) {
+				console.log(error.response);
+			}
 		}
+		if (loginIndex == 1) {
+			try {
+				let res = await requests.auth.verifyCode({ code: code });
+				console.log("here");
+
+				console.log(res.data);
+				userLoggedIn(res.data.data);
+				navigation.navigate(SCREENS.pin, {
+					name: SCREENS.pin,
+					params: {},
+				});
+			} catch (error) {
+				console.log(error.response.message);
+			}
+		}
+		// if (loginIndex != 1) {
+		// 	setLoginIndex(loginIndex + 1);
+		// 	setButtonText(strings.confirm);
+		// } else {
+		// 	navigate(SCREENS.auth, {
+		// 		name: SCREENS.pin,
+		// 		params: {},
+		// 	});
+		// }
 	};
+
+	useEffect(() => {
+		console.log(user);
+	}, [user]);
 
 	return (
 		<View style={styles.plane}>
@@ -114,7 +157,13 @@ const Auth = ({ toggleMenu, navigation }) => {
 				 * * Since we have bottom button Login should not have button
 				 */}
 				<View style={styles.fullWidth}>
-					<Login index={loginIndex} navigation={navigation} />
+					<Login
+						index={loginIndex}
+						navigation={navigation}
+						setPhoneNumber={setPhoneNumber}
+						code={code}
+						setCode={setCode}
+					/>
 				</View>
 			</ScrollView>
 			<RoundButton
@@ -124,6 +173,7 @@ const Auth = ({ toggleMenu, navigation }) => {
 				color={colors.white}
 				fontWeight="400"
 				onPress={!isLogin ? proceed : login}
+				passive={isLogin && phoneNumber.length < 9}
 			/>
 		</View>
 	);
@@ -151,10 +201,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = (state) => ({ todos: state.todos });
+const mapStateToProps = ({ user }) => ({ user });
 
 const mapDispatchToProps = {
 	toggleMenu,
+	userLoaded,
+	userLoggedIn,
 };
 
 const connectedAuth = connect(mapStateToProps, mapDispatchToProps)(Auth);

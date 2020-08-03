@@ -12,6 +12,14 @@ import { strings } from "../../locales/strings";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthStackParams } from "../";
 import images from "../../assets/images";
+import {
+	showLoading,
+	userLoaded,
+	hideLoading,
+	initUserState,
+} from "../../redux/actions";
+import AsyncStorage from "@react-native-community/async-storage";
+import { connect } from "react-redux";
 
 type DefaultNavigationProps = StackNavigationProp<
 	AuthStackParams,
@@ -22,7 +30,14 @@ type Props = {
 	navigation: DefaultNavigationProps;
 };
 
-export const Loader = ({ navigation }: Props) => {
+const Loader = ({
+	navigation,
+	showLoading,
+	hideLoading,
+	appState,
+	userLoaded,
+	initUserState,
+}: Props) => {
 	useEffect(() => {
 		StatusBar.setBarStyle("dark-content");
 		StatusBar.setBackgroundColor(colors.ultraLightDark);
@@ -38,6 +53,47 @@ export const Loader = ({ navigation }: Props) => {
 		</Transition.Sequence>
 	);
 	useEffect(() => {
+		setTimeout(() => {}, 1000);
+	}, []);
+
+	const bootstrap = async () => {
+		// showLoading(strings.loading);
+		try {
+			let storage = await AsyncStorage.getItem("@credentials");
+			if (!!storage) {
+				console.log(storage);
+
+				// validate token
+				let parsedStorage = JSON.parse(storage);
+				let parsedUser = parsedStorage.user;
+				if (!!parsedUser.token) {
+					console.log(parsedStorage);
+					initUserState(parsedStorage);
+					setTimeout(() => {
+						navigation.navigate(SCREENS.pin);
+					}, 200);
+				} else {
+					console.log("no token");
+				}
+			} else {
+				console.log("storage empty");
+				setTimeout(() => {
+					if (!!transitionRef.current) {
+						transitionRef.current.animateNextTransition();
+					}
+					setLoading(false);
+				}, 100);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		bootstrap();
+	}, []);
+
+	useEffect(() => {
 		setTimeout(() => {
 			if (!!transitionRef.current) {
 				transitionRef.current.animateNextTransition();
@@ -45,11 +101,13 @@ export const Loader = ({ navigation }: Props) => {
 			setLoading(false);
 		}, 1000);
 	}, []);
+
 	let defaultPressHandle = () => {
 		navigation.navigate(SCREENS.auth);
 	};
 	return (
 		<Transitioning.View
+			// ref={transition}
 			{...{ ref: (ref) => (transitionRef.current = ref), transition }}
 			style={{
 				...styles.centeredContainer,
@@ -101,3 +159,14 @@ const styles = StyleSheet.create({
 		height: imageWidth / 1.02,
 	},
 });
+
+const mapStateToProps = ({ appState }) => ({ appState });
+
+const mapDispatchToProps = {
+	hideLoading,
+	showLoading,
+	initUserState,
+	userLoaded,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Loader);

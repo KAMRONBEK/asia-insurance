@@ -3,6 +3,8 @@ import {
 	SHOW_FLASH_MESSAGE,
 	SHOW_SELECTION_LOADING,
 	HIDE_SELECTION_LOADING,
+	SHOW_LOADING,
+	HIDE_LOADING,
 } from "../types";
 
 const initialState = {
@@ -10,6 +12,8 @@ const initialState = {
 	flashMessage: "",
 	flashMessageType: "",
 	selectionLoading: false,
+	loading: false,
+	loadingMessage: "",
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -32,6 +36,12 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				selectionLoading: false,
 			};
+		case SHOW_LOADING: {
+			return { ...state, loading: true, loadingMessage: payload };
+		}
+		case HIDE_LOADING: {
+			return { ...state, loading: false, loadingMessage: "" };
+		}
 		default:
 			return state;
 	}

@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextInput as Input, View, StyleSheet } from "react-native";
 import { colors, BORDER_RADIUS } from "../../constants";
+import { replaceAt } from "../../utils/functions";
 
-const SingleInput = ({ onErase, onEnter, inputRef, ...props }) => {
+const SingleInput = ({
+	onErase,
+	onEnter,
+	inputRef,
+	code,
+	setCode,
+	index,
+	...props
+}) => {
 	// console.warn(inputRef);
+
 	let [value, setValue] = useState("");
 	return (
 		<View style={styles.container}>
@@ -11,19 +21,21 @@ const SingleInput = ({ onErase, onEnter, inputRef, ...props }) => {
 				selectTextOnFocus={true}
 				ref={inputRef}
 				onChangeText={(text) => {
-					if (!!text) {
-						if (onEnter) onEnter();
+					if (text.length <= 1) {
 						setValue(text);
+						if (!!text) {
+							if (onEnter) onEnter();
+						}
+						setCode(replaceAt(code, index, text));
 					}
 				}}
 				onKeyPress={({ nativeEvent }) => {
-					nativeEvent.key === "Backspace"
-						? onErase()
-						: console.warn("sila");
+					nativeEvent.key === "Backspace" ? onErase() : undefined;
 				}}
 				{...props}
 				style={styles.input}
 				keyboardType="number-pad"
+				// editable={value.length != 1}
 			/>
 		</View>
 	);
@@ -31,14 +43,16 @@ const SingleInput = ({ onErase, onEnter, inputRef, ...props }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		minWidth: 60,
+		// minWidth: 40,
+		flex: 1,
+		marginHorizontal: 8,
 		backgroundColor: colors.white,
 		borderRadius: BORDER_RADIUS,
 		alignItems: "center",
 	},
 	input: {
 		width: 20,
-		fontSize: 20,
+		fontSize: 18,
 		fontWeight: "bold",
 	},
 });

@@ -78,3 +78,11 @@ export const extractTariffs = (insuranceType: object, typeName: string) => {
 	}
 	return list;
 };
+
+export const replaceAt = (str: string, index: number, replacement: string) => {
+	return (
+		str.substr(0, index) +
+		replacement +
+		str.substr(index + replacement.length)
+	);
+};

@@ -65,6 +65,7 @@ enum SCREENS {
 	contactToTechSupport = "ContactToTechSupport",
 	news = "News",
 	checkout = "Checkout",
+	pin = "Pin",
 }
 
 export const deviceWidth = Dimensions.get("window").width;

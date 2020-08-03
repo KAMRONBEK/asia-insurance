@@ -29,8 +29,19 @@ const Cost = ({ navigation, route, osago, vzr, setInsuranceCost }) => {
 	let osagoTariff =
 		tariffList.reduce((prev, current) => {
 			// console.warn(prev, current);
+			console.log(current);
+
 			return prev * Number.parseFloat(current.tariff);
 		}, 1) / osago.privilege.availablePrivilege.tariff;
+
+	const temp = [
+		{ name: "carType", tariff: "0.12" },
+		{ name: "carRegisterPlace", tariff: "1" },
+		{ name: "availableInsurance", tariff: "2" },
+		{ name: "availablePrivilege", tariff: "1" },
+		{ name: "period", tariff: "0.4" },
+		{ name: "driverCount", tariff: "0.1" },
+	];
 
 	useEffect(() => {
 		setCost(osagoTariff * 40000000);

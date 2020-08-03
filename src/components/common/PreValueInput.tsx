@@ -8,13 +8,20 @@ interface PreValueInputProps {
 	preValue?: string;
 	icon: string;
 	iconAlign?: string;
+	setValue?: any;
 }
 
-const PreValueInput = ({ preValue, icon }: PreValueInputProps) => {
+const PreValueInput = ({ preValue, icon, setValue }: PreValueInputProps) => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.inputText}>{preValue}</Text>
-			<TextInput style={styles.input} keyboardType="name-phone-pad" />
+			<TextInput
+				onChangeText={(text) => {
+					setValue(text);
+				}}
+				style={styles.input}
+				keyboardType="number-pad"
+			/>
 			<Icons name={icon} size={25} color={colors.gray} />
 		</View>
 	);
@@ -31,6 +38,8 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		flex: 1,
+		color: colors.darkBlue,
+		fontWeight: "bold",
 	},
 	inputText: {
 		fontSize: 14,

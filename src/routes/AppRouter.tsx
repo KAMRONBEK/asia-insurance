@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import "react-native-gesture-handler";
-import { AuthStack, MainTabs } from "../views";
+import { AuthStack, MainTabs, PinStack } from "../views";
 import { createStackNavigator } from "@react-navigation/stack";
 import CustomDrawer from "../components/navigation/CustomDrawer";
 import { View, KeyboardAvoidingView } from "react-native";
@@ -23,6 +23,7 @@ const AppRouter = () => {
 								component={AuthStack}
 							/>
 						)}
+						<Stack.Screen name={SCREENS.pin} component={PinStack} />
 						<Stack.Screen
 							name={SCREENS.tabs}
 							component={MainTabs}

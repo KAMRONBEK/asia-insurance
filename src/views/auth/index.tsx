@@ -1,4 +1,5 @@
 import Auth from "./Auth";
-export * from "./Loader";
+import Pin from "./Pin";
+import Loader from "./Loader";
 export * from "./Login";
-export { Auth };
+export { Auth, Pin, Loader };
