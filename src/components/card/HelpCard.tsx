@@ -5,6 +5,7 @@ import {
 	BORDER_RADIUS,
 	CONTAINER_PADDING,
 	Icons,
+	deviceWidth,
 } from "../../constants";
 import RoundButton from "../common/RoundButton";
 import { strings } from "../../locales/strings";
@@ -38,7 +39,9 @@ const HelpCard = ({
 	return (
 		<View style={styles.container}>
 			<View style={styles.titleWrapper}>
-				<Text style={styles.bold}>{title}</Text>
+				<Text style={[styles.bold, { width: deviceWidth * 0.5 }]}>
+					{title}
+				</Text>
 				<Text
 					style={[
 						styles.status,

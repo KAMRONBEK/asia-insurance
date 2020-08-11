@@ -58,13 +58,16 @@ const HelpRequest = ({ navigation, showFlashMessage }) => {
 									console.log(position.coords);
 									setLocation(position.coords);
 									setLoadingLocation(false);
+									showFlashMessage(
+										strings.locationDetermined
+									);
 								},
 								(error) => {
 									setLoadingLocation(false);
 									console.log(error.message);
 								},
 								{
-									enableHighAccuracy: true,
+									enableHighAccuracy: false,
 									timeout: 20000,
 									maximumAge: 1000,
 								}
@@ -72,11 +75,13 @@ const HelpRequest = ({ navigation, showFlashMessage }) => {
 						} else {
 							console.log("Permission Denied");
 							setLoadingLocation(false);
+							setUseLocation(false);
 						}
 					} catch (err) {
 						console.log("err", err);
 						console.warn(err);
 						setLoadingLocation(false);
+						setUseLocation(false);
 					}
 				}
 				requestLocationPermission();
@@ -87,12 +92,17 @@ const HelpRequest = ({ navigation, showFlashMessage }) => {
 	const onPress = async () => {
 		try {
 			console.log(location, location.longitude);
-
+			console.log({
+				content: helpContent,
+				"location[lng]": location.longitude,
+				"location[lat]": location.latitude,
+			});
 			let res = await requests.help.requestHelp({
 				content: helpContent,
 				"location[lng]": location.longitude,
 				"location[lat]": location.latitude,
 			});
+
 			showFlashMessage({
 				type: colors.green,
 				message: strings.requestSent,

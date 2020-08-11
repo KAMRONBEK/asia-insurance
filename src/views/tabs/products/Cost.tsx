@@ -44,12 +44,18 @@ const Cost = ({ navigation, route, osago, vzr, setInsuranceCost }) => {
 	];
 
 	useEffect(() => {
-		setCost(osagoTariff * 40000000);
+		setCost((osagoTariff * 40000000) / 100);
 		setCostDiscounted(
-			osagoTariff * 40000000 * osago.privilege.availablePrivilege.tariff
+			(osagoTariff *
+				40000000 *
+				osago.privilege.availablePrivilege.tariff) /
+				100
 		);
 		setInsuranceCost(
-			osagoTariff * 40000000 * osago.privilege.availablePrivilege.tariff
+			(osagoTariff *
+				40000000 *
+				osago.privilege.availablePrivilege.tariff) /
+				100
 		);
 
 		// setTimeout(() => {

@@ -489,7 +489,7 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 			},
 			{
 				title: strings.policyCost,
-				value: cost,
+				value: Math.round(cost),
 			},
 		];
 
@@ -503,33 +503,48 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 				</Text>
 				<FlatList
 					data={list}
+					contentContainerStyle={{
+						paddingBottom: 60,
+					}}
 					showsVerticalScrollIndicator={false}
 					renderItem={({ item }) => (
 						<View
 							style={{
-								justifyContent: "space-between",
+								// justifyContent: "space-between",
 								flexDirection: "row",
-								alignItems: "center",
+								// alignItems: "center",
 							}}
 						>
-							<View>
+							<View
+								style={{
+									flex: 1,
+									marginVertical: 10,
+								}}
+							>
 								<Text
 									style={[
 										styles.bigText,
 										{
 											fontSize: 11,
+											textAlign: "left",
 										},
 									]}
 								>
 									{item.title}
 								</Text>
 							</View>
-							<View>
+							<View
+								style={{
+									flex: 1,
+									marginVertical: 10,
+								}}
+							>
 								<Text
 									style={[
-										styles.bold,
 										{
+											fontWeight: "bold",
 											fontSize: 11,
+											textAlign: "right",
 										},
 									]}
 								>

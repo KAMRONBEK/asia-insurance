@@ -2,6 +2,7 @@ import LocalizedStrings from "react-native-localization";
 
 export let strings = new LocalizedStrings({
 	ru: {
+		locationDetermined: "Местоположение определено",
 		loadingRequests: "Загрузка запросов на помощь",
 		waitingHelp: "В ожидании",
 		helped: "Помощь найдена",
@@ -103,7 +104,6 @@ export let strings = new LocalizedStrings({
 		myOutgoingRequests: "Мои исходящие запросы",
 		helpOnWay: "Помощь на дороге",
 		respondToHelp: "Откликнуться на помощь",
-		helped: "Помощь оказал",
 		helpAccepted: "Помощь принята",
 		requestForHelp: "Заявка на помощь",
 		whatHappenedTellUs:
@@ -124,7 +124,7 @@ export let strings = new LocalizedStrings({
 		calculatingCost: "Идет расчет стоимости ",
 		loadingCostInfo:
 			"Уважаемый клиент, помните, вы несете ответственность за правильное указание деталей Вашего заказа.",
-		osagoPolicyCost: "Стоимость полиса ВЗР по вашим параметрам",
+		osagoPolicyCost: "Стоимость полиса ОСАГО по вашим параметрам",
 		yourCost: "Ваших данных составляет",
 		insurancePremium: "Страховая премия",
 		checkout: "ОФОРМИТЬ",

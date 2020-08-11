@@ -15,21 +15,17 @@ const AppRouter = () => {
 	return (
 		<View style={{ flex: 1 }}>
 			<NavigationContainer ref={navigationRef}>
-				<CustomDrawer>
-					<Stack.Navigator headerMode="none">
-						{!isAuthenticated && (
-							<Stack.Screen
-								name={SCREENS.auth}
-								component={AuthStack}
-							/>
-						)}
-						<Stack.Screen name={SCREENS.pin} component={PinStack} />
+				<Stack.Navigator headerMode="none">
+					{!isAuthenticated && (
 						<Stack.Screen
-							name={SCREENS.tabs}
-							component={MainTabs}
+							name={SCREENS.auth}
+							component={AuthStack}
 						/>
-					</Stack.Navigator>
-				</CustomDrawer>
+					)}
+					<Stack.Screen name={SCREENS.pin} component={PinStack} />
+					<Stack.Screen name={SCREENS.tabs} component={MainTabs} />
+					{/* </CustomDrawer> */}
+				</Stack.Navigator>
 			</NavigationContainer>
 		</View>
 	);

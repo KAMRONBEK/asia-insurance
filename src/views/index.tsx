@@ -10,6 +10,7 @@ import { SosStack } from "./tabs/sos";
 import { SupportStack } from "./tabs/support";
 import { ProfileStack } from "./tabs/profile";
 import Header from "../components/navigation/Header";
+import CustomDrawer from "../components/navigation/CustomDrawer";
 
 export type AuthStackParams = {
 	[SCREENS.loader]: undefined;
@@ -39,73 +40,75 @@ export const PinStack = () => {
 
 export const MainTabs = () => {
 	return (
-		<Tabs.Navigator tabBar={(props) => <CustomTabbar {...props} />}>
-			<Tabs.Screen
-				component={ProductStack}
-				name={SCREENS.productsStack}
-				options={{
-					tabBarIcon: ({ focused }) => (
-						<Icons
-							name="newspaper"
-							size={24}
-							color={focused ? colors.white : colors.gray}
-						/>
-					),
-					title: "My home",
-				}}
-			/>
-			<Tabs.Screen
-				component={HistoryStack}
-				name={SCREENS.historyStack}
-				options={{
-					tabBarIcon: ({ focused }) => (
-						<Icons
-							name="form"
-							size={24}
-							color={focused ? colors.white : colors.gray}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				component={SosStack}
-				name={SCREENS.sosStack}
-				options={{
-					tabBarIcon: ({ focused }) => (
-						<Icons
-							name="signal"
-							size={24}
-							color={focused ? colors.white : colors.gray}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				component={SupportStack}
-				name={SCREENS.supportStack}
-				options={{
-					tabBarIcon: ({ focused }) => (
-						<Icons
-							name="headphone"
-							size={24}
-							color={focused ? colors.white : colors.gray}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				component={ProfileStack}
-				name={SCREENS.profileStack}
-				options={{
-					tabBarIcon: ({ focused }) => (
-						<Icons
-							name="lock-shield"
-							size={24}
-							color={focused ? colors.white : colors.gray}
-						/>
-					),
-				}}
-			/>
-		</Tabs.Navigator>
+		<CustomDrawer>
+			<Tabs.Navigator tabBar={(props) => <CustomTabbar {...props} />}>
+				<Tabs.Screen
+					component={ProductStack}
+					name={SCREENS.productsStack}
+					options={{
+						tabBarIcon: ({ focused }) => (
+							<Icons
+								name="newspaper"
+								size={24}
+								color={focused ? colors.white : colors.gray}
+							/>
+						),
+						title: "My home",
+					}}
+				/>
+				<Tabs.Screen
+					component={HistoryStack}
+					name={SCREENS.historyStack}
+					options={{
+						tabBarIcon: ({ focused }) => (
+							<Icons
+								name="form"
+								size={24}
+								color={focused ? colors.white : colors.gray}
+							/>
+						),
+					}}
+				/>
+				<Tabs.Screen
+					component={SosStack}
+					name={SCREENS.sosStack}
+					options={{
+						tabBarIcon: ({ focused }) => (
+							<Icons
+								name="signal"
+								size={24}
+								color={focused ? colors.white : colors.gray}
+							/>
+						),
+					}}
+				/>
+				<Tabs.Screen
+					component={SupportStack}
+					name={SCREENS.supportStack}
+					options={{
+						tabBarIcon: ({ focused }) => (
+							<Icons
+								name="headphone"
+								size={24}
+								color={focused ? colors.white : colors.gray}
+							/>
+						),
+					}}
+				/>
+				<Tabs.Screen
+					component={ProfileStack}
+					name={SCREENS.profileStack}
+					options={{
+						tabBarIcon: ({ focused }) => (
+							<Icons
+								name="lock-shield"
+								size={24}
+								color={focused ? colors.white : colors.gray}
+							/>
+						),
+					}}
+				/>
+			</Tabs.Navigator>
+		</CustomDrawer>
 	);
 };

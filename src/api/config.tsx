@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const url = "https://asia.loko.uz/";
+export const url = "https://asia.loko.uz";
 
 export let configureAxios = (store) => {
 	axios.interceptors.request.use((res) => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -20,6 +20,9 @@ interface ProfileProps {
 }
 
 const Profile = ({ navigation }: ProfileProps) => {
+	let [fullName, setFullName] = useState("");
+	let [city, setCity] = useState("");
+
 	const onPress = () => {
 		navigation.navigate(SCREENS.products);
 	};
@@ -46,7 +49,11 @@ const Profile = ({ navigation }: ProfileProps) => {
 				}}
 				style={styles.content}
 			>
-				<Input icon="user" placeholder={strings.fullName} />
+				<Input
+					icon="user"
+					placeholder={strings.fullName}
+					setValue={setFullName}
+				/>
 				<View style={styles.doubleInput}>
 					<Input
 						placeholder={strings.passportSeries}
@@ -76,6 +83,7 @@ const Profile = ({ navigation }: ProfileProps) => {
 						{ label: "Samarqand", value: "Samarqand" },
 					]}
 					icon="flag"
+					selectValue={setCity}
 				/>
 				<Input
 					placeholder={strings.residenceAddress}

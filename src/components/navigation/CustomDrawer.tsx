@@ -41,24 +41,6 @@ const CustomDrawer = ({
 	const [animation, setAnimation] = useState(new Animated.Value(0));
 
 	//changing height while keyboard is on
-	const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-	const onKeyboardDidShow = (e: KeyboardEvent): void => {
-		setKeyboardHeight(e.endCoordinates.height);
-	};
-
-	function onKeyboardDidHide(): void {
-		setKeyboardHeight(0);
-	}
-
-	useEffect(() => {
-		Keyboard.addListener("keyboardDidShow", onKeyboardDidShow);
-		Keyboard.addListener("keyboardDidHide", onKeyboardDidHide);
-		return (): void => {
-			Keyboard.removeListener("keyboardDidShow", onKeyboardDidShow);
-			Keyboard.removeListener("keyboardDidHide", onKeyboardDidHide);
-		};
-	}, []);
 
 	//end of keyboard handling
 
@@ -88,14 +70,7 @@ const CustomDrawer = ({
 				style={StyleSheet.absoluteFillObject}
 				colors={[colors.lightBlue, colors.darkBlue]}
 			/>
-			<View
-				style={[
-					styles.drawerContainer,
-					{
-						bottom: keyboardHeight,
-					},
-				]}
-			>
+			<View style={[styles.drawerContainer]}>
 				<View>
 					<View style={styles.avatarContainer}>
 						<Image
