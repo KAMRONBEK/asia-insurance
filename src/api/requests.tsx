@@ -1,7 +1,12 @@
 import axios from "axios";
-import { url } from "./config";
+import { url, asiaUrl } from "./config";
+import { Platform } from "react-native";
 
-let formData = (rawData) => {
+let asiAxios = axios.create({
+	headers: { "Content-Type": "application/json" },
+});
+
+export let formData = (rawData) => {
 	let form = new FormData();
 	Object.keys(rawData).forEach((key) => {
 		if (Array.isArray(rawData[key])) {
@@ -24,6 +29,15 @@ let formData = (rawData) => {
 	return form;
 };
 
+export const constructFileFromUri = (file) => {
+	let { path, mime } = file;
+	return {
+		uri: Platform.OS === "android" ? path : path.replace("file://", ""),
+		name: "upload_photo",
+		type: mime,
+	};
+};
+
 export let requests = {
 	auth: {
 		login: (credentials) =>
@@ -31,9 +45,33 @@ export let requests = {
 		verifyCode: (credentials) =>
 			axios.post(`${url}/api/user/send-sms-code`, formData(credentials)),
 	},
+	authAsia: {
+		registerUser: (credentials) =>
+			asiAxios.post(`${asiaUrl}/api/Customer/RegisterUser`, credentials),
+		userDetails: (credentials) =>
+			asiAxios.post(
+				`${asiaUrl}/api/Customer/CustomerDetails`,
+				credentials
+			),
+		updateUser: (credentials) =>
+			asiAxios.post(
+				`${asiaUrl}/api/Customer/UpdateCustomerData`,
+				credentials
+			),
+	},
+	order: {
+		createOrder: (credentials) =>
+			asiAxios.post(`${asiaUrl}/api/Order/CreateOrder2`, credentials),
+		orderDetails: (credentials) =>
+			asiAxios.post(`${asiaUrl}/api/Order/OrderDetails`, credentials),
+		rejectOrder: (credentials) =>
+			asiAxios.post(`${asiaUrl}/api/Order/RejectOrder`, credentials),
+		getOrders: (credentials) =>
+			asiAxios.post(`${asiaUrl}/api/Order/CustomerOrders`, credentials),
+	},
 	user: {
 		profile: (token) =>
-			axios.get(`${url}/api/user/profile`, {
+			asiAxios.get(`${url}/api/user/profile`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
@@ -46,11 +84,31 @@ export let requests = {
 	help: {
 		requestHelp: (credentails) =>
 			axios.post(`${url}/api/driver/send`, formData(credentails)),
-		myRequests: (status) =>
-			axios.get(`${url}/api/driver/requests?status=${status}`),
+		myRequests: () => axios.get(`${url}/api/driver/my-requests`),
+		allRequests: () => axios.get(`${url}/api/driver/requests`),
 		requestIndividual: (id) =>
 			axios.get(`${url}/api/driver/request-view?id=${id}`),
 		acceptRequest: (credentials) =>
 			axios.post(`${url}/api/driver/accept`, formData(credentials)),
+		resendRequest: (credentials) =>
+			axios.post(`${url}/api/driver/resend`, formData(credentials)),
+	},
+	ball: {
+		sendBall: (credentials) =>
+			axios.post(`${url}/api/driver/send-points`, formData(credentials)),
+		getBall: () => axios.get(`${url}/api/driver/points`),
+	},
+	dictionary: {
+		getCountryList: () =>
+			axios.get(`${asiaUrl}/api/Dictionaries/CountryList`),
+		getRegionList: () =>
+			asiAxios.get(`${asiaUrl}/api/Dictionaries/RegionsList`),
+		getRayonList: () =>
+			asiAxios.get(`${asiaUrl}/api/Dictionaries/RayonsList`),
+	},
+	policy: {
+		checkPolicy: (credentials) =>
+			asiAxios.post(`${asiaUrl}/api/Policy/CheckPolicy`, credentials),
+		myPolicies: () => asiAxios.get(`${asiaUrl}/api/Policy/MyPolices`),
 	},
 };

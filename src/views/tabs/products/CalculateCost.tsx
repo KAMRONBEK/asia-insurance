@@ -15,8 +15,14 @@ interface CalculateCostProps {
 	navigation: any;
 }
 
-const CalculateCost = ({ route, navigation, osago }: CalculateCostProps) => {
+const CalculateCost = ({
+	route,
+	navigation,
+	osago,
+	vzr,
+}: CalculateCostProps) => {
 	let { car, insuranceCases, privilege, insurancePeriod, driver } = osago;
+	let { destinationCountry, tripDuration, tripPurpose, insuredPerson } = vzr;
 
 	let insuranceList = [
 		{
@@ -100,7 +106,7 @@ const CalculateCost = ({ route, navigation, osago }: CalculateCostProps) => {
 					},
 					small: true,
 					icon: "flag",
-					checked: true,
+					checked: !isEmpty(destinationCountry),
 				},
 				{
 					mainIcon: images.userChecked,
@@ -109,9 +115,9 @@ const CalculateCost = ({ route, navigation, osago }: CalculateCostProps) => {
 					onPress: () => {
 						console.warn("pressed");
 					},
-					checked: true,
 					small: true,
 					icon: "calendar",
+					checked: !isEmpty(tripDuration),
 				},
 				{
 					mainIcon: images.flag,
@@ -121,8 +127,8 @@ const CalculateCost = ({ route, navigation, osago }: CalculateCostProps) => {
 						console.warn("pressed");
 					},
 					small: true,
-					// passive: true,
 					icon: "umbrella",
+					checked: !isEmpty(tripPurpose),
 				},
 				{
 					mainIcon: images.flag,
@@ -132,14 +138,34 @@ const CalculateCost = ({ route, navigation, osago }: CalculateCostProps) => {
 						console.warn("pressed");
 					},
 					small: true,
-					// passive: true,
 					icon: "profile-circle",
+					checked: !isEmpty(insuredPerson),
 				},
 			],
 		},
 	];
 
 	let { insuranceType } = route.params;
+
+	let isButtonPassive = () => {
+		console.log(insuranceType);
+
+		switch (insuranceType) {
+			case strings.osago:
+				return (
+					isEmpty(car) ||
+					isEmpty(insuranceCases) ||
+					isEmpty(privilege) ||
+					isEmpty(insurancePeriod) ||
+					isEmpty(driver)
+				);
+
+			case strings.vzr:
+				return false;
+			default:
+				break;
+		}
+	};
 
 	const onButtonPress = () => {
 		navigation.navigate(SCREENS.cost, {
@@ -196,13 +222,7 @@ const CalculateCost = ({ route, navigation, osago }: CalculateCostProps) => {
 					text={strings.calculate}
 					gradient
 					onPress={onButtonPress}
-					passive={
-						isEmpty(car) ||
-						isEmpty(insuranceCases) ||
-						isEmpty(privilege) ||
-						isEmpty(insurancePeriod) ||
-						isEmpty(driver)
-					}
+					passive={isButtonPassive()}
 				/>
 			</View>
 		</View>
@@ -229,8 +249,9 @@ const styles = StyleSheet.create({
 		paddingHorizontal: CONTAINER_PADDING * 3,
 	},
 });
-const mapStateToProps = ({ insurance: { osago } }) => ({
+const mapStateToProps = ({ insurance: { osago, vzr } }) => ({
 	osago,
+	vzr,
 });
 
 export default connect(mapStateToProps)(CalculateCost);

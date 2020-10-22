@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, TextInput, Image, ScrollView } from "react-native";
+import {
+	StyleSheet,
+	View,
+	TextInput,
+	Image,
+	ScrollView,
+	Keyboard,
+} from "react-native";
 import {
 	Icons,
 	colors,
@@ -14,7 +21,12 @@ import SingleInput from "../../components/common/SingleInput";
 import RoundButton from "../../components/common/RoundButton";
 import images from "../../assets/images";
 import { connect } from "react-redux";
-import { setPinCode, showFlashMessage, showLoading } from "../../redux/actions";
+import {
+	setPinCode,
+	showFlashMessage,
+	showLoading,
+	profileLoadRedux,
+} from "../../redux/actions";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const Pin = ({
@@ -40,7 +52,16 @@ const Pin = ({
 	}, [pinCode]);
 
 	const onPress = async () => {
-		let storage = await AsyncStorage.getItem("@credentials");
+		let profile = await AsyncStorage.getItem("@profile");
+
+		if (!!profile) {
+			let parsedProfile = JSON.parse(profile);
+			if (!!parsedProfile) {
+				profileLoadRedux(parsedProfile);
+			}
+		}
+
+		let storage = await AsyncStorage.getItem("@user");
 		if (!!storage) {
 			let parsedStorage = JSON.parse(storage);
 			if (!!parsedStorage.pinCode) {
@@ -50,6 +71,10 @@ const Pin = ({
 					//entered pin is same as storage pin
 					console.log("entered pin is same as storage pin");
 					showLoading(strings.loading);
+					showFlashMessage({
+						type: colors.green,
+						message: strings.correctPin,
+					});
 					navigation.navigate(SCREENS.tabs, {
 						screen: SCREENS.products,
 						params: {},
@@ -137,6 +162,9 @@ const Pin = ({
 								setCode={setPin}
 								inputRef={inputRefs[3]}
 								onErase={() => inputRefs[2].current.focus()}
+								onEnter={() => {
+									Keyboard.dismiss();
+								}}
 								index={3}
 							/>
 						</View>

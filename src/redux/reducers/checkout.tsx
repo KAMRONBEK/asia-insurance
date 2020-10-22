@@ -4,6 +4,8 @@ import {
 	SET_INSURANCE_PERIOD,
 	SET_LOCATION_INFO,
 	SET_SHIPPING_INFO,
+	SET_WITH_SHIPPING,
+	SET_SHIPPING_ADDRESS_SAME,
 } from "../types";
 
 const initialState = {
@@ -11,7 +13,10 @@ const initialState = {
 	personalInfo: {},
 	insurancePeriod: {},
 	locationInfo: {},
-	shipping: {},
+	shipping: {
+		withShipping: false,
+		sameAddress: false,
+	},
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -19,7 +24,7 @@ export default (state = initialState, { type, payload }) => {
 		case SET_DOCUMENTS:
 			return {
 				...state,
-				documents: payload,
+				documents: [...state.documents, ...payload],
 			};
 		case SET_PERSONAL_INFO:
 			return {
@@ -41,6 +46,26 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				shipping: payload,
 			};
+		case SET_WITH_SHIPPING: {
+			console.log("withshipping", state.shipping.withShipping);
+			return {
+				...state,
+				shipping: {
+					...state.shipping,
+					withShipping: !state.shipping.withShipping,
+				},
+			};
+		}
+		case SET_SHIPPING_ADDRESS_SAME: {
+			return {
+				...state,
+				shipping: {
+					...state.shipping,
+					sameAddress: payload,
+					shipping: payload ? true : state.shipping.withShipping,
+				},
+			};
+		}
 
 		default:
 			return state;

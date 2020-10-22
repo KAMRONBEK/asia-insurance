@@ -5,6 +5,8 @@ import {
 	HIDE_SELECTION_LOADING,
 	SHOW_LOADING,
 	HIDE_LOADING,
+	SHOW_MODAL,
+	HIDE_MODAL,
 } from "../types";
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
 	selectionLoading: false,
 	loading: false,
 	loadingMessage: "",
+	modalVisibility: false,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -42,6 +45,10 @@ export default (state = initialState, { type, payload }) => {
 		case HIDE_LOADING: {
 			return { ...state, loading: false, loadingMessage: "" };
 		}
+		case SHOW_MODAL:
+			return { ...state, modalVisibility: true };
+		case HIDE_MODAL:
+			return { ...state, modalVisibility: false };
 		default:
 			return state;
 	}

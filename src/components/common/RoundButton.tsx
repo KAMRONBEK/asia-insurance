@@ -15,9 +15,11 @@ import Touchable from "./Touchable";
 import { showFlashMessage } from "../../redux/actions";
 import { connect } from "react-redux";
 import { strings } from "../../locales/strings";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export interface ButtonProps {
 	onPress?: ((event: GestureResponderEvent) => void) | undefined;
+	onPressIn?: ((event: GestureResponderEvent) => void) | undefined;
 	text?: string;
 	color?: string;
 	backgroundColor?: string;
@@ -45,6 +47,7 @@ export interface ButtonProps {
 const RoundButton = ({
 	gradient,
 	onPress,
+	onPressIn,
 	text,
 	color = colors.white,
 	backgroundColor = colors.ultraLightBlue,
@@ -55,14 +58,15 @@ const RoundButton = ({
 	showFlashMessage,
 	passive,
 }: ButtonProps) => {
-	let [buttonBorderColor, setButtonBorderColor] = useState(colors.white);
+	let [buttonBorderColor, setButtonBorderColor] = useState(color);
 	let [backColor, setBackColor] = useState(backgroundColor);
 	let [buttonText, setButtonText] = useState(text);
 	let [buttonTextColor, setButtonTextColor] = useState(color);
 
 	return (
 		// <View>
-		<TouchableWithoutFeedback
+		<TouchableOpacity
+			onPressIn={onPressIn}
 			onPress={
 				!passive
 					? !number
@@ -124,7 +128,7 @@ const RoundButton = ({
 					</Text>
 				</LinearGradient>
 			</View>
-		</TouchableWithoutFeedback>
+		</TouchableOpacity>
 		// </View>
 	);
 };

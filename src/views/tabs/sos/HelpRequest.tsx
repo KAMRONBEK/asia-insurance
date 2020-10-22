@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	Platform,
 	PermissionsAndroid,
+	TouchableOpacity,
 } from "react-native";
 import {
 	colors,
@@ -23,15 +24,30 @@ import Geolocation from "@react-native-community/geolocation";
 import { requests } from "../../../api/requests";
 import LottieView from "lottie-react-native";
 import lotties from "../../../assets/lotties";
-import { showFlashMessage } from "../../../redux/actions";
+import {
+	showFlashMessage,
+	setMyLocation,
+	setHelpLocation,
+} from "../../../redux/actions";
 import { connect } from "react-redux";
+import { navigate } from "../../../utils/NavigationService";
 
-const HelpRequest = ({ navigation, showFlashMessage }) => {
+const HelpRequest = ({
+	navigation,
+	showFlashMessage,
+	setMyLocation,
+	setHelpLocation,
+	mapState,
+}) => {
 	let [useLocation, setUseLocation] = useState(false);
 	let [helpContent, setHelpContent] = useState("");
-	let [location, setLocation] = useState({});
+	// let [location, setLocation] = useState({});
 
 	let [loadingLocation, setLoadingLocation] = useState(false);
+
+	const onMapPress = () => {
+		navigation.navigate(SCREENS.map);
+	};
 
 	useEffect(() => {
 		if (useLocation) {
@@ -56,7 +72,7 @@ const HelpRequest = ({ navigation, showFlashMessage }) => {
 								//Will give you the current location
 								(position) => {
 									console.log(position.coords);
-									setLocation(position.coords);
+									setHelpLocation(position.coords);
 									setLoadingLocation(false);
 									showFlashMessage(
 										strings.locationDetermined
@@ -91,16 +107,16 @@ const HelpRequest = ({ navigation, showFlashMessage }) => {
 
 	const onPress = async () => {
 		try {
-			console.log(location, location.longitude);
+			console.log(mapState.helpLocation, mapState.helpLocation.longitude);
 			console.log({
 				content: helpContent,
-				"location[lng]": location.longitude,
-				"location[lat]": location.latitude,
+				"location[lng]": mapState.helpLocation.longitude,
+				"location[lat]": mapState.helpLocation.latitude,
 			});
 			let res = await requests.help.requestHelp({
 				content: helpContent,
-				"location[lng]": location.longitude,
-				"location[lat]": location.latitude,
+				"location[lng]": mapState.helpLocation.longitude,
+				"location[lat]": mapState.helpLocation.latitude,
 			});
 
 			showFlashMessage({
@@ -143,9 +159,11 @@ const HelpRequest = ({ navigation, showFlashMessage }) => {
 				<Text style={styles.bigText}>
 					{strings.selectLocationManually}
 				</Text>
-				<View style={styles.iconWrapper}>
-					<Icons name="flag" size={25} color={colors.darkBlue} />
-				</View>
+				<TouchableOpacity onPressIn={onMapPress}>
+					<View style={styles.iconWrapper}>
+						<Icons name="flag" size={25} color={colors.darkBlue} />
+					</View>
+				</TouchableOpacity>
 			</View>
 			<View style={styles.buttonWrapper}>
 				<RoundButton
@@ -229,10 +247,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 });
-const mapStateToProps = (state) => ({});
+const mapStateToProps = ({ mapState }) => ({
+	mapState,
+});
 
 const mapDispatchToProps = {
 	showFlashMessage,
+	setMyLocation,
+	setHelpLocation,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HelpRequest);

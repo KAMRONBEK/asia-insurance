@@ -13,10 +13,11 @@ import { Value } from "react-native-reanimated";
 interface SelectProps {
 	preValue?: string;
 	selectedOption?: {};
-	options: { label: string; value: string }[];
+	options: { label: string; value: {} }[];
 	icon?: string;
 	placeholder: string;
 	selectValue: any;
+	onValueChange?: any;
 }
 
 const Select = ({
@@ -26,6 +27,7 @@ const Select = ({
 	icon,
 	placeholder,
 	selectValue,
+	onValueChange,
 }: SelectProps) => {
 	let [value, setValue] = useState("");
 	let [containerWidth, setContainerWidth] = useState(0);
@@ -33,7 +35,12 @@ const Select = ({
 		<RNPickerSelect
 			onValueChange={(value) => {
 				selectValue(value);
+				console.log(value?.id);
 				setValue(value);
+				console.log(onValueChange);
+				if (onValueChange) {
+					onValueChange(value?.id);
+				}
 			}}
 			items={options}
 			Icon={() => {}}
@@ -71,7 +78,7 @@ const Select = ({
 						},
 					]}
 				>
-					{value ? value : placeholder}
+					{value?.text ? value?.text : placeholder}
 				</Text>
 
 				<View>

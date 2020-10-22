@@ -8,18 +8,22 @@ import SelectItem from "../../../components/common/SelectItem";
 import SearchBar from "../../../components/common/SearchBar";
 import InPageHeader from "../../../components/common/InPageHeader";
 import images from "../../../assets/images";
-import CarSteps from "../../../components/selectionSteps/CarSteps";
+import CarSteps from "../../../components/osagoSteps/CarSteps";
 import { defined } from "react-native-reanimated";
 import { Text } from "react-native-svg";
-import InsuranceCaseSteps from "../../../components/selectionSteps/InsuranceCaseSteps";
-import PrivilegesSteps from "../../../components/selectionSteps/PrivilegesSteps";
+import InsuranceCaseSteps from "../../../components/osagoSteps/InsuranceCaseSteps";
+import PrivilegesSteps from "../../../components/osagoSteps/PrivilegesSteps";
 import SelectionLoading from "../../../components/container/SelectionLoading";
-import InsurancePeriodSteps from "../../../components/selectionSteps/InsurancePeriodSteps";
-import DriverSteps from "../../../components/selectionSteps/DriverSteps";
+import InsurancePeriodSteps from "../../../components/osagoSteps/InsurancePeriodSteps";
+import DriverSteps from "../../../components/osagoSteps/DriverSteps";
 import { connect } from "react-redux";
 import { isEmpty, extractNames } from "../../../utils/functions";
+import CountrySteps from "../../../components/vzrSteps/CountrySteps";
+import PeriodSteps from "../../../components/vzrSteps/PeriodSteps";
+import TripPurposeSteps from "../../../components/vzrSteps/TripPurposeSteps";
+import InsuredPeopleSteps from "../../../components/vzrSteps/InsuredPeopleSteps";
 
-const Selection = ({ navigation, route, currentStep, osago }) => {
+const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 	let { title } = route.params;
 	let { stepCount } = route.params;
 	let { insuranceType } = route.params;
@@ -27,21 +31,82 @@ const Selection = ({ navigation, route, currentStep, osago }) => {
 	let [boxList, setBoxList] = useState([]);
 
 	useEffect(() => {
-		setBoxList(extractNames(osago, "osago"));
-	}, [osago]);
+		switch (insuranceType) {
+			case strings.osago: {
+				setBoxList(extractNames(osago, "osago"));
+			}
+			case strings.vzr: {
+				let countries = vzr.destinationCountry?.countries?.map(
+					(country) => {
+						let newCountry = {
+							parent: "vzr",
+							child: "destinationCountry",
+							...country,
+						};
+						console.log(newCountry);
+						return newCountry;
+					}
+				);
+
+				console.log(countries);
+
+				// let countriesArray = Object.keys(countriesObj).map((key) => [
+				// 	countriesObj[key],
+				// ]);
+				setBoxList(countries ? [...countries] : []);
+			}
+		}
+	}, [osago, vzr]);
+
+	useEffect(() => {
+		console.log(boxList);
+	}, [boxList]);
 
 	const RenderStep = () => {
-		switch (title) {
-			case strings.car:
-				return <CarSteps />;
-			case strings.insuranceCases:
-				return <InsuranceCaseSteps />;
-			case strings.availablePrivileges:
-				return <PrivilegesSteps />;
-			case strings.insurancePeriod:
-				return <InsurancePeriodSteps />;
-			case strings.driver:
-				return <DriverSteps />;
+		switch (insuranceType) {
+			case strings.osago: {
+				console.log(insuranceType);
+				switch (title) {
+					case strings.car:
+						return <CarSteps />;
+					case strings.insuranceCases:
+						return <InsuranceCaseSteps />;
+					case strings.availablePrivileges:
+						return <PrivilegesSteps />;
+					case strings.insurancePeriod:
+						return <InsurancePeriodSteps />;
+					case strings.driver:
+						return <DriverSteps />;
+					default:
+						return (
+							<View>
+								<Text>no selection</Text>
+							</View>
+						);
+				}
+			}
+
+			case strings.vzr: {
+				console.log(insuranceType);
+				switch (title) {
+					case strings.destinationCountry:
+						return <CountrySteps />;
+					case strings.tripPeriod:
+						return <PeriodSteps />;
+					case strings.tripPurpose:
+						return <TripPurposeSteps />;
+					case strings.insuredPerson:
+						return <InsuredPeopleSteps />;
+					case strings.driver:
+						return <DriverSteps />;
+					default:
+						return (
+							<View>
+								<Text>no selection</Text>
+							</View>
+						);
+				}
+			}
 			default:
 				return (
 					<View>
@@ -73,13 +138,17 @@ const Selection = ({ navigation, route, currentStep, osago }) => {
 				</View>
 			</View> */}
 			<View style={{ height: 130, overflow: "visible" }}>
-				<FlatList
-					keyExtractor={(item, index) => "key" + index}
-					renderItem={({ item }) => <SelectItem item={item} />}
-					data={boxList}
-					contentContainerStyle={styles.box}
-					showsVerticalScrollIndicator={false}
-				/>
+				{boxList.length > 0 ? (
+					<FlatList
+						keyExtractor={(item, index) => "key" + index}
+						renderItem={({ item }) => <SelectItem item={item} />}
+						data={boxList}
+						contentContainerStyle={styles.box}
+						showsVerticalScrollIndicator={false}
+					/>
+				) : (
+					<Text>no item</Text>
+				)}
 			</View>
 			<RenderStep />
 			<SelectionLoading />
@@ -102,9 +171,10 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ insurance: { currentStep, osago } }) => ({
+const mapStateToProps = ({ insurance: { currentStep, osago, vzr } }) => ({
 	currentStep,
 	osago,
+	vzr,
 });
 
 const mapDispatchToProps = {};

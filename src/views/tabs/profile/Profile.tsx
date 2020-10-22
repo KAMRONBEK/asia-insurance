@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	StyleSheet,
@@ -13,19 +13,61 @@ import Text from "../../../components/common/Text";
 import Input from "../../../components/common/Input";
 import Select from "../../../components/common/Select";
 import RoundButton from "../../../components/common/RoundButton";
+import {
+	showLoading,
+	hideLoading,
+	showFlashMessage,
+} from "../../../redux/actions";
+import { requests } from "../../../api/requests";
+import { connect } from "react-redux";
 
 interface ProfileProps {
 	navigation: any;
 	preData: ImageSourcePropType;
 }
 
-const Profile = ({ navigation }: ProfileProps) => {
+const Profile = ({
+	navigation,
+	showFlashMessage,
+	showLoading,
+	hideLoading,
+}: ProfileProps) => {
+	let [regionList, setRegionList] = useState([]);
+
 	let [fullName, setFullName] = useState("");
 	let [city, setCity] = useState("");
 
 	const onPress = () => {
 		navigation.navigate(SCREENS.products);
 	};
+
+	const boot = async () => {
+		showLoading(strings.loadingRegions);
+		try {
+			let res = await requests.dictionary.getRegionList();
+			// console.warn(res.data.length);
+			let temp = res.data.map((region) => {
+				return {
+					label: region.text,
+					value: {
+						text: region.text,
+						id: region.id,
+					},
+				};
+			});
+			console.warn(temp.length, "oblasts");
+			setRegionList(temp);
+		} catch (error) {
+			console.log(error);
+			showFlashMessage({ type: colors.red, message: error });
+		} finally {
+			hideLoading();
+		}
+	};
+
+	useEffect(() => {
+		boot();
+	}, []);
 
 	return (
 		<View style={styles.container}>
@@ -77,11 +119,7 @@ const Profile = ({ navigation }: ProfileProps) => {
 				</View>
 				<Select
 					placeholder={strings.currentCity}
-					options={[
-						{ label: "Tashkent", value: "Tashkent" },
-						{ label: "Karshi", value: "Karshi" },
-						{ label: "Samarqand", value: "Samarqand" },
-					]}
+					options={regionList}
 					icon="flag"
 					selectValue={setCity}
 				/>
@@ -132,4 +170,14 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Profile;
+const mapStateToProps = ({ user }) => ({
+	user,
+});
+
+const mapDispatchToProps = {
+	showFlashMessage,
+	showLoading,
+	hideLoading,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -1,17 +1,77 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, ScrollView, StatusBar } from "react-native";
 import TransactionCard from "../../../components/card/TransactionCard";
 import { colors, CONTAINER_PADDING } from "../../../constants";
 import images from "../../../assets/images";
 import { strings } from "../../../locales/strings";
 import Text from "../../../components/common/Text";
+import { requests } from "../../../api/requests";
+import { connect } from "react-redux";
+import {
+	showFlashMessage,
+	showLoading,
+	hideLoading,
+} from "../../../redux/actions";
+import { FlatList } from "react-native-gesture-handler";
 
-const Transactions = ({ navigation }) => {
+const Transactions = ({
+	navigation,
+	user,
+	showFlashMessage,
+	showLoading,
+	hideLoading,
+}) => {
+	// useEffect(() => {
+	// 	StatusBar.setBarStyle("light-content");
+	// 	StatusBar.setBackgroundColor(colors.darkBlue);
+	// }, [navigation]);
+
+	let [orders, setOrders] = useState([]);
+
+	const boot = async () => {
+		try {
+			let res = await requests.order.getOrders({
+				CustomerId: user.customerId,
+			});
+
+			setOrders(res.data.orders);
+		} catch (error) {
+			showFlashMessage({
+				type: colors.red,
+				message: error,
+			});
+			console.log(error);
+		} finally {
+			hideLoading();
+		}
+	};
+
+	let temp = [
+		{
+			assignedOperator: null,
+			comments: null,
+			contactPhone: "936893665",
+			deliveryAddress: "НАВОИЙСКИЙ ВИЛОЯТ, УРГУТСКИЙ ТУМАН, ",
+			discount: 0,
+			extraData:
+				",,,,,,Физ.лицо,Ограниченое использование ТС,Без нарушений",
+			insuranceSumm: 40000000,
+			insuranceType: "ОСАГО",
+			orderCreateTime: "19.08.2020 04:11:17",
+			orderId: "1106df74-8458-462e-91b8-6a1dcff1d4a5",
+			orderNumber: "11179020081916",
+			orderPrice: null,
+			premia: 44800,
+			status: "НОВЫЙ",
+		},
+	];
+
 	useEffect(() => {
-		StatusBar.setBarStyle("light-content");
-		StatusBar.setBackgroundColor(colors.darkBlue);
-	}, [navigation]);
-
+		showLoading(strings.loadingOrders);
+		setTimeout(() => {
+			boot();
+		}, 300);
+	}, []);
 	return (
 		<View style={styles.container}>
 			<ScrollView
@@ -19,8 +79,28 @@ const Transactions = ({ navigation }) => {
 				contentContainerStyle={styles.plane}
 				showsVerticalScrollIndicator={false}
 			>
-				<Text style={styles.title}>{strings.transactionsList}</Text>
-				<TransactionCard
+				<Text style={styles.title}>{strings.orderList}</Text>
+
+				<FlatList
+					data={orders}
+					renderItem={({ item }) => (
+						<TransactionCard
+							image={
+								item.insuranceType == "ОСАГО"
+									? images.carShield
+									: images.planeShield
+							}
+							title={item.insuranceType}
+							orderId={item.orderNumber}
+							assignedOperator={item.assignedOperator + ""}
+							price={item.premia}
+							currency="сум"
+							status={item.status}
+						/>
+					)}
+				/>
+
+				{/* <TransactionCard
 					image={images.carShield}
 					title={strings.osago}
 					orderId="4364644554"
@@ -55,7 +135,7 @@ const Transactions = ({ navigation }) => {
 					status="Оплачено"
 					currency="сум"
 					price="200 000"
-				/>
+				/> */}
 			</ScrollView>
 		</View>
 	);
@@ -76,4 +156,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Transactions;
+const mapStateToProps = ({ user }) => ({ user });
+
+const mapDispatchToProps = {
+	showFlashMessage,
+	showLoading,
+	hideLoading,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transactions);

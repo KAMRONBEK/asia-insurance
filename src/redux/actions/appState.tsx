@@ -5,6 +5,8 @@ import {
 	HIDE_SELECTION_LOADING,
 	SHOW_LOADING,
 	HIDE_LOADING,
+	SHOW_MODAL,
+	HIDE_MODAL,
 } from "../types";
 
 export const toggleMenu = () => ({
@@ -31,4 +33,12 @@ export const showLoading = (payload) => ({
 
 export const hideLoading = () => ({
 	type: HIDE_LOADING,
+});
+
+export const showModal = () => ({
+	type: SHOW_MODAL,
+});
+
+export const hideModal = () => ({
+	type: HIDE_MODAL,
 });

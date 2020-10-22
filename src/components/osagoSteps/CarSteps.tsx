@@ -199,10 +199,26 @@ const CarSteps = ({
 		useEffect(() => {
 			db.transaction((tx) => {
 				tx.executeSql(
-					`SELECT TerretoryName as name, TerretoryId as id, tariff as tariff FROM tbTerretory order by terretoryid `,
+					// `SELECT TerretoryName as name, TerretoryId as id, tariff as tariff FROM tbTerretory order by terretoryid `,
+					`SELECT oblastid as id, oblastname as name, terretoryid as terretoryid  FROM tbOblast  `,
 					[],
 					(tx, results) => {
-						setCarRegisterPlaceList(results.rows.raw());
+						var len = results.rows.length;
+						for (let i = 0; i < len; i++) {
+							let row = results.rows.item(i);
+							console.log(row.name, row.id, row.terretoryid);
+						}
+
+						let temp = results.rows.raw();
+						temp = temp.map((oblast) => {
+							let tariff = oblast.terretoryid == 1 ? 1.4 : 1;
+							return {
+								...oblast,
+								tariff: tariff,
+							};
+						});
+						console.log(temp);
+						setCarRegisterPlaceList(temp);
 						// hideSelectionLoading();
 						hideSelectionLoading();
 					},
@@ -212,6 +228,7 @@ const CarSteps = ({
 				);
 			});
 		}, []);
+
 		return (
 			<View style={styles.content}>
 				<InPageHeader title={strings.carRegisterPlace} />

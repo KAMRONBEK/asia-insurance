@@ -5,6 +5,7 @@ import HelpRequest from "./HelpRequest";
 import { SCREENS } from "../../../constants";
 import Header from "../../../components/navigation/Header";
 import { strings } from "../../../locales/strings";
+import Map from "./Map";
 
 let Stack = createStackNavigator();
 
@@ -32,6 +33,21 @@ export const SosStack = () => {
 					header: ({ navigation }) => (
 						<Header
 							title={strings.requestForHelp}
+							navigation={navigation}
+							close
+							round
+							alignLeft
+						/>
+					),
+				}}
+			/>
+			<Stack.Screen
+				name={SCREENS.map}
+				component={Map}
+				options={{
+					header: ({ navigation }) => (
+						<Header
+							title={strings.selectPlace}
 							navigation={navigation}
 							close
 							round

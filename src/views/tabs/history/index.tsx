@@ -52,7 +52,7 @@ export const HistoryStack = () => {
 					header: ({ navigation }) => (
 						<Header
 							navigation={navigation}
-							title={strings.myTransactions}
+							title={strings.myOrders}
 							round
 							back
 						/>

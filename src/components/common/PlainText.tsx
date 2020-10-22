@@ -38,23 +38,21 @@ const PlainText = ({
 	setValue,
 	onPress,
 }: PlainTextProps) => {
-	useEffect(() => {
-		console.warn(selected);
-	}, [selected]);
-
-	let [checked, setChecked] = useState(selected);
+	let [checked, setChecked] = useState(
+		item?.selected ? item?.selected : selected
+	);
 	const onRadioPress = () => {
 		setChecked(!checked);
 	};
 	return (
-		<Touchable
+		<TouchableOpacity
 			onPress={() => {
 				onPress();
 				onRadioPress();
-			}}	
+			}}
 		>
 			<View style={styles.container}>
-				<Text style={styles.text}>{item.name}</Text>
+				<Text style={styles.text}>{item?.name}</Text>
 				{radio && (
 					// <TouchableOpacity onPress={onRadioPress}>
 					<View style={styles.radio}>
@@ -70,7 +68,7 @@ const PlainText = ({
 					// </TouchableOpacity>
 				)}
 			</View>
-		</Touchable>
+		</TouchableOpacity>
 	);
 };
 

@@ -81,6 +81,8 @@ target 'asia_insurance' do
 
   pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
 
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
   target 'asia_insuranceTests' do
     inherit! :complete
     # Pods for testing

@@ -25,34 +25,7 @@ import { hideLoading, showLoading } from "../../../redux/actions";
 import { connect } from "react-redux";
 
 //example
-const newsList = [
-	{
-		banner:
-			"https://akm-img-a-in.tosshub.com/indiatoday/images/breaking_news/202003/news_flash_1-770x433.jpeg?M3JSZdGiYVvudutfVnTNf3i_XtXrtCiz",
-		title: "Перенос олимпиады 2020",
-		content:
-			"По причине  Covid 19  МОК принял такое решение,  во избежании проблем со решение принял такое",
-		date: "22.05.2020",
-	},
-	{
-		banner:
-			"https://t4.ftcdn.net/jpg/01/40/26/41/240_F_140264128_9WHC3PQgTiiBnIVf8DFp5TsZfr4N9LJ8.jpg",
-		title: "Перенос олимпиады 2020",
-		content:
-			"По причине  Covid 19  МОК принял такое решение,  во избежании проблем со решение принял такое",
-		date: "22.05.2020",
-	},
-	{
-		banner:
-			"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRN2sdkQqqshaar3z_6wWao8EMIoJ-d_DZv4Nielr61V7aX-9Cs&usqp=CAU",
-		title: "Перенос олимпиады 2020",
-		content:
-			"По причине  Covid 19  МОК принял такое решение,  во избежании проблем со решение принял такое",
-		date: "22.05.2020",
-	},
-];
-
-const Products = ({ navigation, hideLoading, showLoading }) => {
+const Products = ({ navigation, hideLoading, showLoading, customerId }) => {
 	let [newsList, setNewsList] = useState([]);
 
 	useEffect(() => {
@@ -65,6 +38,7 @@ const Products = ({ navigation, hideLoading, showLoading }) => {
 			let res = await requests.news.newsList();
 			setNewsList(res.data.data);
 		} catch (error) {
+			console.log(error.response);
 			console.log(error.response.message);
 		} finally {
 			hideLoading();
@@ -195,7 +169,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = ({ user }) => ({
+	customerId: user.customerId,
+});
 
 const mapDispatchToProps = {
 	hideLoading,

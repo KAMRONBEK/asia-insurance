@@ -3,10 +3,12 @@ import appState from "./reducers/appState";
 import insurance from "./reducers/insurance";
 import checkout from "./reducers/checkout";
 import user from "./reducers/user";
+import mapState from "./reducers/mapState";
+import sos from "./reducers/sos";
 
 let configureStore = () => {
 	return createStore(
-		combineReducers({ appState, insurance, checkout, user })
+		combineReducers({ appState, insurance, checkout, user, mapState, sos })
 	);
 };
 

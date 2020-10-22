@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextInput as Input, View, StyleSheet } from "react-native";
+import { TextInput as Input, View, StyleSheet, Keyboard } from "react-native";
 import { colors, BORDER_RADIUS } from "../../constants";
 import { replaceAt } from "../../utils/functions";
 
@@ -21,16 +21,21 @@ const SingleInput = ({
 				selectTextOnFocus={true}
 				ref={inputRef}
 				onChangeText={(text) => {
+					console.log(text);
 					if (text.length <= 1) {
 						setValue(text);
 						if (!!text) {
 							if (onEnter) onEnter();
 						}
 						setCode(replaceAt(code, index, text));
+						if (onEnter) onEnter();
 					}
 				}}
+				value={value}
 				onKeyPress={({ nativeEvent }) => {
-					nativeEvent.key === "Backspace" ? onErase() : undefined;
+					nativeEvent.key === "Backspace"
+						? onErase()
+						: () => Keyboard.dismiss();
 				}}
 				{...props}
 				style={styles.input}
@@ -51,9 +56,10 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	input: {
-		width: 20,
+		width: "100%",
 		fontSize: 18,
 		fontWeight: "bold",
+		textAlign: "center",
 	},
 });
 

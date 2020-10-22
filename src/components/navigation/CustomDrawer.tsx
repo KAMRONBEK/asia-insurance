@@ -22,6 +22,8 @@ import VersionCheck from "react-native-version-check";
 import { navigate } from "../../utils/NavigationService";
 import FlashMessage from "../common/FlashMessage";
 import { timing } from "react-native-reanimated";
+import { requests } from "../../api/requests";
+import AsyncStorage from "@react-native-community/async-storage";
 
 type DrawerProps = {
 	children: any;
@@ -37,13 +39,26 @@ const CustomDrawer = ({
 	menuOpen,
 	toggleMenu,
 	navigation,
+	profile,
+	user,
 }: DrawerProps) => {
 	const [animation, setAnimation] = useState(new Animated.Value(0));
+
+	let [points, setPoints] = useState(0);
+
+	let boot = async () => {
+		let res = await requests.ball.getBall();
+		setPoints(res.data.data[0].points);
+	};
+
+	useEffect(() => {
+		boot();
+		console.log(profile, user);
+	}, []);
 
 	//changing height while keyboard is on
 
 	//end of keyboard handling
-
 	useEffect(() => {
 		Animated.timing(animation, {
 			toValue: Number(menuOpen),
@@ -62,6 +77,16 @@ const CustomDrawer = ({
 		inputRange: [0, 0.1, 1],
 		outputRange: [0, 40, 40],
 	});
+
+	let logout = () => {
+		AsyncStorage.removeItem("@user");
+		console.log("logged out");
+		navigate(SCREENS.auth, {
+			name: SCREENS.loader,
+			params: {},
+		});
+	};
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<LinearGradient
@@ -90,8 +115,12 @@ const CustomDrawer = ({
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
-					<Text style={styles.username}>Username Surname</Text>
-					<Text style={styles.id}>ID: 009</Text>
+					<Text style={styles.username}>
+						{!!profile.customerName
+							? profile.customerName
+							: `NO NAME`}
+					</Text>
+					<Text style={styles.id}>ID: {user.id}</Text>
 				</View>
 				<View>
 					<DrawerItem
@@ -136,7 +165,7 @@ const CustomDrawer = ({
 							toggleMenu();
 						}}
 						iconName={"history"}
-						text={strings.payments}
+						text={strings.myOrders}
 					/>
 					<DrawerItem
 						onPress={() => {
@@ -190,7 +219,7 @@ const CustomDrawer = ({
 							{strings.myPoints}
 							{": "}
 						</Text>
-						<Text style={styles.normalLight}>75000{"    "}</Text>
+						<Text style={styles.normalLight}>{points} </Text>
 						<Text style={styles.borderedRegular}>
 							{strings.whatIsThis}
 						</Text>
@@ -200,6 +229,7 @@ const CustomDrawer = ({
 							text={strings.logout}
 							iconName={"logout"}
 							hasBorder={false}
+							onPress={logout}
 						/>
 						<Text
 							style={{
@@ -293,7 +323,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ appState: { menuOpen } }) => ({ menuOpen });
+const mapStateToProps = ({ user, appState: { menuOpen } }) => ({
+	menuOpen,
+	profile: user.profile,
+	user: user.user,
+});
 
 const mapDispatchToProps = {
 	toggleMenu,

@@ -4,6 +4,8 @@ import {
 	SET_INSURANCE_PERIOD,
 	SET_SHIPPING_INFO,
 	SET_LOCATION_INFO,
+	SET_WITH_SHIPPING,
+	SET_SHIPPING_ADDRESS_SAME,
 } from "../types";
 
 export const setDocuments = (payload) => ({
@@ -28,5 +30,14 @@ export const setLocationInfo = (payload) => ({
 
 export const setShippingInfo = (payload) => ({
 	type: SET_SHIPPING_INFO,
+	payload,
+});
+
+export const setWithShipping = () => ({
+	type: SET_WITH_SHIPPING,
+});
+
+export const setShippingSameAddr = (payload) => ({
+	type: SET_SHIPPING_ADDRESS_SAME,
 	payload,
 });

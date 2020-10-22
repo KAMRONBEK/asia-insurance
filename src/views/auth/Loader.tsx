@@ -17,6 +17,7 @@ import {
 	userLoaded,
 	hideLoading,
 	initUserState,
+	profileLoadRedux,
 } from "../../redux/actions";
 import AsyncStorage from "@react-native-community/async-storage";
 import { connect } from "react-redux";
@@ -37,6 +38,7 @@ const Loader = ({
 	appState,
 	userLoaded,
 	initUserState,
+	profileLoadRedux,
 }: Props) => {
 	useEffect(() => {
 		StatusBar.setBarStyle("dark-content");
@@ -59,7 +61,16 @@ const Loader = ({
 	const bootstrap = async () => {
 		// showLoading(strings.loading);
 		try {
-			let storage = await AsyncStorage.getItem("@credentials");
+			let profile = await AsyncStorage.getItem("@profile");
+
+			if (!!profile) {
+				let parsedProfile = JSON.parse(profile);
+				if (!!parsedProfile) {
+					profileLoadRedux(parsedProfile);
+				}
+			}
+
+			let storage = await AsyncStorage.getItem("@user");
 			if (!!storage) {
 				console.log(storage);
 
@@ -167,6 +178,7 @@ const mapDispatchToProps = {
 	showLoading,
 	initUserState,
 	userLoaded,
+	profileLoadRedux,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Loader);

@@ -201,6 +201,7 @@ export const Login = ({ index, navigation, setPhoneNumber, code, setCode }) => {
 											style={[
 												styles.count,
 												{
+													paddingTop: 20,
 													color: colors.darkBlue,
 												},
 											]}
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingHorizontal: CONTAINER_PADDING,
-		backgroundColor: colors.ultraLightDark,
+		backgroundColor: colors.ultraLightBlue,
 	},
 	top: {
 		paddingTop: 30,

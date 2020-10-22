@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import {
 	colors,
@@ -13,36 +13,77 @@ import Text from "../common/Text";
 // import ImagePicker from "react-native-image-picker";
 import ImagePicker from "react-native-image-crop-picker";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { formData, constructFileFromUri } from "../../api/requests";
+import { connect } from "react-redux";
+import { setDocuments } from "../../redux/actions";
 
 interface ImageUploadCardProps {
 	name: string;
 	data: never[];
 	setData: any;
+	docType: number;
 }
 
-const ImageUploadCard = ({ name, data, setData }: ImageUploadCardProps) => {
+const ImageUploadCard = ({
+	name,
+	data,
+	setData,
+	docType,
+	setDocuments,
+}: ImageUploadCardProps) => {
 	let [images, setImages] = useState([]);
 	let [fileName, setFileName] = useState(name);
 
-	const onCameraPress = () => {
+	const onChoosePress = () => {
 		ImagePicker.openPicker({
 			multiple: true,
+			includeBase64: true,
 		})
 			.then((pictures) => {
-				console.log(pictures);
 				setImages([...pictures, ...images]);
-				setData([...data, { passport: pictures }]);
+				// setData([...data, { passport: pictures }]);
+				pictures.map((picture) => {
+					setData([
+						...data,
+						{
+							DocumentTypeEnum: docType,
+							// File: formData(constructFileFromUri(picture)),
+							File: picture.data,
+						},
+					]);
+					// console.log(formData(constructFileFromUri(picture)));
+				});
+				// pictures.map((picture) => {
+				// 	setDocuments({
+				// 		DocumentTypeEnum: docType,
+				// 		File: formData(constructFileFromUri(picture)),
+				// 	});
+				// });
 			})
 			.catch((err) => console.warn(err));
 	};
-	const onChoosePress = () => {
+
+	const onCameraPress = () => {
 		ImagePicker.openCamera({
+			includeBase64: true,
 			multiple: true,
 		})
 			.then((picture) => {
-				console.log(picture);
 				setImages([picture, ...images]);
-				setData([...data, { passport: images }]);
+				setData([
+					...data,
+					{
+						DocumentTypeEnum: docType,
+						// File: formData(constructFileFromUri(picture)),
+						File: picture.data,
+					},
+				]);
+				// setDocuments({
+				// 	DocumentTypeEnum: docType,
+				// 	File: formData(constructFileFromUri(picture)),
+				// });
+				// console.log(formData(constructFileFromUri(picture)));
+				// setData([...data, { passport: images }]);
 			})
 			.catch((err) => console.warn(err));
 	};
@@ -62,11 +103,11 @@ const ImageUploadCard = ({ name, data, setData }: ImageUploadCardProps) => {
 				>
 					<Text style={styles.title}>{fileName}</Text>
 
-					<TouchableWithoutFeedback onPress={onCameraPress}>
+					<TouchableWithoutFeedback onPress={onChoosePress}>
 						<Icons name="form" color={colors.darkBlue} size={28} />
 					</TouchableWithoutFeedback>
 				</View>
-				<TouchableWithoutFeedback onPress={onChoosePress}>
+				<TouchableWithoutFeedback onPress={onCameraPress}>
 					<Icons
 						name="camera"
 						color={colors.darkBlue}
@@ -139,4 +180,11 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 });
-export default ImageUploadCard;
+
+const mapStateToProps = ({ checkout }) => ({});
+
+const mapDispatchToProps = {
+	setDocuments,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ImageUploadCard);

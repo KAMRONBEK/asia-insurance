@@ -9,15 +9,22 @@ import {
 } from "react-native";
 //@ts-ignore
 import RoundButton from "../../components/common/RoundButton";
-import { colors, SCREENS } from "../../constants";
+import { colors, SCREENS, deviceWidth } from "../../constants";
 import { strings } from "../../locales/strings";
 import Intros, { Intro } from "./Intros";
 import { Login } from "./Login";
-import { toggleMenu, userLoaded, userLoggedIn } from "../../redux/actions";
+import {
+	toggleMenu,
+	userLoaded,
+	userLoggedIn,
+	showLoading,
+	hideLoading,
+	profileStored,
+} from "../../redux/actions";
 import { connect } from "react-redux";
 import images from "../../assets/images";
 import { navigate } from "../../utils/NavigationService";
-import { requests } from "../../api/requests";
+import { requests, formData } from "../../api/requests";
 
 //* Our staticly typed intros
 let introsData: Intro[] = [
@@ -35,7 +42,17 @@ let introsData: Intro[] = [
 	},
 ];
 
-const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
+const Auth = ({
+	toggleMenu,
+	navigation,
+	userLoaded,
+	user,
+	userLoggedIn,
+	showLoading,
+	hideLoading,
+	device_token,
+	profileStored,
+}) => {
 	useEffect(() => {
 		StatusBar.setBarStyle("dark-content");
 		StatusBar.setBackgroundColor(colors.ultraLightDark);
@@ -48,6 +65,9 @@ const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
 		useRef<ScrollView>(null),
 	];
 	//*
+
+	// console.log(user, "fcm");
+
 	const [current, setCurrent] = useState(0);
 	//* For scrolling from Intros to Login
 	const ref = useRef<ScrollView>(null);
@@ -62,6 +82,8 @@ const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
 	let [buttonText, setButtonText] = useState(strings.next);
 
 	let proceed = () => {
+		console.log("press");
+
 		let currentRef = 0;
 		let newValue = current >= introsData.length ? 0 : current + 1;
 
@@ -74,9 +96,10 @@ const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
 		}
 		//* scroll each IntroData container (ScrollView)
 		let id = setInterval(() => {
-			scroll[currentRef].current?.scrollTo({ x: width * newValue });
+			scroll[currentRef]?.current?.scrollTo({ x: width * newValue });
 			currentRef++;
-		}, 300);
+		}, 100);
+
 		//* remove scroll interval
 		setTimeout(() => {
 			clearInterval(id);
@@ -87,6 +110,10 @@ const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
 
 	let [phoneNumber, setPhoneNumber] = useState("");
 	let [code, setCode] = useState("");
+
+	useEffect(() => {
+		console.log(code);
+	}, [code]);
 	let login = async () => {
 		if (loginIndex == 0) {
 			setLoginIndex(loginIndex + 1);
@@ -94,7 +121,7 @@ const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
 			try {
 				let res = await requests.auth.login({
 					phone: phoneNumber,
-					device_token: "test123",
+					device_token: user.user.device_token,
 				});
 				console.log(res.data.data);
 				let profileRes = await requests.user.profile(
@@ -105,22 +132,55 @@ const Auth = ({ toggleMenu, navigation, userLoaded, user, userLoggedIn }) => {
 				}
 				console.log(profileRes.data.data);
 			} catch (error) {
-				console.log(error.response);
+				console.log(error.response.data);
 			}
 		}
 		if (loginIndex == 1) {
+			showLoading(strings.verifyingCode);
 			try {
 				let res = await requests.auth.verifyCode({ code: code });
-				console.log("here");
+				console.log("res.data");
+				console.log(res.data.data);
+				//code verified
+				try {
+					let resAsia = await requests.authAsia.registerUser({
+						PhoneNumber: phoneNumber,
+						ActivationCode: code,
+					});
+					console.log(resAsia.data);
+					userLoggedIn({
+						user: res.data.data,
+						id: resAsia.data.customerId,
+					});
 
-				console.log(res.data);
-				userLoggedIn(res.data.data);
-				navigation.navigate(SCREENS.pin, {
-					name: SCREENS.pin,
-					params: {},
-				});
+					//user registered to ASIA-INSURANCE
+					showLoading(strings.gettingProfile);
+					try {
+						let profileAsia = await requests.authAsia.userDetails({
+							CustomerID: resAsia.data.customerId,
+						});
+
+						console.log("profile:", profileAsia.data);
+
+						profileStored(profileAsia.data);
+
+						navigation.navigate(SCREENS.pin, {
+							name: SCREENS.pin,
+							params: {},
+						});
+					} catch (error) {
+						console.log(error, "error in profile");
+					}
+				} catch (error) {
+					console.log(
+						error.response.data.message,
+						"error in Asia register"
+					);
+				}
 			} catch (error) {
-				console.log(error.response.message);
+				console.log(error.response, "error verify");
+			} finally {
+				hideLoading();
 			}
 		}
 		// if (loginIndex != 1) {
@@ -185,7 +245,7 @@ const styles = StyleSheet.create({
 	plane: {
 		flex: 1,
 		alignItems: "center",
-		backgroundColor: colors.ultraLightDark,
+		backgroundColor: colors.ultraLightBlue,
 	},
 	container: {
 		flex: 1,
@@ -207,6 +267,9 @@ const mapDispatchToProps = {
 	toggleMenu,
 	userLoaded,
 	userLoggedIn,
+	showLoading,
+	hideLoading,
+	profileStored,
 };
 
 const connectedAuth = connect(mapStateToProps, mapDispatchToProps)(Auth);

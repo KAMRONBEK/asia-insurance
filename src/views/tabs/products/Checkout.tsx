@@ -20,7 +20,21 @@ import Select from "../../../components/common/Select";
 import PlainText from "../../../components/common/PlainText";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { connect } from "react-redux";
-import { setShippingInfo } from "../../../redux/actions";
+import {
+	setShippingInfo,
+	setDocuments,
+	setLocationInfo,
+	showFlashMessage,
+	setInsurancePeriod,
+	showLoading,
+	hideLoading,
+	setWithShipping,
+	setShippingSameAddr,
+} from "../../../redux/actions";
+import { requests } from "../../../api/requests";
+import moment from "moment";
+import DatePicker from "react-native-datepicker";
+import { navigate } from "../../../utils/NavigationService";
 
 const limDriverForm = {
 	first: strings.driverPassport,
@@ -36,16 +50,42 @@ const unlimDriverForm = {
 	type: "relative",
 };
 
-const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
+const Checkout = ({
+	navigation,
+	osago,
+	checkout,
+	setShippingInfo,
+	cost,
+	setDocuments,
+	user,
+	setLocationInfo,
+	showFlashMessage,
+	setInsurancePeriod,
+	showLoading,
+	hideLoading,
+	setWithShipping,
+	setShippingSameAddr,
+}) => {
 	//checkout datas goes here
-	let [sameAddress, setSameAddress] = useState(false);
 	let driverLimited = osago?.driver?.driverCount?.value == "limited";
+
+	// let [oblastId, setOblastId] = useState(0);
+	// let [rayonId, setRayonId] = useState(0);
+
+	// let endDate = beginDate.setDate(
+	// 	beginDate.getDate() + osago.insurancePeriod.period.days
+	// );
 
 	let Document = () => {
 		let [driversDocuments, setDriversDocuments] = useState([]);
 		let [driverDocumentList, setDriverDocumentList] = useState([]);
 
+		useEffect(() => {
+			// console.log(driversDocuments);
+		}, [driversDocuments]);
+
 		const onPress = () => {
+			setDocuments(driversDocuments);
 			setIndex(index + 1);
 		};
 
@@ -70,16 +110,19 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 						name={strings.applicantsPassport}
 						data={driversDocuments}
 						setData={setDriversDocuments}
+						docType={1}
 					/>
 					<ImageUploadCard
 						name={strings.ownerPassport}
 						data={driversDocuments}
 						setData={setDriversDocuments}
+						docType={2}
 					/>
 					<ImageUploadCard
 						name={strings.techPassport}
 						data={driversDocuments}
 						setData={setDriversDocuments}
+						docType={3}
 					/>
 					{driverDocumentList.map((driver, index) => (
 						<>
@@ -93,16 +136,19 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 								name={driver.first}
 								data={driversDocuments}
 								setData={setDriversDocuments}
+								docType={5}
 							/>
 							<ImageUploadCard
 								name={driver.second}
 								data={driversDocuments}
 								setData={setDriversDocuments}
+								docType={4}
 							/>
 							<ImageUploadCard
 								name={driver.third}
 								data={driversDocuments}
 								setData={setDriversDocuments}
+								docType={6}
 							/>
 						</>
 					))}
@@ -157,7 +203,7 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 						<Text style={[styles.bold, styles.textCenter]}>
 							{strings.pleaseFillPersonalData}
 						</Text>
-						<Input placeholder={strings.pinfl} setValue={setPin} />
+						{/* <Input placeholder={strings.pinfl} setValue={setPin} /> */}
 						<Input
 							placeholder={strings.lastName}
 							setValue={setLastName}
@@ -195,47 +241,266 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 						text={strings.next}
 						gradient
 						onPress={onPress}
-						passive={!pin || !name || !lastName || !middleName}
+						passive={!name || !lastName || !middleName}
 					/>
 				</View>
 			</View>
 		);
 	};
-	// let InsurancePeriod = () => {
-	// 	const onPress = () => {
-	// 		setIndex(index + 1);
-	// 	};
-	// 	return (
-	// 		<View style={styles.period}>
-	// 			<Select
-	// 				placeholder={strings.chooseInsurancePeriod}
-	// 				options={[{ label: "label", value: "value" }]}
-	// 			/>
-	// 			<Select
-	// 				placeholder={strings.realisationDate}
-	// 				options={[{ label: "label", value: "value" }]}
-	// 			/>
-	// 			<View style={styles.buttonWrapper}>
-	// 				<RoundButton
-	// 					text={strings.next}
-	// 					gradient
-	// 					onPress={onPress}
-	// 				/>
-	// 			</View>
-	// 		</View>
-	// 	);
-	// };
-	let LocationInfo = () => {
+	let InsurancePeriod = () => {
+		let [beginDate, setBeginDate] = useState();
+		// moment(new Date(), "DD.MM.YYYY")
+		let [endDate, setEndDate] = useState();
+		// moment(beginDate, "DD.MM.YYYY")
+		// 	.add(osago.insurancePeriod.period.days, "days")
+		// 	.format("DD.MM.YYYY")
 		const onPress = () => {
+			setInsurancePeriod({ beginDate: beginDate, endDate: endDate });
+
 			setIndex(index + 1);
 		};
+		useEffect(() => {
+			setEndDate(
+				moment(beginDate, "DD.MM.YYYY")
+					.add(osago.insurancePeriod.period.days, "days")
+					.format("DD.MM.YYYY")
+			);
 
-		let [country, setCountry] = useState("");
-		let [region, setRegion] = useState("");
-		let [district, setDistrict] = useState("");
+			console.log(
+				beginDate,
+				moment(beginDate, "DD.MM.YYYY")
+					.add(osago.insurancePeriod.period.days, "days")
+					.format("DD.MM.YYYY"),
+				osago.insurancePeriod.period.days
+			);
+		}, [beginDate]);
+
+		return (
+			<View style={styles.period}>
+				{/* <Select
+					placeholder={strings.chooseInsurancePeriod}
+					options={[{ label: "label", value: "value" }]}
+				/>
+				<Select
+					placeholder={strings.realisationDate}
+					options={[{ label: "label", value: "value" }]}
+				/> */}
+				<DatePicker
+					style={{
+						borderRadius: BORDER_RADIUS,
+						backgroundColor: colors.white,
+						justifyContent: "space-between",
+						width: "100%",
+						padding: 10,
+						marginBottom: 20,
+					}}
+					date={beginDate}
+					mode="date"
+					placeholder={strings.pickStartDate}
+					format="DD.MM.YYYY"
+					minDate={new Date()}
+					maxDate="01-01-2030"
+					confirmBtnText={strings.yes}
+					cancelBtnText={strings.no}
+					iconComponent={
+						<Icons name="calendar" size={20} color={colors.gray} />
+					}
+					customStyles={{
+						dateIcon: {
+							height: 30,
+							width: 30,
+						},
+						dateInput: {
+							borderWidth: 0,
+							marginRight: 20,
+							borderRadius: BORDER_RADIUS,
+						},
+						dateTouchBody: {
+							width: "100%",
+							justifyContent: "space-between",
+							overflow: "hidden",
+							paddingRight: 10,
+						},
+						// ... You can check the source to find the other keys.
+					}}
+					onDateChange={(date) => {
+						setBeginDate(date);
+					}}
+				/>
+				<DatePicker
+					style={{
+						borderRadius: BORDER_RADIUS,
+						backgroundColor: colors.white,
+						justifyContent: "space-between",
+						width: "100%",
+						padding: 10,
+					}}
+					date={endDate}
+					disabled
+					mode="date"
+					placeholder={strings.pickEndDate}
+					format="DD.MM.YYYY"
+					minDate={new Date()}
+					maxDate="01-01-2030"
+					confirmBtnText={strings.yes}
+					cancelBtnText={strings.no}
+					iconComponent={
+						<Icons name="calendar" size={20} color={colors.gray} />
+					}
+					customStyles={{
+						dateIcon: {
+							height: 30,
+							width: 30,
+						},
+						dateInput: {
+							borderWidth: 0,
+							borderRadius: BORDER_RADIUS,
+							marginRight: 20,
+						},
+						dateTouchBody: {
+							width: "100%",
+							justifyContent: "space-between",
+							overflow: "hidden",
+							paddingRight: 10,
+						},
+						disabled: {
+							backgroundColor: colors.ultraLightDark,
+						},
+						// ... You can check the source to find the other keys.
+					}}
+					onDateChange={(date) => {
+						setEndDate(date);
+					}}
+				/>
+				<View style={styles.buttonWrapper}>
+					<RoundButton
+						text={strings.next}
+						gradient
+						onPress={onPress}
+						passive={!beginDate || !endDate}
+					/>
+				</View>
+			</View>
+		);
+	};
+	let LocationInfo = () => {
+		let [countryList, setCountryList] = useState([]);
+		let [oblastList, setOblastList] = useState([]);
+		let [rayonList, setRayonList] = useState([]);
+
+		let [country, setCountry] = useState({});
+		let [region, setRegion] = useState({});
+		let [district, setDistrict] = useState({});
 		let [street, setStreet] = useState("");
 		let [house, setHouse] = useState("");
 		let [phone, setPhone] = useState("");
+
+		let getCountryList = async () => {
+			showLoading(strings.loadingCountries);
+			try {
+				let res = await requests.dictionary.getCountryList();
+				// console.warn(res.data.length);
+				let temp = res.data.map((country) => {
+					return {
+						label: country.text,
+						value: {
+							text: country.text,
+							id: country.id,
+						},
+					};
+				});
+				console.warn(temp.length, "countries");
+				setCountryList(temp);
+			} catch (error) {
+				console.log(error);
+				showFlashMessage({ type: colors.red, message: error });
+			} finally {
+				hideLoading();
+			}
+		};
+
+		let getOblastList = async () => {
+			showLoading(strings.loadingRegions);
+			try {
+				let res = await requests.dictionary.getRegionList();
+				// console.warn(res.data.length);
+				let temp = res.data.map((region) => {
+					return {
+						label: region.text,
+						value: {
+							text: region.text,
+							id: region.id,
+						},
+					};
+				});
+				console.warn(temp.length, "oblasts");
+				setOblastList(temp);
+			} catch (error) {
+				console.log(error);
+				showFlashMessage({ type: colors.red, message: error });
+			} finally {
+				hideLoading();
+			}
+		};
+
+		let getRayonList = async (id) => {
+			showLoading(strings.loadingRayons);
+			try {
+				console.log(id, "load rayon");
+				let res = await requests.dictionary.getRayonList();
+				console.log(res.data.length, "ta rayon");
+				let correspondingRayons = res.data.filter((rayon) => {
+					if (rayon.regionId === id) {
+						return rayon;
+					}
+				});
+				let temp = correspondingRayons.map((rayon) => {
+					return {
+						label: rayon?.text,
+						value: {
+							text: rayon?.text,
+							regionId: rayon?.regionId,
+							id: rayon?.id,
+						},
+					};
+				});
+				console.log(temp.length, "rayon");
+
+				setRayonList(temp);
+			} catch (error) {
+				showFlashMessage({ type: colors.red, message: error });
+				console.log(error);
+			} finally {
+				hideLoading();
+			}
+		};
+
+		// useEffect(() => {
+		// 	console.log("region change");
+		// 	if (region && index == 3) {
+		// 	}
+		// }, [region]);
+
+		useEffect(() => {
+			if (index == 3) {
+				getCountryList();
+				getOblastList();
+			}
+		}, [index]);
+
+		const onRegionSelected = () => {};
+
+		const onPress = () => {
+			setLocationInfo({
+				country: country,
+				region: region,
+				district: district,
+				street: street,
+				house: house,
+				phone: phone,
+			});
+			setIndex(index + 1);
+		};
 
 		return (
 			<View style={styles.location}>
@@ -251,98 +516,19 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 						</Text>
 						<Select
 							placeholder={strings.country}
-							options={[
-								{ label: "Uzbekistan", value: "Uzbekistan" },
-							]}
+							options={countryList}
 							selectValue={setCountry}
 						/>
 						<Select
 							selectValue={setRegion}
+							onValueChange={getRayonList}
 							placeholder={strings.region}
-							options={[
-								{
-									label: "ГОРОД  ТАШКЕНТ",
-									value: "ГОРОД  ТАШКЕНТ",
-								},
-								{
-									label: "ТАШКЕНТСКИЙ ВИЛОЯТ",
-									value: "ТАШКЕНТСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "СЫРДАРЬИНСКИЙ ВИЛОЯТ",
-									value: "СЫРДАРЬИНСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "ДЖИЗАКСКИЙ ВИЛОЯТ",
-									value: "ДЖИЗАКСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "САМАРКАНДСКИЙ ВИЛОЯТ",
-									value: "САМАРКАНДСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "ФЕРГАНСКИЙ ВИЛОЯТ",
-									value: "ФЕРГАНСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "НАМАНГАНСКИЙ ВИЛОЯТ",
-									value: "НАМАНГАНСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "АНДИЖАНСКИЙ ВИЛОЯТ",
-									value: "АНДИЖАНСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "КАШКАДАРЬИНСКИЙ ВИЛОЯТ",
-									value: "КАШКАДАРЬИНСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "СУРХАНДАРЬИНСКИЙ ВИЛОЯТ",
-									value: "СУРХАНДАРЬИНСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "БУХАРСКИЙ ВИЛОЯТ",
-									value: "БУХАРСКИЙ ВИЛОЯТ",
-								},
-								{
-									label: "НАВОИЙ ВИЛОЯТИ",
-									value: "НАВОИЙ ВИЛОЯТИ",
-								},
-								{
-									label: "ХОРЕЗМСКИЙ ВИЛОЯТ",
-									value: "ХОРЕЗМСКИЙ ВИЛОЯТ",
-								},
-							]}
+							options={oblastList}
 						/>
 						<Select
 							selectValue={setDistrict}
 							placeholder={strings.district}
-							options={[
-								{
-									label: "ЖОНДОРСКИЙ ТУМАН",
-									value: "ЖОНДОРСКИЙ ТУМАН",
-								},
-								{
-									label: "ЧИМБОЙ ГОРОД",
-									value: "ЧИМБОЙ ГОРОД",
-								},
-								{
-									label: "ГОРОД КУМКУРГАН",
-									value: "ГОРОД КУМКУРГАН",
-								},
-								{
-									label: "ГОРОД МУЙНАК",
-									value: "ГОРОД МУЙНАК",
-								},
-								{
-									label: "ГОРОД ШАФИРКАН",
-									value: "ГОРОД ШАФИРКАН",
-								},
-								{
-									label: "ГУРЛАНСКИЙ ТУМАН",
-									value: "ГУРЛАНСКИЙ ТУМАН",
-								},
-							]}
+							options={rayonList}
 						/>
 						<Input
 							placeholder={strings.street}
@@ -377,16 +563,22 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 		);
 	};
 	let Shipping = () => {
-		let [withShipping, setWithShipping] = useState(false);
+		// let [withShipping, setWithShipping] = useState(false);
+		let [isShippingAddrSame, setIsShippingAddrSame] = useState(false);
 
 		const onPress = () => {
 			setIndex(index + 1);
-			setShippingInfo({
-				withShipping: withShipping
-					? strings.shipping
-					: strings.takeFromOffice,
-			});
+			// setShippingInfo({
+			// 	withShipping: checkout.shipping.withShipping
+			// 		? strings.shipping
+			// 		: strings.takeFromOffice,
+			// });
 		};
+
+		useEffect(() => {
+			console.log(checkout.shipping.withShipping);
+		}, [checkout.shipping.withShipping]);
+
 		return (
 			<View style={styles.shipping}>
 				<ScrollView
@@ -402,19 +594,14 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 						<PlainText
 							radio
 							item={{ name: strings.shippingToDoor }}
-							onPress={() => {
-								console.warn(withShipping);
-								setWithShipping(true);
-							}}
-							selected={withShipping}
+							onPress={setWithShipping}
+							selected={checkout.shipping.withShipping}
 						/>
 						<PlainText
 							radio
 							item={{ name: strings.takeFromOffice }}
-							onPress={() => {
-								setWithShipping(false);
-							}}
-							selected={!withShipping}
+							onPress={setWithShipping}
+							selected={!checkout.shipping.withShipping}
 						/>
 					</View>
 					<View
@@ -429,11 +616,11 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 							{strings.isShippingAddressAndLivingAddressSame}
 						</Text>
 						<CustomSwitch
-							value={sameAddress}
-							onValueChange={setSameAddress}
+							value={isShippingAddrSame}
+							onValueChange={setIsShippingAddrSame}
 						/>
 					</View>
-					{withShipping && (
+					{checkout.shipping.withShipping && (
 						<View style={styles.shippingContent}>
 							<View style={styles.textArea}>
 								<TextInput
@@ -485,7 +672,9 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 			},
 			{
 				title: strings.deliveryType,
-				value: checkout.shipping.withShipping,
+				value: checkout.shipping.withShipping
+					? strings.shippingToDoor
+					: strings.takeFromOffice,
 			},
 			{
 				title: strings.policyCost,
@@ -493,9 +682,163 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 			},
 		];
 
-		const onPress = () => {
-			navigation.navigate(SCREENS.products);
+		const onPress = async () => {
+			showLoading(strings.registeringYourOrder);
+
+			try {
+				console.log({
+					CustomerId: user.customerId,
+					ContactPhone: user.user.phone,
+					InsuranceType: 0,
+					DeliveryOblastId: checkout.locationInfo.region.id,
+					DeliveryRayonId: checkout.locationInfo.district.id,
+					InsuranceParams: {
+						Premia:
+							Math.round(cost) /
+							osago.privilege.availablePrivilege.tariff,
+						InsuranceSumm: 40000000,
+						Discount:
+							Math.round(cost) /
+								osago.privilege.availablePrivilege.tariff -
+							Math.round(cost),
+						BeginDate: checkout.insurancePeriod.beginDate,
+						ExtraData: JSON.stringify(osago),
+						EndDate: checkout.insurancePeriod.endDate,
+					},
+				});
+
+				let res = await requests.order.createOrder({
+					CustomerId: user.customerId,
+					ContactPhone: user.user.phone,
+					InsuranceType: 0,
+					DeliveryOblastId: checkout.locationInfo.region.id,
+					DeliveryRayonId: checkout.locationInfo.district.id,
+					InsuranceParams: {
+						Premia:
+							Math.round(cost) /
+							osago.privilege.availablePrivilege.tariff,
+						InsuranceSumm: 40000000,
+						Discount:
+							Math.round(cost) /
+								osago.privilege.availablePrivilege.tariff -
+							Math.round(cost),
+						BeginDate: checkout.insurancePeriod.beginDate,
+						EndDate: checkout.insurancePeriod.endDate,
+						ExtraData: JSON.stringify(osago),
+					},
+					// Docs: checkout.documents,
+					// Docs: [],
+					DocsInBytes: checkout.documents,
+				});
+				console.log(res.data, "res");
+				showFlashMessage({
+					type: colors.green,
+					message:
+						strings.yourOrderAccepted +
+						"\n" +
+						strings.orderId +
+						res.data.orderId,
+				});
+				// navigation.navigate(SCREENS.products);
+				navigate(SCREENS.tabs, {
+					name: SCREENS.historyStack,
+					params: {
+						screen: SCREENS.transactions,
+					},
+				});
+			} catch (error) {
+				console.log(error.request._response, "checkout");
+				showFlashMessage({
+					type: colors.red,
+					message: error.request._response.toString(),
+				});
+			} finally {
+				hideLoading();
+			}
 		};
+
+		let temp = {
+			config: {
+				data:
+					'{"CustomerId":"600a723f-c121-4d72-bf5a-ba6f67433601","ContactPhone":"993440423","InsuranceType":0,"DeliveryOblastId":15,"DeliveryRayonId":1508,"InsuranceParams":{"Premia":38400,"InsuranceSumm":40000000,"Discount":0,"BeginDate":"13.08.2020","EndDate":"13.08.2020"},"Docs":[{"DocumentTypeEnum":1,"File":{"_parts":[["uri","file:///data/user/0/com.asia_insurance/cache/react-native-image-crop-picker/IMG_20200806_171618_668.jpg"],["name","upload_photo"],["type","image/jpeg"]]}},{"DocumentTypeEnum":2,"File":{"_parts":[["uri","file:///data/user/0/com.asia_insurance/cache/react-native-image-crop-picker/IMG_20200806_171618_668.jpg"],["name","upload_photo"],["type","image/jpeg"]]}},{"DocumentTypeEnum":3,"File":{"_parts":[["uri","file:///data/user/0/com.asia_insurance/cache/react-native-image-crop-picker/IMG_20200806_171618_668.jpg"],["name","upload_photo"],["type","image/jpeg"]]}}]}',
+				headers: {
+					Accept: "application/json, text/plain, */*",
+					"Content-Type": "application/json",
+				},
+				maxContentLength: -1,
+				method: "post",
+				timeout: 0,
+				url: "http://81.95.229.2:5000/api/Order/CreateOrder",
+				validateStatus: "[Function validateStatus]",
+				xsrfCookieName: "XSRF-TOKEN",
+				xsrfHeaderName: "X-XSRF-TOKEN",
+			},
+			data: {
+				errors: {
+					"Docs[0].File._parts": [Array],
+					"Docs[1].File._parts": [Array],
+					"Docs[2].File._parts": [Array],
+				},
+				status: 400,
+				title: "One or more validation errors occurred.",
+				traceId: "80000069-0005-ff00-b63f-84710c7967bb",
+			},
+			headers: {
+				"content-length": "775",
+				"content-type": "application/problem+json; charset=utf-8",
+				date: "Wed, 12 Aug 2020 21:11:54 GMT",
+				server: "Microsoft-IIS/10.0",
+				"x-powered-by": "ASP.NET",
+			},
+			request: {
+				DONE: 4,
+				HEADERS_RECEIVED: 2,
+				LOADING: 3,
+				OPENED: 1,
+				UNSENT: 0,
+				_aborted: false,
+				_cachedResponse: undefined,
+				_hasError: false,
+				_headers: {
+					accept: "application/json, text/plain, */*",
+					"content-type": "application/json",
+				},
+				_incrementalEvents: false,
+				_lowerCaseResponseHeaders: {
+					"content-length": "775",
+					"content-type": "application/problem+json; charset=utf-8",
+					date: "Wed, 12 Aug 2020 21:11:54 GMT",
+					server: "Microsoft-IIS/10.0",
+					"x-powered-by": "ASP.NET",
+				},
+				_method: "POST",
+				_requestId: null,
+				_response:
+					'{"errors":{"Docs[0].File._parts":["Could not create an instance of type Microsoft.AspNetCore.Http.IFormFile. Type is an interface or abstract class and cannot be instantiated. Path \'Docs[0].File._parts\', line 1, position 311."],"Docs[1].File._parts":["Could not create an instance of type Microsoft.AspNetCore.Http.IFormFile. Type is an interface or abstract class and cannot be instantiated. Path \'Docs[1].File._parts\', line 1, position 514."],"Docs[2].File._parts":["Could not create an instance of type Microsoft.AspNetCore.Http.IFormFile. Type is an interface or abstract class and cannot be instantiated. Path \'Docs[2].File._parts\', line 1, position 717."]},"title":"One or more validation errors occurred.","status":400,"traceId":"80000069-0005-ff00-b63f-84710c7967bb"}',
+				_responseType: "",
+				_sent: true,
+				_subscriptions: [],
+				_timedOut: false,
+				_trackingName: "unknown",
+				_url: "http://81.95.229.2:5000/api/Order/CreateOrder",
+				readyState: 4,
+				responseHeaders: {
+					"Content-Length": "775",
+					"Content-Type": "application/problem+json; charset=utf-8",
+					Date: "Wed, 12 Aug 2020 21:11:54 GMT",
+					Server: "Microsoft-IIS/10.0",
+					"X-Powered-By": "ASP.NET",
+				},
+				responseURL: "http://81.95.229.2:5000/api/Order/CreateOrder",
+				status: 400,
+				timeout: 0,
+				upload: {},
+				withCredentials: true,
+			},
+			status: 400,
+			statusText: undefined,
+		};
+
 		return (
 			<View style={styles.confirmation}>
 				<Text style={[styles.bold, styles.textCenter]}>
@@ -559,6 +902,8 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 						text={strings.pay}
 						gradient
 						onPress={onPress}
+						// onPressIn={() =>
+						// }
 					/>
 				</View>
 			</View>
@@ -569,7 +914,7 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 	const [routes] = useState([
 		{ key: "first", title: strings.documents },
 		{ key: "second", title: strings.personalInfo },
-		// { key: "third", title: strings.insurancePeriod },
+		{ key: "third", title: strings.insurancePeriod },
 		{ key: "fourth", title: strings.personalInfo },
 		{ key: "fifth", title: strings.shipping },
 		{ key: "sixth", title: strings.orderConfirmation },
@@ -578,7 +923,7 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 	const renderScene = SceneMap({
 		first: Document,
 		second: PersonalInfo,
-		// third: InsurancePeriod,
+		third: InsurancePeriod,
 		fourth: LocationInfo,
 		fifth: Shipping,
 		sixth: Confirmation,
@@ -591,7 +936,7 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 				close
 				title={routes[index].title}
 				navigation
-				step={[index + 1, 5]}
+				step={[index + 1, 6]}
 				navigation={navigation}
 			/>
 			<TabView
@@ -607,7 +952,7 @@ const Checkout = ({ navigation, osago, checkout, setShippingInfo, cost }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: colors.ultraLightDark,
+		backgroundColor: colors.ultraLightBlue,
 		flex: 1,
 	},
 	document: {
@@ -688,14 +1033,23 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ insurance: { cost, osago }, checkout }) => ({
-	osago,
+const mapStateToProps = ({ user, insurance, checkout }) => ({
+	osago: insurance.osago,
 	checkout,
-	cost,
+	cost: insurance.cost,
+	user,
 });
 
 const mapDispatchToProps = {
 	setShippingInfo,
+	setDocuments,
+	setLocationInfo,
+	showFlashMessage,
+	setInsurancePeriod,
+	showLoading,
+	hideLoading,
+	setWithShipping,
+	setShippingSameAddr,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
 		color: colors.darkBlue,
 		fontSize: 14,
 		padding: 0,
+		width: "100%",
 	},
 });
 

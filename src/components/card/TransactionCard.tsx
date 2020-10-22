@@ -17,6 +17,7 @@ interface TransactionCardProps {
 	price: string;
 	transactionId: string;
 	currency: string;
+	assignedOperator: any;
 }
 
 const TransactionCard = ({
@@ -27,6 +28,7 @@ const TransactionCard = ({
 	price,
 	transactionId,
 	currency,
+	assignedOperator,
 }: TransactionCardProps) => {
 	return (
 		<View style={styles.container}>
@@ -40,7 +42,7 @@ const TransactionCard = ({
 			>
 				<Text style={styles.status}>{strings.status}</Text>
 				<View style={styles.statusWrapper}>
-					{status === "Оплачено" ? (
+					{status !== "НОВЫЙ" ? (
 						<View style={styles.iconWrapper}>
 							<Icons
 								name="check1"
@@ -56,7 +58,7 @@ const TransactionCard = ({
 							styles.bold,
 							{
 								color:
-									status === "Оплачено"
+									status !== "НОВЫЙ"
 										? colors.green
 										: colors.red,
 								paddingLeft: 10,
@@ -95,7 +97,7 @@ const TransactionCard = ({
 						<Text style={styles.bold}>{orderId}</Text>
 					</View>
 					<Text style={styles.text}>{strings.transactionsId}</Text>
-					<Text style={styles.bold}>{transactionId}</Text>
+					<Text style={styles.bold}>{assignedOperator}</Text>
 				</View>
 			</View>
 		</View>

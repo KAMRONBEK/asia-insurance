@@ -5,7 +5,7 @@ import {
 	SET_INSURANCE_COST,
 } from "../types";
 
-const initialState = {
+const INITIAL_STATE = {
 	osago: {
 		car: {
 			//test
@@ -37,7 +37,7 @@ const initialState = {
 	cost: 0,
 };
 
-export default (state = initialState, { type, payload }) => {
+export default (state = INITIAL_STATE, { type, payload }) => {
 	switch (type) {
 		case SET_INSURANCE_DATA:
 			return {

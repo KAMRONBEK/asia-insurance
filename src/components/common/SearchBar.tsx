@@ -28,16 +28,18 @@ const SearchBar = ({ placeholder, list, setList }: SearchBarProps) => {
 		>
 			<TextInput
 				onChangeText={(value) => {
-					// list.reduce((item, index) => {
-					// 	if (!!item) {
-					// 		console.warn(item.name, value);
-					// 	}
-					// 	if (!!item) {
-					// 		if (item.name == value) {
-					// 			setSearchList([...searchList, item]);
-					// 		}
-					// 	}
-					// });
+					if (list.length > 0) {
+						let searchResult = list.filter((item, index) => {
+							if (
+								item.name
+									.toLowerCase()
+									.match(value.toLowerCase())
+							)
+								return item;
+						});
+
+						setList(searchResult);
+					}
 				}}
 				placeholder={placeholder}
 				style={styles.input}

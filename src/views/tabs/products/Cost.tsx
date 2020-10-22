@@ -24,15 +24,18 @@ const Cost = ({ navigation, route, osago, vzr, setInsuranceCost }) => {
 	let [cost, setCost] = useState(1);
 	let [costDiscounted, setCostDiscounted] = useState(0);
 
-	let tariffList = extractTariffs(osago, "osago");
+	let tariffList;
+	let osagoTariff;
+	if (insuranceType == strings.osago) {
+		tariffList = extractTariffs(osago, "osago");
+		osagoTariff =
+			tariffList.reduce((prev, current) => {
+				// console.warn(prev, current);
+				console.log(current);
 
-	let osagoTariff =
-		tariffList.reduce((prev, current) => {
-			// console.warn(prev, current);
-			console.log(current);
-
-			return prev * Number.parseFloat(current.tariff);
-		}, 1) / osago.privilege.availablePrivilege.tariff;
+				return prev * Number.parseFloat(current.tariff);
+			}, 1) / osago.privilege.availablePrivilege.tariff;
+	}
 
 	const temp = [
 		{ name: "carType", tariff: "0.12" },
@@ -44,27 +47,32 @@ const Cost = ({ navigation, route, osago, vzr, setInsuranceCost }) => {
 	];
 
 	useEffect(() => {
-		setCost((osagoTariff * 40000000) / 100);
-		setCostDiscounted(
-			(osagoTariff *
-				40000000 *
-				osago.privilege.availablePrivilege.tariff) /
-				100
-		);
-		setInsuranceCost(
-			(osagoTariff *
-				40000000 *
-				osago.privilege.availablePrivilege.tariff) /
-				100
-		);
-
+		if (insuranceType == strings.osago) {
+			setCost((osagoTariff * 40000000) / 100);
+			setCostDiscounted(
+				(osagoTariff *
+					40000000 *
+					osago.privilege.availablePrivilege.tariff) /
+					100
+			);
+			setInsuranceCost(
+				(osagoTariff *
+					40000000 *
+					osago.privilege.availablePrivilege.tariff) /
+					100
+			);
+		}
 		// setTimeout(() => {
 		setLoading(false);
 		// }, 3000);
 	}, []);
 
 	const onButtonPress = () => {
-		navigation.navigate(SCREENS.checkout);
+		if (insuranceType == strings.osago) {
+			navigation.navigate(SCREENS.checkout);
+		} else {
+			console.log(insuranceType);
+		}
 	};
 
 	const LoadingCost = () => {

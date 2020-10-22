@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "47026489755",
+    "firebase_url": "https://asiainsurance.firebaseio.com",
+    "project_id": "asiainsurance",
+    "storage_bucket": "asiainsurance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47026489755:android:adcc5a267558aaf3c8393e",
+        "android_client_info": {
+          "package_name": "com.asia_insurance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47026489755-m2dfd5vbskt4q37vpv95bl4ir90atbl5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMi5rPIDaBgFdOclNvuitJ_zmBiEH2Gks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47026489755-m2dfd5vbskt4q37vpv95bl4ir90atbl5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

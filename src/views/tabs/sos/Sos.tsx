@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { strings } from "../../../locales/strings";
@@ -13,6 +13,7 @@ import HelpCard from "../../../components/card/HelpCard";
 import { showLoading, hideLoading } from "../../../redux/actions";
 import { connect } from "react-redux";
 import { requests } from "../../../api/requests";
+import { useFocusEffect } from "@react-navigation/native";
 
 const helpList = [
 	{
@@ -76,14 +77,18 @@ const helpedList = [
 	},
 ];
 
-const Sos = ({ navigation, showLoading, hideLoading }) => {
+const Sos = ({ navigation, showLoading, hideLoading, counter }) => {
 	let [myRequestsList, setMyRequestList] = useState([]);
+	let [allRequestsList, setAllRequestsList] = useState([]);
 
 	const bootstrap = async () => {
 		try {
-			let res = await requests.help.myRequests();
-			console.log(res.data.data);
-			setMyRequestList(res.data.data);
+			let myResult = await requests.help.myRequests();
+			let allResult = await requests.help.allRequests();
+			console.log(myResult.data.data, "my");
+			console.log(allResult.data.data.length, "all");
+			setMyRequestList(myResult.data.data);
+			setAllRequestsList(allResult.data.data);
 		} catch (error) {
 			console.log(error.response);
 		} finally {
@@ -94,62 +99,106 @@ const Sos = ({ navigation, showLoading, hideLoading }) => {
 	useEffect(() => {
 		showLoading(strings.loadingRequests);
 		bootstrap();
+	}, [counter]);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			console.log("Screen is focused");
+			showLoading(strings.loadingRequests);
+			bootstrap();
+		});
+
+		return unsubscribe;
 	}, []);
+
+	// useFocusEffect(() => {
+	// 	const unsubscribe = () => bootstrap();
+	// 	console.log("focus");
+	// 	return () => unsubscribe();
+	// });
+	let temp = [
+		{
+			content: "Kamron Nujen pomosh, toplivo!",
+			date: "2020-09-14 15:00:44",
+			id: 12,
+			lat: "undefined",
+			lng: "undefined",
+			receiver: {
+				device_token:
+					"d_kVKRY-SnOBdgb5puDRDk:APA91bEp1DzNodN8ny4ojnbzs7Ock4lbDP5nfLjoQHpZzfE5Awnlv1YSOrnNFJrynRit58ywpAARocYXW27w6jaoXFJbFZc0Ly8qBKWaUtUb22iM-SzdJio5w684kpZGNQX06ydE0J0R",
+				email: null,
+				id: 397,
+				name: null,
+				phone: "909770502",
+				points: 1000,
+				token: "3JC43iFbJjef0zUDm0rVhFa2FbtfZ1Jb",
+			},
+			status: 2,
+			title: null,
+			user: {
+				device_token:
+					"cLENH3OVQs-B0cH0pysLlo:APA91bE9KpwW13LN07xwNiC2J-ehi0NU_vnAJQ0z-DwoGzzyW0qD4ca1EZoYtCqWnH8VsjmusGijr3B5MZp6hGPIQ-EozuKPLulE-xWMHbK0I3h5Q2t2g5ngy4OQixIgNYz1Fi0lUuAd",
+				email: null,
+				id: 385,
+				name: null,
+				phone: "936893665",
+				points: 2000,
+				token: "Ge8TP1daKQxlOyBVQt6ch0TK-6qEjMBi",
+			},
+		},
+	];
+
+	const onAccept = async (item) => {
+		showLoading(strings.acceptingRequest);
+		try {
+			let res = await requests.help.acceptRequest({ id: item.id });
+			if (res) {
+				bootstrap();
+			}
+		} catch (error) {
+		} finally {
+			hideLoading();
+		}
+	};
 
 	const FirstTab = () => (
 		<View style={styles.content}>
 			<FlatList
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.cardWrapper}
-				data={helpList}
-				keyExtractor={(e) => e.toString()}
-				renderItem={({ item }) => (
+				data={allRequestsList}
+				renderItem={({ item, index }) => (
 					<HelpCard
-						onPress={item.onPress}
+						key={index.toString()}
+						onPress={() => onAccept(item)}
 						title={item.title}
 						content={item.content}
 						status={item.status}
 						time={item.time}
 						date={item.date}
-						buttonText={item.buttonText || ""}
+						latitude={item.lat}
+						longitude={item.lng}
 						// buttonBackColor={item.buttonBackColor || ""}
 						// buttonTextColor={item.buttonTextColor || ""}
 						// buttonBorderColor={item.buttonBorderColor || ""}
-						number={item.number}
-						helperId={item.helperId || ""}
+						number={item?.user?.phone}
+						helperId={item?.receiver?.id}
+						incoming
 					/>
 				)}
 			/>
 		</View>
 	);
 
-	let temp = {
-		content: "Sjdisjsjs",
-		date: "2020-08-01 23:03:16",
-		id: 6,
-		lat: "undefined",
-		lng: "undefined",
-		receiver: null,
-		status: 0,
-		user: {
-			device_token: "test123",
-			email: null,
-			id: 385,
-			name: null,
-			phone: "936893665",
-			token: "jf2ouzHJGcZTC-fakoIa6W3TxxTMzd9d",
-		},
-	};
-
 	const SecondTab = () => (
 		<View style={styles.content}>
 			<FlatList
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.cardWrapper}
-				keyExtractor={(e) => e.toString()}
 				data={myRequestsList}
 				renderItem={({ item }) => (
 					<HelpCard
+						key={index.toString()}
 						// onPress={item.onPress}
 						id={item.id}
 						title={item.content}
@@ -157,9 +206,9 @@ const Sos = ({ navigation, showLoading, hideLoading }) => {
 						status={item.status}
 						// time={item.date}
 						date={item.date}
-						buttonText={strings.helpAccepted || ""}
-						buttonBackColor={colors.darkBlue}
-						buttonTextColor={colors.white}
+						helperId={item?.receiver?.id}
+						number={item?.receiver?.phone}
+						outgoing
 					/>
 				)}
 			/>
@@ -261,7 +310,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = ({ sos }) => ({
+	counter: sos.counter,
+});
 
 const mapDispatchToProps = {
 	showLoading,

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const url = "https://asia.loko.uz";
+export const asiaUrl = "http://81.95.229.2:5000";
 
 export let configureAxios = (store) => {
 	axios.interceptors.request.use((res) => {
