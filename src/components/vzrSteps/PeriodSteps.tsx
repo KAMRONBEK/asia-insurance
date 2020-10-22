@@ -6,12 +6,22 @@ import { BORDER_RADIUS, colors, Icons, SCREENS } from "../../constants";
 import { strings } from "../../locales/strings";
 import moment from "moment";
 import { navigate } from "../../utils/NavigationService";
+import { connect } from "react-redux";
+import { setInsurance } from "../../redux/actions";
 
-const PeriodSteps = () => {
+const PeriodSteps = ({ setInsurance }) => {
 	let [beginDate, setBeginDate] = useState(moment(new Date(), "DD.MM.YYYY"));
 	let [endDate, setEndDate] = useState(moment(new Date(), "DD.MM.YYYY"));
 
 	const onNextPress = () => {
+		setInsurance({
+			parent: "vzr",
+			child: "tripDuration",
+			data: {
+				startDate: moment(beginDate).format("DD.MM.YYYY"),
+				endDate: moment(endDate).format("DD.MM.YYYY"),
+			},
+		});
 		navigate(SCREENS.calculateCost, {
 			name: SCREENS.calculateCost,
 			params: {},
@@ -116,7 +126,13 @@ const PeriodSteps = () => {
 	);
 };
 
-export default PeriodSteps;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+	setInsurance,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PeriodSteps);
 
 const styles = StyleSheet.create({
 	content: {

@@ -99,12 +99,17 @@ export let requests = {
 		getBall: () => axios.get(`${url}/api/driver/points`),
 	},
 	dictionary: {
-		getCountryList: () =>
-			axios.get(`${asiaUrl}/api/Dictionaries/CountryList`),
+		getCountryList: () => axios.get(`${asiaUrl}/api/Travel/CountryList`),
 		getRegionList: () =>
 			asiAxios.get(`${asiaUrl}/api/Dictionaries/RegionsList`),
 		getRayonList: () =>
 			asiAxios.get(`${asiaUrl}/api/Dictionaries/RayonsList`),
+		getProgram: (level: string) =>
+			axios.get(
+				`${asiaUrl}/api/Travel/GetInsurancePrograms?p_Levels=${level}`
+			),
+		getTravelDictionary: () =>
+			axios.get(`${asiaUrl}/api/Travel/GetTravelDictionaries`),
 	},
 	policy: {
 		checkPolicy: (credentials) =>

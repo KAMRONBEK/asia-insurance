@@ -19,6 +19,7 @@ import { connect } from "react-redux";
 import { requests } from "../../api/requests";
 import PackageCard from "../common/PackageCard";
 import Modal from "../container/Modal";
+import reactotron from "../../redux/ReactotronConfig";
 
 const CountrySteps = ({
 	setInsurance,
@@ -30,7 +31,10 @@ const CountrySteps = ({
 	//set step initially
 	setCurrentStep(1);
 
-	let [countries, setCountries] = useState({});
+	/**
+	 * Selected countries
+	 */
+	let [countries, setCountries] = useState([]);
 
 	const CountryStepOne = ({ navigation }: any) => {
 		const [countryList, setCountryList] = useState([]);
@@ -117,14 +121,30 @@ const CountrySteps = ({
 	};
 
 	const CountryStepTwo = ({ navigation }: any) => {
-		const [purposeList, setPurposeList] = useState([
-			{ id: 1, name: "12312", text: "adas" },
-		]);
+		const [purposeList, setPurposeList] = useState([]);
+
+		let effect = async () => {
+			let levels = countries.reduce(
+				(prev, current) => ({ ...prev, [current.level]: true }),
+				{}
+			);
+			reactotron.warn({ levels });
+			let levelsStr = Object.keys(levels).reduce(
+				(prev, current, index) =>
+					prev +
+					current +
+					(index !== Object.keys(levels).length - 1 ? "," : ""),
+				""
+			);
+			let res = await requests.dictionary.getProgram(levelsStr);
+			setPurposeList(res.data.data);
+		};
+
+		useEffect(() => {
+			effect();
+		}, []);
+
 		const onStepFourPress = (item) => {
-			navigate(SCREENS.calculateCost, {
-				name: SCREENS.calculateCost,
-				params: {},
-			});
 			// setInsurance({
 			// 	parent: "osago",
 			// 	child: "car",
@@ -140,7 +160,13 @@ const CountrySteps = ({
 				child: "destinationCountry",
 				data: {
 					countries: countries,
+					program: item,
 				},
+			});
+
+			navigate(SCREENS.calculateCost, {
+				name: SCREENS.calculateCost,
+				params: {},
 			});
 		};
 

@@ -9,6 +9,7 @@ import {
 } from "../../constants";
 import { showModal } from "../../redux/actions";
 import { connect } from "react-redux";
+import { strings } from "../../locales/strings";
 
 const PackageCard = ({ item, onPress, selected, showModal }) => {
 	let [checked, setChecked] = useState(
@@ -26,16 +27,22 @@ const PackageCard = ({ item, onPress, selected, showModal }) => {
 		>
 			<View style={styles.container}>
 				<View style={styles.column}>
-					<Text style={styles.title}>{item.name}</Text>
+					<Text style={styles.title}>
+						{item.insuranceProgramName}
+					</Text>
 					<View style={styles.row}>
-						<Text style={styles.price}>{item.name}</Text>
+						<Text style={styles.price}>
+							{item.insuranceSummValue} {item.currencyCode}
+						</Text>
 						<View style={{}}>
 							<TouchableOpacity
 								onPress={() => {
 									showModal();
 								}}
 							>
-								<Text style={styles.link}>{item.name}</Text>
+								<Text style={styles.link}>
+									{strings.tarifDetails}
+								</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
