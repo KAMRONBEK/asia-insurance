@@ -18,7 +18,7 @@ import Input from "../common/Input";
 import Select from "../common/Select";
 import { requests } from "../../api/requests";
 
-const InsuredPeopleSteps = ({ hideSelectionLoading }) => {
+const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 	//insured person data
 
 	useEffect(() => {
@@ -27,6 +27,17 @@ const InsuredPeopleSteps = ({ hideSelectionLoading }) => {
 
 	const InsuredStepOne = ({ navigation }: any) => {
 		// const [carRegisterPlaceList, setCarRegisterPlaceList] = useState([]);
+
+		const [state, setState] = useState({});
+		let [name, setName] = useState();
+		let [midName, setMidName] = useState();
+		let [lastName, setLastName] = useState();
+		let [country, setCountry] = useState();
+		let [region, setRegion] = useState();
+
+		let [countryList, setCountryList] = useState([]);
+		let [regionList, setRegionList] = useState([]);
+
 		const onNextPress = (item) => {
 			// setIndex(index + 1);
 
@@ -49,16 +60,6 @@ const InsuredPeopleSteps = ({ hideSelectionLoading }) => {
 				params: {},
 			});
 		};
-
-		const [state, setState] = useState({});
-		let [name, setName] = useState();
-		let [midName, setMidName] = useState();
-		let [lastName, setLastName] = useState();
-		let [country, setCountry] = useState();
-		let [region, setRegion] = useState();
-
-		let [countryList, setCountryList] = useState([]);
-		let [regionList, setRegionList] = useState([]);
 
 		const initDictionary = async () => {
 			try {

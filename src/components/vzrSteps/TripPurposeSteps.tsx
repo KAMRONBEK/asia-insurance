@@ -52,7 +52,7 @@ const TripPurposeSteps = ({
 							name: res.data.travelTypes[index],
 							id: index,
 						});
-						console.warn(index);
+						// console.warn(index);
 					});
 					setPeriodList(array);
 				})
@@ -128,7 +128,7 @@ const TripPurposeSteps = ({
 						name: res.data.multiTravelPeriods[index],
 						id: index,
 					});
-					console.warn(index);
+					// console.warn(index);
 				});
 				setMultiPeriodptions(array);
 			});
@@ -167,7 +167,7 @@ const TripPurposeSteps = ({
 						name: res.data.travelGoals[index],
 						id: index,
 					});
-					console.warn(index);
+					// console.warn(index);
 				});
 				setPurposeList(array);
 			});
@@ -222,7 +222,7 @@ const TripPurposeSteps = ({
 						name: res.data.travelGroupTypes[index],
 						id: index,
 					});
-					console.warn(index);
+					// console.warn(index);
 				});
 				setCountList(array);
 			});

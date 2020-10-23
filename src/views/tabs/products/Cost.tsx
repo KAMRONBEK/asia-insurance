@@ -15,9 +15,26 @@ import Text from "../../../components/common/Text";
 import RoundButton from "../../../components/common/RoundButton";
 import { connect } from "react-redux";
 import { isEmpty, extractTariffs } from "../../../utils/functions";
-import { setInsuranceCost } from "../../../redux/actions";
+import {
+	hideLoading,
+	setInsuranceCost,
+	showFlashMessage,
+	showLoading,
+} from "../../../redux/actions";
+import { requests } from "../../../api/requests";
+import { navigate } from "../../../utils/NavigationService";
 
-const Cost = ({ navigation, route, osago, vzr, setInsuranceCost }) => {
+const Cost = ({
+	navigation,
+	route,
+	osago,
+	vzr,
+	setInsuranceCost,
+	user,
+	showLoading,
+	hideLoading,
+	showFlashMessage,
+}) => {
 	let [loading, setLoading] = useState(true);
 	let { insuranceType } = route.params;
 
@@ -67,11 +84,69 @@ const Cost = ({ navigation, route, osago, vzr, setInsuranceCost }) => {
 		// }, 3000);
 	}, []);
 
+	let { destinationCountry, tripDuration, tripPurpose, insuredPerson } = vzr;
+
+	// {"countries": [{"id": 184, "level": 1, "name": "УЗБЕКИСТАН", "selected": true, "text": "УЗБЕКИСТАН"}, {"id": 187, "level": 3, "name": "ЧИЛИ", "selected": true, "text": "ЧИЛИ"}], "program": {"currencyCode": "EUR", "insuranceProgramId": "fa5589ab-ad68-46e8-a31c-13ff195928ee", "insuranceProgramName": "ABSOLUT", "insuranceSummValue": 80000, "level": 3}} destinationCountry
+	// {"endDate": "Invalid date", "startDate": "Invalid date"} tripDuration
+	// {"isMulti": {"id": "48a977e0-c657-4cdb-b0bf-1b9342bfbaa8", "name": "ОДНОКРАТНОЕ ПУТЕШЕСТВИЕ"}, "multiPeriods": undefined, "peopleCount": {"id": "2,50;5f44f84f-bb20-447f-8616-74bd68c6daab", "name": "СЕМЬЯ (ОТ 3 ДО 6 ЧЕЛОВЕК)"}, "purpose": {"id": "1e4e1009-6296-4866-8c6b-03191da79d59", "name": "СПОРТ"}, "selectedPeriod": undefined} tripPurpose
+	// {"insuredPerson": {"country": {"id": 184, "text": "УЗБЕКИСТАН"}, "lastName": "Kfkfkd", "midName": "Bshsjsd", "name": "Hsjsjss", "region": {"id": 10, "text": "ГОРОД  ТАШКЕНТ"}}} insuredPerson
+	// {"countries": [{"id": 184, "level": 1, "name": "УЗБЕКИСТАН", "selected": true, "text": "УЗБЕКИСТАН"}, {"id": 187, "level": 3, "name": "ЧИЛИ", "selected": true, "text": "ЧИЛИ"}], "program": {"currencyCode": "EUR", "insuranceProgramId": "fa5589ab-ad68-46e8-a31c-13ff195928ee", "insuranceProgramName": "ABSOLUT", "insuranceSummValue": 80000, "level": 3}} destinationCountry
+	// {"endDate": "Invalid date", "startDate": "Invalid date"} tripDuration
+	// {"isMulti": {"id": "48a977e0-c657-4cdb-b0bf-1b9342bfbaa8", "name": "ОДНОКРАТНОЕ ПУТЕШЕСТВИЕ"}, "multiPeriods": undefined, "peopleCount": {"id": "2,50;5f44f84f-bb20-447f-8616-74bd68c6daab", "name": "СЕМЬЯ (ОТ 3 ДО 6 ЧЕЛОВЕК)"}, "purpose": {"id": "1e4e1009-6296-4866-8c6b-03191da79d59", "name": "СПОРТ"}, "selectedPeriod": undefined} tripPurpose
+
+	let createOrder = async () => {
+		console.log(user);
+
+		try {
+			let res = await requests.order.createOrder({
+				CustomerId: user.customerId,
+				ContactPhone: user.user.phone,
+				InsuranceType: 1, //vzr
+				DeliveryOblastId: 10,
+				DeliveryRayonId: 1003,
+				InsuranceParams: {
+					//not calculated
+					Premia: 162000,
+					InsuranceSumm: 40000000,
+					Discount: 0,
+					BeginDate: "23.10.2020",
+					EndDate: "25.10.2020",
+					ExtraData: JSON.stringify(osago),
+				},
+				// Docs: checkout.documents,
+				Docs: [],
+				// DocsInBytes: checkout.documents,
+			});
+			console.log(res.data);
+			showFlashMessage({
+				type: colors.green,
+				message:
+					strings.yourOrderAccepted +
+					"\n" +
+					strings.orderId +
+					res.data.orderId,
+			});
+			// navigation.navigate(SCREENS.products);
+			navigate(SCREENS.tabs, {
+				name: SCREENS.historyStack,
+				params: {
+					screen: SCREENS.transactions,
+				},
+			});
+		} catch (error) {
+			console.log(error);
+		} finally {
+			hideLoading();
+		}
+	};
+
 	const onButtonPress = () => {
 		if (insuranceType == strings.osago) {
 			navigation.navigate(SCREENS.checkout);
 		} else {
-			console.log(insuranceType);
+			console.log("vzr");
+			showLoading(strings.registeringYourOrder);
+			createOrder();
 		}
 	};
 
@@ -230,13 +305,17 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ insurance: { osago, vzr } }) => ({
+const mapStateToProps = ({ user, insurance: { osago, vzr } }) => ({
 	osago,
 	vzr,
+	user,
 });
 
 const mapDispatchToProps = {
 	setInsuranceCost,
+	showLoading,
+	hideLoading,
+	showFlashMessage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cost);
