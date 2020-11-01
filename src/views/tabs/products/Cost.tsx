@@ -23,6 +23,7 @@ import {
 } from "../../../redux/actions";
 import { requests } from "../../../api/requests";
 import { navigate } from "../../../utils/NavigationService";
+import moment from "moment";
 
 const Cost = ({
 	navigation,
@@ -38,6 +39,7 @@ const Cost = ({
 	let [loading, setLoading] = useState(true);
 	let { insuranceType } = route.params;
 
+	//osago
 	let [cost, setCost] = useState(1);
 	let [costDiscounted, setCostDiscounted] = useState(0);
 
@@ -54,14 +56,42 @@ const Cost = ({
 			}, 1) / osago.privilege.availablePrivilege.tariff;
 	}
 
-	const temp = [
-		{ name: "carType", tariff: "0.12" },
-		{ name: "carRegisterPlace", tariff: "1" },
-		{ name: "availableInsurance", tariff: "2" },
-		{ name: "availablePrivilege", tariff: "1" },
-		{ name: "period", tariff: "0.4" },
-		{ name: "driverCount", tariff: "0.1" },
-	];
+	//vzr
+	let [vzrCost, setVzrCost] = useState();
+
+	const calculateVzr = async () => {
+		try {
+			let response = await requests.travel.calculate({
+				PeriodType: 1,
+				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id,
+				CurrencyValue: 10000,
+				DaysCount:
+					1 /
+					moment
+						.duration(
+							moment(vzr.tripDuration.endDate, "mm.dd.yyyy").diff(
+								moment(vzr.tripDuration.startDate, "mm.dd.yyyy")
+							)
+						)
+						.asDays(),
+				InsuranceProgramId:
+					vzr?.destinationCountry?.program?.insuranceProgramId,
+				InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,
+				AntiCovidCoverage: 0,
+				PersonsBirthDates: [
+					vzr?.insuredPerson?.insuredPerson?.birthDate,
+				],
+				GroupTypeId: vzr?.tripPurpose?.peopleCount?.id.split(";")[1],
+			});
+			console.log(response.data.data);
+
+			setVzrCost(response.data.data);
+		} catch (error) {
+			console.log(error.response.data);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	useEffect(() => {
 		if (insuranceType == strings.osago) {
@@ -79,9 +109,37 @@ const Cost = ({
 					100
 			);
 		}
-		// setTimeout(() => {
-		setLoading(false);
-		// }, 3000);
+		if (insuranceType == strings.vzr) {
+			setLoading(true);
+			console.log({
+				PeriodType: vzr?.tripPurpose?.isMulti?.id,
+				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id,
+				CurrencyValue: 10000,
+				DaysCount:
+					1 /
+					moment
+						.duration(
+							moment(vzr.tripDuration.endDate, "mm.dd.yyyy").diff(
+								moment(vzr.tripDuration.startDate, "mm.dd.yyyy")
+							)
+						)
+						.asDays(),
+				InsuranceProgramId:
+					vzr?.destinationCountry?.program?.insuranceProgramId,
+				InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,
+				AntiCovidCoverage: 0,
+				PersonsBirthDates: [
+					vzr?.insuredPerson?.insuredPerson?.birthDate,
+				],
+				GroupTypeId: vzr?.tripPurpose?.peopleCount?.id.split(";")[1],
+			});
+
+			calculateVzr();
+		}
+
+		setTimeout(() => {
+			setLoading(false);
+		}, 500);
 	}, []);
 
 	let { destinationCountry, tripDuration, tripPurpose, insuredPerson } = vzr;
@@ -228,15 +286,15 @@ const Cost = ({
 										},
 									]}
 								>
-									162 000 сум
+									{Math.floor(vzrCost)} {strings.summ}
 								</Text>
 							</View>
-							<View>
+							{/* <View>
 								<Text style={styles.title}>
 									{strings.insurancePremium}:
 								</Text>
 								<Text style={styles.cost}>810 000 сум</Text>
-							</View>
+							</View> */}
 							<View style={styles.buttonWrapper}>
 								<RoundButton
 									onPress={onButtonPress}

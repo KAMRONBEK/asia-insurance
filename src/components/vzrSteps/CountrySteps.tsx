@@ -136,7 +136,9 @@ const CountrySteps = ({
 					(index !== Object.keys(levels).length - 1 ? "," : ""),
 				""
 			);
+			console.log(levelsStr);
 			let res = await requests.dictionary.getProgram(levelsStr);
+			console.log(res.data);
 			setPurposeList(res.data.data);
 		};
 
@@ -234,16 +236,17 @@ const styles = StyleSheet.create({
 	nextWrapper: {
 		position: "absolute",
 		alignItems: "flex-end",
-		paddingVertical: 5,
-		paddingHorizontal: 10,
+		paddingVertical: 8,
+		paddingHorizontal: 12,
 		bottom: 5,
 		right: 5,
 		borderRadius: 100,
-		backgroundColor: colors.paleGray,
+		backgroundColor: colors.lightBlue,
 	},
 	next: {
 		fontSize: 16,
 		fontWeight: "700",
+		color: colors.white,
 	},
 });
 

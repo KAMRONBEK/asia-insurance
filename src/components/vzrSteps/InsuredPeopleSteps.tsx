@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
 import { connect } from "react-redux";
-import { colors, SCREENS } from "../../constants";
+import { BORDER_RADIUS, colors, Icons, SCREENS } from "../../constants";
 import { strings } from "../../locales/strings";
 import { navigate } from "../../utils/NavigationService";
 import InPageHeader from "../common/InPageHeader";
@@ -17,6 +17,7 @@ import RoundButton from "../common/RoundButton";
 import Input from "../common/Input";
 import Select from "../common/Select";
 import { requests } from "../../api/requests";
+import DatePicker from "react-native-datepicker";
 
 const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 	//insured person data
@@ -32,6 +33,7 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 		let [name, setName] = useState();
 		let [midName, setMidName] = useState();
 		let [lastName, setLastName] = useState();
+		let [birthDate, setBirthDate] = useState();
 		let [country, setCountry] = useState();
 		let [region, setRegion] = useState();
 
@@ -51,6 +53,7 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 						lastName: lastName,
 						country: country,
 						region: region,
+						birthDate: birthDate,
 					},
 				},
 			});
@@ -131,6 +134,53 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 							placeholder={strings.midName}
 							value={state.midName}
 							setValue={setMidName}
+						/>
+						<DatePicker
+							style={{
+								borderRadius: BORDER_RADIUS,
+								backgroundColor: colors.white,
+								justifyContent: "space-between",
+								width: "100%",
+								padding: 10,
+								marginBottom: 20,
+								marginTop: 10,
+							}}
+							date={birthDate}
+							mode="date"
+							placeholder={strings.pickBirthDate}
+							format="DD.MM.YYYY"
+							minDate="01.01.1900"
+							maxDate={new Date()}
+							confirmBtnText={strings.yes}
+							cancelBtnText={strings.no}
+							iconComponent={
+								<Icons
+									name="calendar"
+									size={20}
+									color={colors.gray}
+								/>
+							}
+							customStyles={{
+								dateIcon: {
+									height: 30,
+									width: 30,
+								},
+								dateInput: {
+									borderWidth: 0,
+									marginRight: 20,
+									borderRadius: BORDER_RADIUS,
+								},
+								dateTouchBody: {
+									width: "100%",
+									justifyContent: "space-between",
+									overflow: "hidden",
+									paddingRight: 10,
+								},
+								// ... You can check the source to find the other keys.
+							}}
+							onDateChange={(date) => {
+								setBirthDate(date);
+							}}
 						/>
 						<Select
 							placeholder={strings.country}

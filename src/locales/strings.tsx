@@ -2,6 +2,9 @@ import LocalizedStrings from "react-native-localization";
 
 export let strings = new LocalizedStrings({
 	ru: {
+		chooseTripDuration: "Выберите продолжительность поездки",
+		chooseTripType: "Выберите тип поездки",
+		pickBirthDate: "ДАТА РОЖДЕНИЯ",
 		tarifDetails: "Детали тарифа",
 		helping: "Помогает",
 		closedRequest: "Закрытая заявка",

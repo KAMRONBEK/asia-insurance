@@ -14,12 +14,14 @@ interface SelectItemProps {
 }
 
 const SelectItem = ({ item, osago, removeInsuranceData }: SelectItemProps) => {
+	console.log("box", item);
+
 	return (
 		<View style={styles.container}>
 			<Text
 				numberOfLines={1}
 				style={{
-					textTransform: "lowercase",
+					textTransform: "capitalize",
 					maxWidth: deviceWidth - 100,
 				}}
 			>

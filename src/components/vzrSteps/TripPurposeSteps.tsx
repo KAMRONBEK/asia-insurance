@@ -92,7 +92,7 @@ const TripPurposeSteps = ({
 		}, []);
 		return (
 			<View style={styles.content}>
-				<InPageHeader title={strings.chooseTripPurpose} />
+				<InPageHeader title={strings.chooseTripType} />
 				<FlatList
 					keyExtractor={(item, index) => {
 						(item + index).toString();
@@ -136,7 +136,7 @@ const TripPurposeSteps = ({
 
 		return (
 			<View style={styles.content}>
-				<InPageHeader title={strings.choosePeopleCount} />
+				<InPageHeader title={strings.chooseTripDuration} />
 				<FlatList
 					keyExtractor={(item, index) => "key" + index}
 					data={multiPeriodOptions}
@@ -175,7 +175,7 @@ const TripPurposeSteps = ({
 
 		return (
 			<View style={styles.content}>
-				<InPageHeader title={strings.choosePeopleCount} />
+				<InPageHeader title={strings.chooseTripPurpose} />
 				<FlatList
 					keyExtractor={(item, index) => "key" + index}
 					data={purposeList}

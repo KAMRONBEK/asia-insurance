@@ -106,7 +106,7 @@ export let requests = {
 			asiAxios.get(`${asiaUrl}/api/Dictionaries/RayonsList`),
 		getProgram: (level: string) =>
 			axios.get(
-				`${asiaUrl}/api/Travel/GetInsurancePrograms?p_Levels=${level}`
+				`${asiaUrl}/api/Travel/GetInsurancePrograms?p_CountryLevels=${level}`
 			),
 		getTravelDictionary: () =>
 			axios.get(`${asiaUrl}/api/Travel/GetTravelDictionaries`),
@@ -115,5 +115,9 @@ export let requests = {
 		checkPolicy: (credentials) =>
 			asiAxios.post(`${asiaUrl}/api/Policy/CheckPolicy`, credentials),
 		myPolicies: () => asiAxios.get(`${asiaUrl}/api/Policy/MyPolices`),
+	},
+	travel: {
+		calculate: (credentials) =>
+			asiAxios.post(`${asiaUrl}/api/Travel/CalculatePremia`, credentials),
 	},
 };

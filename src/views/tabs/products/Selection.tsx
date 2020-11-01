@@ -22,6 +22,7 @@ import CountrySteps from "../../../components/vzrSteps/CountrySteps";
 import PeriodSteps from "../../../components/vzrSteps/PeriodSteps";
 import TripPurposeSteps from "../../../components/vzrSteps/TripPurposeSteps";
 import InsuredPeopleSteps from "../../../components/vzrSteps/InsuredPeopleSteps";
+import reactotron from "reactotron-react-native";
 
 const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 	let { title } = route.params;
@@ -36,24 +37,53 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 				setBoxList(extractNames(osago, "osago"));
 			}
 			case strings.vzr: {
-				let countries = vzr.destinationCountry?.countries?.map(
+				let countries = vzr.destinationCountry?.countries?.filter(
 					(country) => {
 						let newCountry = {
 							parent: "vzr",
 							child: "destinationCountry",
 							...country,
 						};
-						console.log(newCountry);
 						return newCountry;
 					}
 				);
 
-				console.log(countries);
+				let array = [];
+				reactotron.warn({ countries });
+
+				if (countries?.length > 0) {
+					array = countries;
+				}
+
+				if (vzr.tripPurpose) {
+					array = [
+						...array,
+						{
+							parent: "vzr",
+							child: "tripPurpose",
+							name: vzr.tripPurpose?.isMulti?.name,
+						},
+
+						{
+							parent: "vzr",
+							child: "tripPurpose",
+							name: vzr.tripPurpose?.purpose?.name,
+						},
+						{
+							parent: "vzr",
+							child: "tripPurpose",
+							name: vzr.tripPurpose?.peopleCount?.name,
+						},
+					];
+				}
+
+				reactotron.warn(array);
 
 				// let countriesArray = Object.keys(countriesObj).map((key) => [
 				// 	countriesObj[key],
 				// ]);
-				setBoxList(countries ? [...countries] : []);
+
+				setBoxList(array);
 			}
 		}
 	}, [osago, vzr]);

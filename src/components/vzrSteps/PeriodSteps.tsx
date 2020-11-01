@@ -18,8 +18,8 @@ const PeriodSteps = ({ setInsurance }) => {
 			parent: "vzr",
 			child: "tripDuration",
 			data: {
-				startDate: moment(beginDate).format("DD.MM.YYYY"),
-				endDate: moment(endDate).format("DD.MM.YYYY"),
+				startDate: beginDate,
+				endDate: endDate,
 			},
 		});
 		navigate(SCREENS.calculateCost, {
