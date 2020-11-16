@@ -743,7 +743,7 @@ const Checkout = ({
 				navigate(SCREENS.tabs, {
 					name: SCREENS.historyStack,
 					params: {
-						screen: SCREENS.transactions,
+						screen: SCREENS.payments,
 					},
 				});
 			} catch (error) {

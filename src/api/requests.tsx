@@ -71,6 +71,7 @@ export let requests = {
 	},
 	user: {
 		profile: (token) =>
+			//asiAxios because axios has token
 			asiAxios.get(`${url}/api/user/profile`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -98,6 +99,10 @@ export let requests = {
 			axios.post(`${url}/api/driver/send-points`, formData(credentials)),
 		getBall: () => axios.get(`${url}/api/driver/points`),
 	},
+	insuredCases: {
+		myRequest: () => axios.get(`${url}/api/claim`),
+	},
+
 	dictionary: {
 		getCountryList: () => axios.get(`${asiaUrl}/api/Travel/CountryList`),
 		getRegionList: () =>
@@ -119,5 +124,11 @@ export let requests = {
 	travel: {
 		calculate: (credentials) =>
 			asiAxios.post(`${asiaUrl}/api/Travel/CalculatePremia`, credentials),
+		programService: (credentials) =>
+			asiAxios.get(
+				`${asiaUrl}/api/Travel/GetInsuranceProgramService?p_ProgramId=${credentials}`
+			),
+		getCurrency: () =>
+			asiAxios.get(`${asiaUrl}/api/Dictionaries/GetCurrencyValue`),
 	},
 };

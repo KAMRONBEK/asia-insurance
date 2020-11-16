@@ -18,13 +18,20 @@ import Input from "../common/Input";
 import Select from "../common/Select";
 import { requests } from "../../api/requests";
 import DatePicker from "react-native-datepicker";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
+const InsuredPeopleSteps = ({
+	hideSelectionLoading,
+	setInsurance,
+	peopleCount,
+}) => {
 	//insured person data
 
 	useEffect(() => {
 		hideSelectionLoading();
 	}, []);
+
+	let [insuredPerson, setInsuredPerson] = useState({});
 
 	const InsuredStepOne = ({ navigation }: any) => {
 		// const [carRegisterPlaceList, setCarRegisterPlaceList] = useState([]);
@@ -41,27 +48,37 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 		let [regionList, setRegionList] = useState([]);
 
 		const onNextPress = (item) => {
-			// setIndex(index + 1);
-
-			setInsurance({
-				parent: "vzr",
-				child: "insuredPerson",
-				data: {
-					insuredPerson: {
-						name: name,
-						midName: midName,
-						lastName: lastName,
-						country: country,
-						region: region,
-						birthDate: birthDate,
+			if (peopleCount?.id.split(",")[0] == 1) {
+				setInsurance({
+					parent: "vzr",
+					child: "insuredPerson",
+					data: {
+						insuredPerson: {
+							name: name,
+							midName: midName,
+							lastName: lastName,
+							country: country,
+							region: region,
+							birthDate: birthDate,
+						},
 					},
-				},
-			});
+				});
 
-			navigate(SCREENS.calculateCost, {
-				name: SCREENS.calculateCost,
-				params: {},
-			});
+				navigate(SCREENS.calculateCost, {
+					name: SCREENS.calculateCost,
+					params: {},
+				});
+			} else {
+				setInsuredPerson({
+					name: name,
+					midName: midName,
+					lastName: lastName,
+					country: country,
+					region: region,
+					birthDate: birthDate,
+				});
+				setIndex(index + 1);
+			}
 		};
 
 		const initDictionary = async () => {
@@ -111,7 +128,7 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 
 		return (
 			<View style={styles.content}>
-				<InPageHeader title={strings.choosePeopleCount} />
+				<InPageHeader title={strings.enterInsuredPersonData} />
 				{/* 38 page verstka */}
 				<View style={styles.content}>
 					<ScrollView
@@ -198,11 +215,18 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 						/>
 					</ScrollView>
 				</View>
-				<View style={{ paddingHorizontal: 20 }}>
+				<View style={{ paddingHorizontal: 40 }}>
 					<RoundButton
 						text={strings.next}
 						gradient
 						onPress={onNextPress}
+						passive={
+							!name ||
+							!lastName ||
+							!birthDate ||
+							!region ||
+							!country
+						}
 					/>
 				</View>
 			</View>
@@ -210,21 +234,303 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 	};
 
 	const InsuredStepTwo = ({ navigation }: any) => {
-		// const [carRegisterPlaceList, setCarRegisterPlaceList] = useState([]);
+		let [extraPeopleList, setExtraPeopleList] = useState(1);
+		let [extraPeopleData, setExtraPeopleData] = useState<Array<object>>([]);
+
+		let [tempDate, setTempDate] = useState();
+
+		let [countryList, setCountryList] = useState([]);
+		let [regionList, setRegionList] = useState([]);
+
+		const initDictionary = async () => {
+			try {
+				let res = await requests.dictionary.getCountryList();
+				let temp = res.data.map((region, index) => {
+					return {
+						label: region.text,
+						value: {
+							text: region.text,
+							id: region.id,
+						},
+						key: index,
+					};
+				});
+				let resRegion = await requests.dictionary.getRegionList();
+				let tempRegion = resRegion.data.map((region, index) => {
+					return {
+						label: region.text,
+						value: {
+							text: region.text,
+							id: region.id,
+						},
+						key: index,
+					};
+				});
+				setCountryList(temp);
+				console.log(temp);
+
+				setRegionList(tempRegion);
+			} catch (error) {
+				console.log(error.response);
+			} finally {
+				hideSelectionLoading();
+			}
+		};
+
+		useEffect(() => {
+			console.log(extraPeopleData);
+		}, [extraPeopleData]);
+
 		const onNextPress = (item) => {
+			setInsurance({
+				parent: "vzr",
+				child: "insuredPerson",
+				data: {
+					insuredPerson: insuredPerson,
+					extraPeople: extraPeopleData,
+				},
+			});
+
 			navigate(SCREENS.calculateCost, {
 				name: SCREENS.calculateCost,
 				params: {},
 			});
 		};
 
-		useEffect(() => {}, []);
+		useEffect(() => {
+			initDictionary();
+		}, []);
 
 		return (
 			<View style={styles.content}>
-				<InPageHeader title={strings.choosePeopleCount} />
+				<InPageHeader title={strings.additionalTripMembers} />
 				{/* 39 page verstka */}
-				<View style={styles.content}></View>
+				<View style={styles.content}>
+					<ScrollView
+						style={styles.form}
+						contentContainerStyle={{
+							paddingBottom: 40,
+						}}
+					>
+						{[...new Array(extraPeopleList)].map(
+							(person, index) => (
+								<>
+									<Text
+										style={{
+											paddingBottom: 10,
+											color: colors.black,
+											fontWeight: "bold",
+										}}
+									>
+										{strings.member} {index + 1}
+									</Text>
+									<Input
+										placeholder={strings.lastName}
+										value={extraPeopleData[index]?.lastName}
+										setValue={(text) => {
+											const newValues = {
+												...extraPeopleData[index],
+												lastName: text,
+											};
+											let newList = [...extraPeopleData];
+											newList[index] = newValues;
+
+											setExtraPeopleData(newList);
+										}}
+									/>
+									<Input
+										placeholder={strings.firstName}
+										value={
+											extraPeopleData[index]?.firstName
+										}
+										setValue={(text) => {
+											const newValues = {
+												...extraPeopleData[index],
+												firstName: text,
+											};
+											let newList = [...extraPeopleData];
+											newList[index] = newValues;
+											setExtraPeopleData(newList);
+										}}
+									/>
+									<Input
+										placeholder={strings.midName}
+										value={extraPeopleData[index]?.midName}
+										setValue={(text) => {
+											const newValues = {
+												...extraPeopleData[index],
+												midName: text,
+											};
+											let newList = [...extraPeopleData];
+											newList[index] = newValues;
+											setExtraPeopleData(newList);
+										}}
+									/>
+									<DatePicker
+										style={{
+											borderRadius: BORDER_RADIUS,
+											backgroundColor: colors.white,
+											justifyContent: "space-between",
+											width: "100%",
+											padding: 10,
+											marginBottom: 20,
+											marginTop: 10,
+										}}
+										date={extraPeopleData[index]?.birthDate}
+										mode="date"
+										placeholder={strings.pickBirthDate}
+										format="DD.MM.YYYY"
+										minDate="01.01.1900"
+										maxDate={new Date()}
+										confirmBtnText={strings.yes}
+										cancelBtnText={strings.no}
+										iconComponent={
+											<Icons
+												name="calendar"
+												size={20}
+												color={colors.gray}
+											/>
+										}
+										customStyles={{
+											dateIcon: {
+												height: 30,
+												width: 30,
+											},
+											dateInput: {
+												borderWidth: 0,
+												marginRight: 20,
+												borderRadius: BORDER_RADIUS,
+											},
+											dateTouchBody: {
+												width: "100%",
+												justifyContent: "space-between",
+												overflow: "hidden",
+												paddingRight: 10,
+											},
+											// ... You can check the source to find the other keys.
+										}}
+										onDateChange={(date) => {
+											const newValues = {
+												...extraPeopleData[index],
+												birthDate: date,
+											};
+											let newList = [...extraPeopleData];
+											newList[index] = newValues;
+											setExtraPeopleData(newList);
+										}}
+									/>
+									<View
+										style={{
+											flexDirection: "row",
+											justifyContent: "space-between",
+										}}
+									>
+										<Input
+											style={{
+												flex: 1,
+											}}
+											placeholder={strings.series}
+											value={
+												extraPeopleData[index]?.series
+											}
+											setValue={(text) => {
+												const newValues = {
+													...extraPeopleData[index],
+													series: text,
+												};
+												console.log(newValues);
+												let newList = [
+													...extraPeopleData,
+												];
+												newList[index] = newValues;
+												console.log(newList);
+												setExtraPeopleData(newList);
+											}}
+										/>
+										<Input
+											style={{
+												flex: 4,
+												marginLeft: 10,
+											}}
+											placeholder={strings.passportNumber}
+											value={
+												extraPeopleData[index]
+													?.passportNumber
+											}
+											setValue={(text) => {
+												const newValues = {
+													...extraPeopleData[index],
+													passportNumber: text,
+												};
+												console.log(newValues);
+												let newList = [
+													...extraPeopleData,
+												];
+												newList[index] = newValues;
+												console.log(newList);
+												setExtraPeopleData(newList);
+											}}
+										/>
+									</View>
+									{/* <Select
+								placeholder={strings.country}
+								options={countryList}
+								key={"country"}
+								icon="flag"
+								selectValue={(value) => {
+									const newValues = {
+										...extraPeopleData[index],
+										country: value,
+									};
+									let newList = [...extraPeopleData];
+									newList[index] = newValues;
+									setExtraPeopleData(newList);
+								}}
+							/>
+							<Select
+								placeholder={strings.region}
+								options={regionList}
+								key={"region"}
+								icon="flag"
+								selectValue={(value) => {
+									const newValues = {
+										...extraPeopleData[index],
+										region: value,
+									};
+									let newList = [...extraPeopleData];
+									newList[index] = newValues;
+									setExtraPeopleData(newList);
+								}}
+							/> */}
+								</>
+							)
+						)}
+						{extraPeopleList <= 5 && (
+							<TouchableOpacity
+								onPress={() => {
+									setExtraPeopleList(extraPeopleList + 1);
+								}}
+							>
+								<View
+									style={{
+										alignItems: "center",
+									}}
+								>
+									<Text
+										style={{
+											fontSize: 18,
+											color: colors.darkBlue,
+											fontWeight: "bold",
+										}}
+									>
+										{strings.addMember}
+									</Text>
+								</View>
+							</TouchableOpacity>
+						)}
+					</ScrollView>
+				</View>
+
 				<View style={{ paddingHorizontal: 20 }}>
 					<RoundButton
 						text={strings.next}
@@ -250,7 +556,7 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 	return (
 		<>
 			<TabView
-				swipeEnabled={false}
+				swipeEnabled={true}
 				renderTabBar={() => null}
 				navigationState={{ index, routes }}
 				renderScene={renderScene}
@@ -260,7 +566,9 @@ const InsuredPeopleSteps = ({ hideSelectionLoading, setInsurance }) => {
 	);
 };
 
-const mapStateToProps = ({ state }) => ({});
+const mapStateToProps = ({ insurance }) => ({
+	peopleCount: insurance.vzr.tripPurpose.peopleCount,
+});
 
 const mapDispatchToProps = {
 	setCurrentStep,

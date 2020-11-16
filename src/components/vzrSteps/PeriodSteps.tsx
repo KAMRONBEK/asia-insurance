@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import DatePicker from "react-native-datepicker";
 import InPageHeader from "../common/InPageHeader";
@@ -12,6 +12,8 @@ import { setInsurance } from "../../redux/actions";
 const PeriodSteps = ({ setInsurance }) => {
 	let [beginDate, setBeginDate] = useState(moment(new Date(), "DD.MM.YYYY"));
 	let [endDate, setEndDate] = useState(moment(new Date(), "DD.MM.YYYY"));
+
+	let [diffDays, setDiffDays] = useState(0);
 
 	const onNextPress = () => {
 		setInsurance({
@@ -27,6 +29,22 @@ const PeriodSteps = ({ setInsurance }) => {
 			params: {},
 		});
 	};
+
+	useEffect(() => {
+		console.log(
+			moment(endDate, "DD.MM.YYYY").diff(
+				moment(beginDate, "DD.MM.YYYY"),
+				"days"
+			)
+		);
+		setDiffDays(
+			moment(endDate, "DD.MM.YYYY").diff(
+				moment(beginDate, "DD.MM.YYYY"),
+				"days"
+			)
+		);
+	}, [endDate, beginDate]);
+
 	return (
 		<View style={styles.content}>
 			<View>
@@ -87,7 +105,7 @@ const PeriodSteps = ({ setInsurance }) => {
 					mode="date"
 					placeholder={strings.pickStartDate}
 					format="DD.MM.YYYY"
-					minDate={new Date()}
+					minDate={beginDate}
 					maxDate="01-01-2030"
 					confirmBtnText={strings.yes}
 					cancelBtnText={strings.no}
@@ -114,11 +132,51 @@ const PeriodSteps = ({ setInsurance }) => {
 					}}
 					onDateChange={(date) => {
 						setEndDate(date);
+						console.log(date);
 					}}
 				/>
+				{diffDays != 0 && (
+					<View
+						style={{
+							alignItems: "center",
+						}}
+					>
+						<Text
+							style={{
+								color: colors.darkBlue,
+								fontWeight: "bold",
+								fontSize: 16,
+							}}
+						>
+							{diffDays} {strings.days}
+						</Text>
+					</View>
+				)}
 			</View>
-			<View style={styles.nextWrapper}>
-				<TouchableOpacity onPress={onNextPress}>
+			<View
+				style={[
+					styles.nextWrapper,
+					{
+						backgroundColor:
+							moment(endDate, "DD.MM.YYYY").diff(
+								moment(beginDate, "DD.MM.YYYY"),
+								"days"
+							) > 0
+								? colors.lightBlue
+								: colors.gray,
+					},
+				]}
+			>
+				<TouchableOpacity
+					onPress={
+						moment(endDate, "DD.MM.YYYY").diff(
+							moment(beginDate, "DD.MM.YYYY"),
+							"days"
+						) > 0
+							? onNextPress
+							: undefined
+					}
+				>
 					<Text style={styles.next}>{strings.next}</Text>
 				</TouchableOpacity>
 			</View>
@@ -142,10 +200,16 @@ const styles = StyleSheet.create({
 	},
 	nextWrapper: {
 		alignItems: "flex-end",
-		padding: 20,
+		padding: 12,
+		paddingVertical: 8,
+		borderRadius: 20,
+		backgroundColor: colors.lightBlue,
+		alignSelf: "flex-end",
+		margin: 5,
 	},
 	next: {
 		fontSize: 16,
 		fontWeight: "700",
+		color: colors.white,
 	},
 });

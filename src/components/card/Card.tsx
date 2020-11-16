@@ -90,17 +90,19 @@ const Card = ({
 					>
 						{title}
 					</Text>
-					<Text
-						style={[
-							styles.desc,
-							!!icon && {
-								fontWeight: "300",
-							},
-						]}
-						numberOfLines={2}
-					>
-						{desc}
-					</Text>
+					{desc && (
+						<Text
+							style={[
+								styles.desc,
+								!!icon && {
+									fontWeight: "300",
+								},
+							]}
+							numberOfLines={2}
+						>
+							{desc}
+						</Text>
+					)}
 				</View>
 				<View style={styles.icon}>
 					<Icons
@@ -132,6 +134,7 @@ const styles = StyleSheet.create({
 	middle: {
 		flex: 1,
 		marginLeft: 10,
+		justifyContent: "center",
 	},
 	icon: {
 		paddingLeft: 15,

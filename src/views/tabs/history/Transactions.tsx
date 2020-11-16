@@ -56,7 +56,7 @@ const Transactions = ({
 			extraData:
 				",,,,,,Физ.лицо,Ограниченое использование ТС,Без нарушений",
 			insuranceSumm: 40000000,
-			insuranceType: "ОСАГО",
+			insuranceType: "ОСГО ВТС",
 			orderCreateTime: "19.08.2020 04:11:17",
 			orderId: "1106df74-8458-462e-91b8-6a1dcff1d4a5",
 			orderNumber: "11179020081916",
@@ -74,33 +74,47 @@ const Transactions = ({
 	}, []);
 	return (
 		<View style={styles.container}>
-			<ScrollView
-				style={{ flex: 1 }}
-				contentContainerStyle={styles.plane}
-				showsVerticalScrollIndicator={false}
-			>
-				<Text style={styles.title}>{strings.orderList}</Text>
+			{/* <Text style={styles.title}>{strings.orderList}</Text> */}
 
-				<FlatList
-					data={orders}
-					renderItem={({ item }) => (
-						<TransactionCard
-							image={
-								item.insuranceType == "ОСАГО"
-									? images.carShield
-									: images.planeShield
-							}
-							title={item.insuranceType}
-							orderId={item.orderNumber}
-							assignedOperator={item.assignedOperator + ""}
-							price={item.premia}
-							currency="сум"
-							status={item.status}
-						/>
-					)}
-				/>
+			{orders.length == 0 ? (
+				<View style={styles.center}>
+					<Text
+						style={{
+							fontSize: 13,
+							color: colors.grayText,
+						}}
+					>
+						{strings.noOrders}
+					</Text>
+				</View>
+			) : (
+				<ScrollView
+					style={{ flex: 1 }}
+					contentContainerStyle={styles.plane}
+					showsVerticalScrollIndicator={false}
+				>
+					<FlatList
+						data={orders}
+						renderItem={({ item }) => (
+							<TransactionCard
+								image={
+									item.insuranceType == "ОСГО ВТС"
+										? images.carShield
+										: images.planeShield
+								}
+								title={item.insuranceType}
+								orderId={item.orderNumber}
+								assignedOperator={item.assignedOperator + ""}
+								price={item.premia}
+								currency="сум"
+								status={item.status}
+							/>
+						)}
+					/>
+				</ScrollView>
+			)}
 
-				{/* <TransactionCard
+			{/* <TransactionCard
 					image={images.carShield}
 					title={strings.osago}
 					orderId="4364644554"
@@ -136,7 +150,6 @@ const Transactions = ({
 					currency="сум"
 					price="200 000"
 				/> */}
-			</ScrollView>
 		</View>
 	);
 };
@@ -153,6 +166,11 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		fontSize: 15,
 		paddingBottom: 30,
+	},
+	center: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });
 

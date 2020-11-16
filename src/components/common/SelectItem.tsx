@@ -35,6 +35,11 @@ const SelectItem = ({ item, osago, removeInsuranceData }: SelectItemProps) => {
 			>
 				<TouchableOpacity
 					onPress={() => {
+						console.log({
+							parent: item.parent,
+							child: item.child,
+						});
+
 						removeInsuranceData({
 							parent: item.parent,
 							child: item.child,

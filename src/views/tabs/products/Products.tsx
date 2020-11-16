@@ -100,8 +100,8 @@ const Products = ({ navigation, hideLoading, showLoading, customerId }) => {
 				<Card
 					onPress={onPlanePress}
 					navigation={navigation}
-					title={strings.vzr}
-					desc={strings.vzrInfo}
+					title={strings.vzrInfo}
+					// desc={strings.vzrInfo}
 					image={images.planeShield}
 				/>
 				<Text style={[styles.title, styles.paddingTop]}>

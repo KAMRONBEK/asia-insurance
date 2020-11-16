@@ -10,55 +10,70 @@ import {
 import { showModal } from "../../redux/actions";
 import { connect } from "react-redux";
 import { strings } from "../../locales/strings";
+import { requests } from "../../api/requests";
+import Modal from "../container/Modal";
 
-const PackageCard = ({ item, onPress, selected, showModal }) => {
+const PackageCard = ({ item, onPress, selected, showModal, modalChild }) => {
 	let [checked, setChecked] = useState(
 		item.selected ? item.selected : selected
 	);
+
 	const onRadioPress = () => {
 		setChecked(!checked);
 	};
+
+	const onDetailPress = async () => {
+		console.log(item.insuranceProgramId);
+		try {
+			let res = await requests.travel.programService(
+				item.insuranceProgramId
+			);
+			console.log(res.data.data);
+			showModal(res.data.data);
+		} catch (error) {
+			console.log(error.response, "error");
+		}
+	};
+
 	return (
-		<Touchable
-			onPress={() => {
-				onPress();
-				onRadioPress();
-			}}
-		>
-			<View style={styles.container}>
-				<View style={styles.column}>
-					<Text style={styles.title}>
-						{item.insuranceProgramName}
-					</Text>
-					<View style={styles.row}>
-						<Text style={styles.price}>
-							{item.insuranceSummValue} {item.currencyCode}
+		<>
+			<Touchable
+				onPress={() => {
+					onPress();
+					onRadioPress();
+				}}
+			>
+				<View style={styles.container}>
+					<View style={styles.column}>
+						<Text style={styles.title}>
+							{item.insuranceProgramName}
 						</Text>
-						<View style={{}}>
-							<TouchableOpacity
-								onPress={() => {
-									showModal();
-								}}
-							>
-								<Text style={styles.link}>
-									{strings.tarifDetails}
-								</Text>
-							</TouchableOpacity>
+						<View style={styles.row}>
+							<Text style={styles.price}>
+								{item.insuranceSummValue} {item.currencyCode}
+							</Text>
+							<View style={{}}>
+								<TouchableOpacity onPress={onDetailPress}>
+									<Text style={styles.link}>
+										{strings.tarifDetails}
+									</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
+					<View style={styles.radio}>
+						<View
+							style={[
+								styles.radioIcon,
+								!!checked && {
+									backgroundColor: colors.red,
+								},
+							]}
+						/>
+					</View>
 				</View>
-				<View style={styles.radio}>
-					<View
-						style={[
-							styles.radioIcon,
-							!!checked && {
-								backgroundColor: colors.red,
-							},
-						]}
-					/>
-				</View>
-			</View>
-		</Touchable>
+			</Touchable>
+		</>
 	);
 };
 
@@ -113,7 +128,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = ({ appState }) => ({
+	modalChild: appState.modalChild,
+});
 
 const mapDispatchToProps = {
 	showModal,

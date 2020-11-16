@@ -67,6 +67,7 @@ enum SCREENS {
 	checkout = "Checkout",
 	pin = "Pin",
 	map = "Map",
+	insuredEvents = "InsuredEvents",
 }
 
 export const deviceWidth = Dimensions.get("window").width;
@@ -75,6 +76,7 @@ export const deviceHeight = Dimensions.get("window").height;
 export const CONTAINER_PADDING = 15;
 export const BORDER_RADIUS = 10;
 export const BIG_BORDER_RADIUS = 20;
+export const BOX_HEIGHT = 130;
 
 export const LATITUDE_DELTA = 0.01;
 export const LONGITUDE_DELTA = 0.01;

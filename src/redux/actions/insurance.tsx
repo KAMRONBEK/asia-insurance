@@ -3,6 +3,7 @@ import {
 	SET_CURRENT_STEP,
 	REMOVE_INSURANCE_DATA,
 	SET_INSURANCE_COST,
+	SET_ANTI_COVID,
 } from "../types";
 
 export const setInsurance = (payload) => ({
@@ -23,4 +24,8 @@ export const setInsuranceCost = (payload) => ({
 export const removeInsuranceData = (payload) => ({
 	type: REMOVE_INSURANCE_DATA,
 	payload,
+});
+
+export const setAntiCovid = () => ({
+	type: SET_ANTI_COVID,
 });

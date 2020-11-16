@@ -8,6 +8,7 @@ import { configureAxios } from "./src/api/config";
 import Loading from "./src/components/container/Loading";
 import { init } from "./src/utils/NotificationServices";
 import { strings } from "./src/locales/strings";
+import Modal from "./src/components/container/Modal";
 
 if (Platform.OS === "android") {
 	if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -24,6 +25,7 @@ const App = () => {
 		<SafeAreaProvider>
 			<Provider store={store}>
 				<AppRouter />
+				<Modal />
 				<Loading />
 			</Provider>
 		</SafeAreaProvider>

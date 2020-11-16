@@ -20,10 +20,13 @@ import {
 	setInsuranceCost,
 	showFlashMessage,
 	showLoading,
+	setAntiCovid,
 } from "../../../redux/actions";
 import { requests } from "../../../api/requests";
 import { navigate } from "../../../utils/NavigationService";
 import moment from "moment";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import CustomSwitch from "../../../components/common/CustomSwitch";
 
 const Cost = ({
 	navigation,
@@ -35,6 +38,7 @@ const Cost = ({
 	showLoading,
 	hideLoading,
 	showFlashMessage,
+	setAntiCovid,
 }) => {
 	let [loading, setLoading] = useState(true);
 	let { insuranceType } = route.params;
@@ -61,23 +65,26 @@ const Cost = ({
 
 	const calculateVzr = async () => {
 		try {
+			let currency = await requests.travel.getCurrency();
+
 			let response = await requests.travel.calculate({
-				PeriodType: 1,
-				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id,
-				CurrencyValue: 10000,
-				DaysCount:
-					1 /
-					moment
-						.duration(
-							moment(vzr.tripDuration.endDate, "mm.dd.yyyy").diff(
-								moment(vzr.tripDuration.startDate, "mm.dd.yyyy")
-							)
-						)
-						.asDays(),
+				PeriodType:
+					vzr?.tripPurpose?.isMulti?.id ==
+					"48a977e0-c657-4cdb-b0bf-1b9342bfbaa8"
+						? 0
+						: 1,
+				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id.split(
+					";"
+				)[1],
+				CurrencyValue: currency.data.currency_value,
+				DaysCount: moment(vzr.tripDuration.endDate, "DD.MM.YYYY").diff(
+					moment(vzr.tripDuration.startDate, "DD.MM.YYYY"),
+					"days"
+				),
 				InsuranceProgramId:
 					vzr?.destinationCountry?.program?.insuranceProgramId,
 				InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,
-				AntiCovidCoverage: 0,
+				AntiCovidCoverage: vzr?.antiCovid ? 1 : 0,
 				PersonsBirthDates: [
 					vzr?.insuredPerson?.insuredPerson?.birthDate,
 				],
@@ -112,18 +119,19 @@ const Cost = ({
 		if (insuranceType == strings.vzr) {
 			setLoading(true);
 			console.log({
-				PeriodType: vzr?.tripPurpose?.isMulti?.id,
-				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id,
+				PeriodType:
+					vzr?.tripPurpose?.isMulti?.id ==
+					"48a977e0-c657-4cdb-b0bf-1b9342bfbaa8"
+						? 0
+						: 1,
+				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id.split(
+					";"
+				)[1],
 				CurrencyValue: 10000,
-				DaysCount:
-					1 /
-					moment
-						.duration(
-							moment(vzr.tripDuration.endDate, "mm.dd.yyyy").diff(
-								moment(vzr.tripDuration.startDate, "mm.dd.yyyy")
-							)
-						)
-						.asDays(),
+				DaysCount: moment(vzr.tripDuration.endDate, "DD.MM.YYYY").diff(
+					moment(vzr.tripDuration.startDate, "DD.MM.YYYY"),
+					"days"
+				),
 				InsuranceProgramId:
 					vzr?.destinationCountry?.program?.insuranceProgramId,
 				InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,
@@ -141,6 +149,10 @@ const Cost = ({
 			setLoading(false);
 		}, 500);
 	}, []);
+
+	useEffect(() => {
+		calculateVzr();
+	}, [vzr.antiCovid]);
 
 	let { destinationCountry, tripDuration, tripPurpose, insuredPerson } = vzr;
 
@@ -163,13 +175,13 @@ const Cost = ({
 				DeliveryOblastId: 10,
 				DeliveryRayonId: 1003,
 				InsuranceParams: {
-					//not calculated
-					Premia: 162000,
-					InsuranceSumm: 40000000,
+					Premia: vzrCost,
+					InsuranceSumm:
+						vzr.destinationCountry?.program?.insuranceSummValue,
 					Discount: 0,
-					BeginDate: "23.10.2020",
-					EndDate: "25.10.2020",
-					ExtraData: JSON.stringify(osago),
+					BeginDate: vzr.tripDuration.startDate,
+					EndDate: vzr.tripDuration.endDate,
+					ExtraData: JSON.stringify(vzr),
 				},
 				// Docs: checkout.documents,
 				Docs: [],
@@ -188,7 +200,7 @@ const Cost = ({
 			navigate(SCREENS.tabs, {
 				name: SCREENS.historyStack,
 				params: {
-					screen: SCREENS.transactions,
+					screen: SCREENS.payments,
 				},
 			});
 		} catch (error) {
@@ -247,20 +259,22 @@ const Cost = ({
 									{strings.osagoPolicyCost}
 								</Text>
 								<Text style={styles.title}>
-									{strings.yourCost}:
+									{strings.yourCost}
 								</Text>
 								<Text style={styles.cost}>
 									{Math.round(cost)} сум
 								</Text>
 							</View>
-							<View>
-								<Text style={styles.title}>
-									{strings.insurancePremium}:
-								</Text>
-								<Text style={styles.cost}>
-									{Math.round(costDiscounted)} сум
-								</Text>
-							</View>
+							{cost !== costDiscounted && (
+								<View>
+									<Text style={styles.title}>
+										{strings.insurancePremium}:
+									</Text>
+									<Text style={styles.cost}>
+										{Math.round(costDiscounted)} сум
+									</Text>
+								</View>
+							)}
 							<View style={styles.buttonWrapper}>
 								<RoundButton
 									onPress={onButtonPress}
@@ -275,9 +289,9 @@ const Cost = ({
 								<Text style={styles.title}>
 									{strings.vzrPolicyCost}
 								</Text>
-								<Text style={styles.title}>
+								{/* <Text style={styles.title}>
 									{strings.yourCost}:
-								</Text>
+								</Text> */}
 								<Text
 									style={[
 										styles.cost,
@@ -286,15 +300,30 @@ const Cost = ({
 										},
 									]}
 								>
-									{Math.floor(vzrCost)} {strings.summ}
+									{Math.ceil(vzrCost)} {strings.sum}
 								</Text>
 							</View>
-							{/* <View>
-								<Text style={styles.title}>
-									{strings.insurancePremium}:
+
+							<View
+								style={{
+									alignItems: "center",
+									justifyContent: "space-around",
+									flexDirection: "row",
+									paddingHorizontal: 20,
+								}}
+							>
+								<Text
+									style={{
+										textTransform: "capitalize",
+									}}
+								>
+									{strings.antiCovid}:
 								</Text>
-								<Text style={styles.cost}>810 000 сум</Text>
-							</View> */}
+								<CustomSwitch
+									value={vzr.antiCovid}
+									onValueChange={setAntiCovid}
+								/>
+							</View>
 							<View style={styles.buttonWrapper}>
 								<RoundButton
 									onPress={onButtonPress}
@@ -374,6 +403,7 @@ const mapDispatchToProps = {
 	showLoading,
 	hideLoading,
 	showFlashMessage,
+	setAntiCovid,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cost);

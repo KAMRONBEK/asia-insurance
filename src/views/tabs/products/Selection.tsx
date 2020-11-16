@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, ScrollView } from "react-native";
+import {
+	StyleSheet,
+	View,
+	FlatList,
+	ScrollView,
+	Keyboard,
+	KeyboardAvoidingView,
+} from "react-native";
 import { TabView, SceneMap } from "react-native-tab-view";
 import Header from "../../../components/navigation/Header";
 import { strings } from "../../../locales/strings";
-import { colors, CONTAINER_PADDING } from "../../../constants";
+import { BOX_HEIGHT, colors, CONTAINER_PADDING } from "../../../constants";
 import SelectItem from "../../../components/common/SelectItem";
 import SearchBar from "../../../components/common/SearchBar";
 import InPageHeader from "../../../components/common/InPageHeader";
@@ -37,25 +44,35 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 				setBoxList(extractNames(osago, "osago"));
 			}
 			case strings.vzr: {
-				let countries = vzr.destinationCountry?.countries?.filter(
-					(country) => {
-						let newCountry = {
-							parent: "vzr",
-							child: "destinationCountry",
-							...country,
-						};
-						return newCountry;
-					}
-				);
+				let selectedCountries;
+				if (
+					vzr.destinationCountry &&
+					vzr.destinationCountry.countries &&
+					vzr.destinationCountry.countries.length > 0
+				) {
+					selectedCountries = vzr.destinationCountry.countries.map(
+						(country) => {
+							let newCountry = {
+								...country,
+								parent: "vzr",
+								child: "destinationCountry",
+							};
+							console.log(newCountry);
 
-				let array = [];
-				reactotron.warn({ countries });
-
-				if (countries?.length > 0) {
-					array = countries;
+							return newCountry;
+						}
+					);
 				}
 
-				if (vzr.tripPurpose) {
+				let array = [];
+				reactotron.warn({ selectedCountries });
+
+				if (selectedCountries?.length > 0) {
+					console.log("adding countries");
+					array = selectedCountries;
+				}
+
+				if (!isEmpty(vzr.tripPurpose)) {
 					array = [
 						...array,
 						{
@@ -75,22 +92,15 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 							name: vzr.tripPurpose?.peopleCount?.name,
 						},
 					];
+					console.log("adding trip purpose");
 				}
 
 				reactotron.warn(array);
-
-				// let countriesArray = Object.keys(countriesObj).map((key) => [
-				// 	countriesObj[key],
-				// ]);
 
 				setBoxList(array);
 			}
 		}
 	}, [osago, vzr]);
-
-	useEffect(() => {
-		console.log(boxList);
-	}, [boxList]);
 
 	const RenderStep = () => {
 		switch (insuranceType) {
@@ -167,7 +177,7 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 					</ScrollView>
 				</View>
 			</View> */}
-			<View style={{ height: 130, overflow: "visible" }}>
+			<View style={{ height: BOX_HEIGHT, overflow: "visible" }}>
 				{boxList.length > 0 ? (
 					<FlatList
 						keyExtractor={(item, index) => "key" + index}
@@ -181,6 +191,7 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 				)}
 			</View>
 			<RenderStep />
+
 			<SelectionLoading />
 		</View>
 	);

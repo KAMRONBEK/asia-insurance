@@ -15,9 +15,9 @@ const Policy = ({ navigation }) => {
 				</View>
 			</View> */}
 			<View style={styles.row}>
-				<Text style={styles.title}>{strings.availablePolicies}</Text>
+				{/* <Text style={styles.title}>{strings.availablePolicies}</Text> */}
 			</View>
-			<PolicyCard
+			{/* <PolicyCard
 				image={images.carShield}
 				id="4364644972"
 				title={strings.osago}
@@ -33,7 +33,10 @@ const Policy = ({ navigation }) => {
 				image={images.planeShield}
 				id="4364644972"
 				title={strings.vzr}
-			/>
+			/> */}
+			<View style={styles.center}>
+				<Text style={styles.text}>{strings.noPolicy}</Text>
+			</View>
 		</View>
 	);
 };
@@ -52,6 +55,15 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 15,
 		fontWeight: "bold",
+	},
+	center: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	text: {
+		fontSize: 13,
+		color: colors.grayText,
 	},
 	iconWrapper: {
 		height: 25,

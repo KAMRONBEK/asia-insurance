@@ -6,6 +6,7 @@ import { SCREENS } from "../../../constants";
 import Header from "../../../components/navigation/Header";
 import { strings } from "../../../locales/strings";
 import Map from "./Map";
+import InsuredEvents from "./InsuredEvents";
 
 let Stack = createStackNavigator();
 
@@ -19,6 +20,20 @@ export const SosStack = () => {
 					header: ({ navigation }) => (
 						<Header
 							title={strings.helpOnWay}
+							navigation={navigation}
+							back
+							round
+						/>
+					),
+				}}
+			/>
+			<Stack.Screen
+				name={SCREENS.insuredEvents}
+				component={InsuredEvents}
+				options={{
+					header: ({ navigation }) => (
+						<Header
+							title={strings.insuredEvents}
 							navigation={navigation}
 							back
 							round

@@ -44,6 +44,8 @@ const TripPurposeSteps = ({
 				.getTravelDictionary()
 				.then((res) => {
 					let array = [];
+					console.log("travel", res.data.travelTypes);
+
 					// res.data.travelTypes.map((item, index) => {
 					// 	array.push({ name: item });
 					// });
@@ -64,6 +66,7 @@ const TripPurposeSteps = ({
 			// setIndex(index + 1);
 			// let tempCountry = item;
 
+			//is one time?
 			if (item.id === "48a977e0-c657-4cdb-b0bf-1b9342bfbaa8") {
 				setIndex(index + 2);
 			} else {
@@ -218,12 +221,15 @@ const TripPurposeSteps = ({
 				let array = [];
 
 				Object.keys(res.data.travelGroupTypes).map((index, value) => {
-					array.push({
-						name: res.data.travelGroupTypes[index],
-						id: index,
-					});
+					if (index.split(",")[0] == 1 || index.split(",")[0] == 2) {
+						array.push({
+							name: res.data.travelGroupTypes[index],
+							id: index,
+						});
+					}
 					// console.warn(index);
 				});
+
 				setCountList(array);
 			});
 		}, []);

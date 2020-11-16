@@ -1,3 +1,4 @@
+import { asiaUrl } from "../../api/config";
 import {
 	TOGGLE_MENU,
 	SHOW_FLASH_MESSAGE,
@@ -17,6 +18,7 @@ const initialState = {
 	loading: false,
 	loadingMessage: "",
 	modalVisibility: false,
+	modalChild: undefined,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -46,7 +48,7 @@ export default (state = initialState, { type, payload }) => {
 			return { ...state, loading: false, loadingMessage: "" };
 		}
 		case SHOW_MODAL:
-			return { ...state, modalVisibility: true };
+			return { ...state, modalVisibility: true, modalChild: payload };
 		case HIDE_MODAL:
 			return { ...state, modalVisibility: false };
 		default:

@@ -8,7 +8,7 @@
 		"start": "react-native start",
 		"test": "jest",
 		"lint": "eslint .",
-		"reconnect":"adb reverse tcp:8081 tcp:8081 && adb reverse tcp:9090 tcp:9090"
+		"reconnect": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:9090 tcp:9090"
 	},
 	"dependencies": {
 		"@react-native-community/async-storage": "^1.11.0",
@@ -49,6 +49,7 @@
 		"react-native-tab-view": "^2.14.2",
 		"react-native-vector-icons": "^6.6.0",
 		"react-native-version-check": "^3.4.1",
+		"react-native-webview": "^10.10.0",
 		"react-redux": "^7.2.0",
 		"redux": "^4.0.5",
 		"redux-saga": "^1.1.3"

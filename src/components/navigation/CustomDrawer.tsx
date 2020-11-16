@@ -24,6 +24,7 @@ import FlashMessage from "../common/FlashMessage";
 import { timing } from "react-native-reanimated";
 import { requests } from "../../api/requests";
 import AsyncStorage from "@react-native-community/async-storage";
+import images from "../../assets/images";
 
 type DrawerProps = {
 	children: any;
@@ -47,13 +48,22 @@ const CustomDrawer = ({
 	let [points, setPoints] = useState(0);
 
 	let boot = async () => {
-		let res = await requests.ball.getBall();
-		setPoints(res.data.data[0].points);
+		try {
+			let res = await requests.ball.getBall();
+			if (res.data.data[0]) {
+				console.log(res.data.data[0].points);
+
+				setPoints(res.data.data[0].points);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	useEffect(() => {
 		boot();
-		console.log(profile, user);
+		console.log("profile", profile);
+		console.log("user", user);
 	}, []);
 
 	//changing height while keyboard is on
@@ -99,10 +109,7 @@ const CustomDrawer = ({
 				<View>
 					<View style={styles.avatarContainer}>
 						<Image
-							source={{
-								uri:
-									"https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80",
-							}}
+							source={user.logo ? user.logo : images.logoBg}
 							style={styles.avatar}
 						/>
 						<TouchableWithoutFeedback onPress={toggleMenu}>
@@ -116,9 +123,7 @@ const CustomDrawer = ({
 						</TouchableWithoutFeedback>
 					</View>
 					<Text style={styles.username}>
-						{!!profile.customerName
-							? profile.customerName
-							: `NO NAME`}
+						{!!profile.customerName ? profile.customerName : ``}
 					</Text>
 					<Text style={styles.id}>ID: {user.id}</Text>
 				</View>
@@ -171,16 +176,16 @@ const CustomDrawer = ({
 						onPress={() => {
 							try {
 								navigate(SCREENS.tabs, {
-									name: SCREENS.historyStack,
+									name: SCREENS.sosStack,
 									params: {
-										screen: SCREENS.payouts,
+										screen: SCREENS.insuredEvents,
 									},
 								});
 							} catch (error) {}
 							toggleMenu();
 						}}
 						iconName={"card-hand"}
-						text={strings.sos}
+						text={strings.insuredEvents}
 					/>
 					<DrawerItem
 						onPress={() => {

@@ -81,7 +81,7 @@ const Pin = ({
 					});
 				} else {
 					//entered pin is wrong
-					console.log("entered pin is wrong");
+					console.log("entered pin is wrong", parsedStorage.pinCode);
 					showFlashMessage({
 						type: colors.red,
 						message: strings.wrongPin,

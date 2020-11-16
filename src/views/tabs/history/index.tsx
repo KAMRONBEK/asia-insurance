@@ -9,6 +9,7 @@ import { strings } from "../../../locales/strings";
 import Policy from "./Policy";
 import PolicyCheck from "./PolicyCheck";
 import PolicySelect from "./PolicySelect";
+import { Payments } from "../payments/Payments";
 
 let Stack = createStackNavigator();
 
@@ -41,6 +42,21 @@ export const HistoryStack = () => {
 							close
 							alignLeft
 							step={[1, 10]}
+						/>
+					),
+				}}
+			/>
+			<Stack.Screen
+				name={SCREENS.payments}
+				component={Payments}
+				options={{
+					header: ({ navigation }) => (
+						<Header
+							navigation={navigation}
+							title={strings.payment}
+							round
+							close
+							alignLeft
 						/>
 					),
 				}}

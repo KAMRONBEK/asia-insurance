@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, ScrollView, TextInput } from "react-native";
+import { StyleSheet, View, ScrollView, TextInput, Linking } from "react-native";
 import {
 	colors,
 	CONTAINER_PADDING,
@@ -15,7 +15,8 @@ import CustomSwitch from "../../../components/common/CustomSwitch";
 
 const ContactToTechSupport = ({ navigation }) => {
 	const onPress = () => {
-		navigation.navigate(SCREENS.support);
+		Linking.openURL(`mailto:kamuranbek1998@gmail.com`);
+		// navigation.navigate(SCREENS.support);
 	};
 	let [useLocation, setUseLocation] = useState(false);
 	return (

@@ -9,14 +9,14 @@ import {
 import { connect } from "react-redux";
 import { hideModal } from "../../redux/actions";
 import { strings } from "../../locales/strings";
-import { colors } from "../../constants";
+import { colors, deviceWidth } from "../../constants";
 
-const Modal = ({ children, hideModal, modalVisibility }) => {
+const Modal = ({ children, hideModal, modalVisibility, modalChild }) => {
 	let [colorAnimation, setAnimation] = useState(new Animated.Value(0));
 
 	let colorInterpolation = colorAnimation.interpolate({
 		inputRange: [0, 1],
-		outputRange: ["transparent", "rgba(0,0,0,0.2)"],
+		outputRange: ["transparent", "rgba(255,255,255,0.9)"],
 	});
 
 	useEffect(() => {
@@ -24,7 +24,7 @@ const Modal = ({ children, hideModal, modalVisibility }) => {
 			Animated.parallel([
 				Animated.timing(colorAnimation, {
 					toValue: 1,
-					duration: 500,
+					duration: 200,
 					useNativeDriver: false,
 				}),
 			]).start();
@@ -32,7 +32,7 @@ const Modal = ({ children, hideModal, modalVisibility }) => {
 			Animated.parallel([
 				Animated.timing(colorAnimation, {
 					toValue: 0,
-					duration: 500,
+					duration: 200,
 					useNativeDriver: false,
 				}),
 			]).start();
@@ -52,11 +52,25 @@ const Modal = ({ children, hideModal, modalVisibility }) => {
 				style={[
 					styles.container,
 					{
-						backgroundColor: colorInterpolation,
+						backgroundColor: colors.white,
 					},
 				]}
 			>
-				{children}
+				{modalChild &&
+					modalChild.map((service, index) => {
+						return (
+							<View style={styles.row}>
+								<View
+									style={{
+										maxWidth: 0.6 * deviceWidth,
+									}}
+								>
+									<Text>{service.serviceName}</Text>
+								</View>
+								<Text>{service.serviceCost}</Text>
+							</View>
+						);
+					})}
 			</Animated.View>
 		</TouchableWithoutFeedback>
 	);
@@ -71,11 +85,26 @@ const styles = StyleSheet.create({
 		right: 0,
 		justifyContent: "center",
 		alignItems: "center",
+		backgroundColor: colors.white,
+		padding: 15,
+	},
+	row: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		borderColor: colors.lightBlue,
+		borderRadius: 5,
+		flex: 1,
+		width: deviceWidth - 20,
+		paddingHorizontal: 20,
+		margin: 5,
+		backgroundColor: colors.ultraLightBlue,
 	},
 });
 
 const mapStateToProps = ({ appState }) => ({
 	modalVisibility: appState.modalVisibility,
+	modalChild: appState.modalChild,
 });
 
 const mapDispatchToProps = {

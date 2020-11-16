@@ -3,6 +3,7 @@ import {
 	SET_CURRENT_STEP,
 	REMOVE_INSURANCE_DATA,
 	SET_INSURANCE_COST,
+	SET_ANTI_COVID,
 } from "../types";
 
 const INITIAL_STATE = {
@@ -32,6 +33,7 @@ const INITIAL_STATE = {
 		tripDuration: {},
 		tripPurpose: {},
 		insuredPerson: {},
+		antiCovid: false,
 	},
 	currentStep: 1,
 	cost: 0,
@@ -66,6 +68,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 			return {
 				...state,
 				cost: payload,
+			};
+		case SET_ANTI_COVID:
+			return {
+				...state,
+				vzr: { ...state.vzr, antiCovid: !state.vzr.antiCovid },
 			};
 		default:
 			return state;

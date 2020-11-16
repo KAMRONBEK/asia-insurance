@@ -18,5 +18,6 @@ const images = {
 	handHoldingCard: require("./hand-holding-car.png"),
 	shield: require("./shield.png"),
 	gray: require("./gray.jpg"),
+	logoBg: require("./logo-bg.png"),
 };
 export default images;

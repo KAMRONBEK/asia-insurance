@@ -26,7 +26,6 @@ const CountrySteps = ({
 	showSelectionLoading,
 	hideSelectionLoading,
 	setCurrentStep,
-	vzr,
 }: any) => {
 	//set step initially
 	setCurrentStep(1);
@@ -121,7 +120,7 @@ const CountrySteps = ({
 	};
 
 	const CountryStepTwo = ({ navigation }: any) => {
-		const [purposeList, setPurposeList] = useState([]);
+		const [programList, setProgramList] = useState([]);
 
 		let effect = async () => {
 			let levels = countries.reduce(
@@ -139,7 +138,7 @@ const CountrySteps = ({
 			console.log(levelsStr);
 			let res = await requests.dictionary.getProgram(levelsStr);
 			console.log(res.data);
-			setPurposeList(res.data.data);
+			setProgramList(res.data.data);
 		};
 
 		useEffect(() => {
@@ -179,7 +178,7 @@ const CountrySteps = ({
 				<InPageHeader title={strings.packageSelection} />
 				<FlatList
 					keyExtractor={(item, index) => "key" + index}
-					data={purposeList}
+					data={programList}
 					renderItem={({ item }) => (
 						<PackageCard
 							item={item}
@@ -211,19 +210,6 @@ const CountrySteps = ({
 				renderScene={renderScene}
 				onIndexChange={setIndex}
 			/>
-			<Modal>
-				<View style={{ borderWidth: 10, padding: 30 }}>
-					<Text>as</Text>
-					<Text>as</Text>
-					<Text>as</Text>
-					<Text>as</Text>
-					<Text>as</Text>
-					<Text>as</Text>
-					<Text>as</Text>
-					<Text>as</Text>
-					<Text>as</Text>
-				</View>
-			</Modal>
 		</>
 	);
 };

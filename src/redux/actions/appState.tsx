@@ -35,8 +35,9 @@ export const hideLoading = () => ({
 	type: HIDE_LOADING,
 });
 
-export const showModal = () => ({
+export const showModal = (payload) => ({
 	type: SHOW_MODAL,
+	payload,
 });
 
 export const hideModal = () => ({
