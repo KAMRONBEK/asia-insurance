@@ -1,4 +1,5 @@
 import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { setDeviceToken } from "../redux/actions";
 
 export let init = (store) => {
