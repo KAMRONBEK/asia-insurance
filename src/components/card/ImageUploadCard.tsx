@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Image,
+	TouchableWithoutFeedback,
+} from "react-native";
 import {
 	colors,
 	BORDER_RADIUS,
@@ -12,7 +17,6 @@ import images from "../../assets/images";
 import Text from "../common/Text";
 // import ImagePicker from "react-native-image-picker";
 import ImagePicker from "react-native-image-crop-picker";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { formData, constructFileFromUri } from "../../api/requests";
 import { connect } from "react-redux";
 import { setDocuments } from "../../redux/actions";

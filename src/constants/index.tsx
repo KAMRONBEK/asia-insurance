@@ -68,6 +68,7 @@ enum SCREENS {
 	pin = "Pin",
 	map = "Map",
 	insuredEvents = "InsuredEvents",
+	insuredEventPage = "InsuredEventPage",
 }
 
 export const deviceWidth = Dimensions.get("window").width;

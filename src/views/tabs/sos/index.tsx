@@ -7,6 +7,7 @@ import Header from "../../../components/navigation/Header";
 import { strings } from "../../../locales/strings";
 import Map from "./Map";
 import InsuredEvents from "./InsuredEvents";
+import InsuredEventPage from "./InsuredEventPage";
 
 let Stack = createStackNavigator();
 
@@ -39,6 +40,13 @@ export const SosStack = () => {
 							round
 						/>
 					),
+				}}
+			/>
+			<Stack.Screen
+				name={SCREENS.insuredEventPage}
+				component={InsuredEventPage}
+				options={{
+					header: () => {},
 				}}
 			/>
 			<Stack.Screen
