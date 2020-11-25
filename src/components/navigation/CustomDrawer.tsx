@@ -273,6 +273,7 @@ const styles = StyleSheet.create({
 		left: 20,
 		bottom: 0,
 		justifyContent: "space-between",
+		paddingVertical:20
 	},
 	avatarContainer: {
 		flexDirection: "row",

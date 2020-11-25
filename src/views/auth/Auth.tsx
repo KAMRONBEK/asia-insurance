@@ -173,7 +173,7 @@ const Auth = ({
 					}
 				} catch (error) {
 					console.log(
-						error.response.data.message,
+						error.response.data.response.massage,
 						"error in Asia register"
 					);
 				}

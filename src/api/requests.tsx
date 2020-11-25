@@ -59,6 +59,12 @@ export let requests = {
 				credentials
 			),
 	},
+	orderConfirm: {
+		confirmOrder: (credentails) =>
+			axios.post(`${url}/api/order/send`, formData(credentails)),
+		myOrders: () => axios.get(`${url}/api/order`),
+		orderDetail: (id) => axios.get(`${url}/api/order/view?id=${id}`),
+	},
 	order: {
 		createOrder: (credentials) =>
 			asiAxios.post(`${asiaUrl}/api/Order/CreateOrder2`, credentials),

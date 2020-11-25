@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>47026489755-3841eilq1k26nvrs16e5cafdjsrbagpu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.47026489755-3841eilq1k26nvrs16e5cafdjsrbagpu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCXMeiF34XVfwmp9ojlTH9_wHZGJtJk2Nc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>47026489755</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>uz.asia.insurance</string>
+	<key>PROJECT_ID</key>
+	<string>asiainsurance</string>
+	<key>STORAGE_BUCKET</key>
+	<string>asiainsurance.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:47026489755:ios:c85aeb28e93d31adc8393e</string>
+	<key>DATABASE_URL</key>
+	<string>https://asiainsurance.firebaseio.com</string>
+</dict>
+</plist>

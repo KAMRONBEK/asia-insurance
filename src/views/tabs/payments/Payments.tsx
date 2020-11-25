@@ -1,15 +1,25 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { WebView } from "react-native-webview";
 import { colors, deviceHeight } from "../../../constants";
 
-export const Payments = () => {
+let paymentUrl = "http://asiainsurance.uz/main/payme?";
+
+export const Payments = ({ route }) => {
+	let { id, user_id, price } = route.params.paymentData;
+	// let amount = Math.ceil(price / 100) * 100;
+
+	console.log(
+		`${paymentUrl}order_id=${id}&user_id=${user_id}&amount=${price}`,
+		price
+	);
+
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<WebView
+				scrollEnabled={true}
 				source={{
-					uri:
-						"https://payme.uz/fallback/merchant/?id=5ccc0ff9167ca1553c2bcee3",
+					uri: `${paymentUrl}order_id=${id}&user_id=${user_id}&amount=${price}`,
 				}}
 				style={{
 					flex: 0,
@@ -20,15 +30,17 @@ export const Payments = () => {
 					paddingVertical: 0,
 				}}
 			/>
-		</View>
+		</ScrollView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		// flex: 1,
+		height: deviceHeight,
 	},
 	webview: {
-		...StyleSheet.absoluteFillObject,
+		// ...StyleSheet.absoluteFillObject,
+		height: deviceHeight,
 	},
 });

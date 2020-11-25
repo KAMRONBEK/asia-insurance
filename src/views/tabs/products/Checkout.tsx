@@ -694,7 +694,7 @@ const Checkout = ({
 					DeliveryRayonId: checkout.locationInfo.district.id,
 					InsuranceParams: {
 						Premia:
-							Math.round(cost) /
+							(Math.ceil(cost / 100) * 100) /
 							osago.privilege.availablePrivilege.tariff,
 						InsuranceSumm: 40000000,
 						Discount:
@@ -715,7 +715,7 @@ const Checkout = ({
 					DeliveryRayonId: checkout.locationInfo.district.id,
 					InsuranceParams: {
 						Premia:
-							Math.round(cost) /
+							(Math.ceil(cost / 100) * 100) /
 							osago.privilege.availablePrivilege.tariff,
 						InsuranceSumm: 40000000,
 						Discount:
@@ -730,7 +730,21 @@ const Checkout = ({
 					// Docs: [],
 					DocsInBytes: checkout.documents,
 				});
-				console.log(res.data, "res");
+
+				console.log(res.data);
+
+				let orderConfirmRespose = await requests.orderConfirm.confirmOrder(
+					{
+						type: "osgo",
+						order_number: res.data.orderNumber,
+						order_id: res.data.orderId,
+						price: Math.ceil(cost / 100) * 100,
+						discount: 0,
+					}
+				);
+
+				console.log(orderConfirmRespose.data.data);
+
 				showFlashMessage({
 					type: colors.green,
 					message:
@@ -744,6 +758,9 @@ const Checkout = ({
 					name: SCREENS.historyStack,
 					params: {
 						screen: SCREENS.payments,
+						params: {
+							paymentData: orderConfirmRespose.data.data,
+						},
 					},
 				});
 			} catch (error) {

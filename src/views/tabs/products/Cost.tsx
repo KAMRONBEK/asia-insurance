@@ -65,6 +65,8 @@ const Cost = ({
 
 	const calculateVzr = async () => {
 		try {
+			console.log("cost");
+
 			let currency = await requests.travel.getCurrency();
 
 			let response = await requests.travel.calculate({
@@ -90,7 +92,7 @@ const Cost = ({
 				],
 				GroupTypeId: vzr?.tripPurpose?.peopleCount?.id.split(";")[1],
 			});
-			console.log(response.data.data);
+			console.log(response.data.data, "cost");
 
 			setVzrCost(response.data.data);
 		} catch (error) {
@@ -118,29 +120,29 @@ const Cost = ({
 		}
 		if (insuranceType == strings.vzr) {
 			setLoading(true);
-			console.log({
-				PeriodType:
-					vzr?.tripPurpose?.isMulti?.id ==
-					"48a977e0-c657-4cdb-b0bf-1b9342bfbaa8"
-						? 0
-						: 1,
-				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id.split(
-					";"
-				)[1],
-				CurrencyValue: 10000,
-				DaysCount: moment(vzr.tripDuration.endDate, "DD.MM.YYYY").diff(
-					moment(vzr.tripDuration.startDate, "DD.MM.YYYY"),
-					"days"
-				),
-				InsuranceProgramId:
-					vzr?.destinationCountry?.program?.insuranceProgramId,
-				InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,
-				AntiCovidCoverage: 0,
-				PersonsBirthDates: [
-					vzr?.insuredPerson?.insuredPerson?.birthDate,
-				],
-				GroupTypeId: vzr?.tripPurpose?.peopleCount?.id.split(";")[1],
-			});
+			// console.log({
+			// 	PeriodType:
+			// 		vzr?.tripPurpose?.isMulti?.id ==
+			// 		"48a977e0-c657-4cdb-b0bf-1b9342bfbaa8"
+			// 			? 0
+			// 			: 1,
+			// 	MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id.split(
+			// 		";"
+			// 	)[1],
+			// 	CurrencyValue: 10000,
+			// 	DaysCount: moment(vzr.tripDuration.endDate, "DD.MM.YYYY").diff(
+			// 		moment(vzr.tripDuration.startDate, "DD.MM.YYYY"),
+			// 		"days"
+			// 	),
+			// 	InsuranceProgramId:
+			// 		vzr?.destinationCountry?.program?.insuranceProgramId,
+			// 	InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,
+			// 	AntiCovidCoverage: 0,
+			// 	PersonsBirthDates: [
+			// 		vzr?.insuredPerson?.insuredPerson?.birthDate,
+			// 	],
+			// 	GroupTypeId: vzr?.tripPurpose?.peopleCount?.id.split(";")[1],
+			// });
 
 			calculateVzr();
 		}
@@ -187,7 +189,36 @@ const Cost = ({
 				Docs: [],
 				// DocsInBytes: checkout.documents,
 			});
+			console.log({
+				CustomerId: user.customerId,
+				ContactPhone: user.user.phone,
+				InsuranceType: 1, //vzr
+				DeliveryOblastId: 10,
+				DeliveryRayonId: 1003,
+				InsuranceParams: {
+					Premia: vzrCost,
+					InsuranceSumm:
+						vzr.destinationCountry?.program?.insuranceSummValue,
+					Discount: 0,
+					BeginDate: vzr.tripDuration.startDate,
+					EndDate: vzr.tripDuration.endDate,
+					ExtraData: JSON.stringify(vzr),
+				},
+				Docs: [],
+			});
+
 			console.log(res.data);
+
+			let orderConfirmRespose = await requests.orderConfirm.confirmOrder({
+				type: "vzr",
+				order_number: res.data.orderNumber,
+				order_id: res.data.orderId,
+				price: Math.ceil(vzrCost / 100) * 100,
+				discount: 0,
+			});
+
+			console.log(orderConfirmRespose.data.data);
+
 			showFlashMessage({
 				type: colors.green,
 				message:
@@ -201,10 +232,13 @@ const Cost = ({
 				name: SCREENS.historyStack,
 				params: {
 					screen: SCREENS.payments,
+					params: {
+						paymentData: orderConfirmRespose.data.data,
+					},
 				},
 			});
 		} catch (error) {
-			console.log(error);
+			console.log(error.response.data, "error in create order VZR");
 		} finally {
 			hideLoading();
 		}

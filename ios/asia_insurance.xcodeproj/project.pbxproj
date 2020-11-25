@@ -24,10 +24,10 @@
 		61A402C4D1F170C0EFC9784C /* libPods-asia_insurance-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B669F1AAF5CDBABA618D448 /* libPods-asia_insurance-tvOS.a */; };
 		62B32C422567088D008AD992 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62B32C412567088D008AD992 /* LaunchScreen.storyboard */; };
 		62B32C432567088D008AD992 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62B32C412567088D008AD992 /* LaunchScreen.storyboard */; };
+		62B32E1E256A88D3008AD992 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62B32E1D256A88D3008AD992 /* GoogleService-Info.plist */; };
 		63EEF96746C24F29B10CBE17 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E91DBDED3BB74778A5749033 /* OpenSans-Regular.ttf */; };
 		6643AC175B2545D58A278EBF /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1C35BB511DF44FCB2003EB4 /* OpenSans-Italic.ttf */; };
 		665EDCAA5E49482B91894167 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 319596ED11A14B2180A0850E /* OpenSans-Light.ttf */; };
-		6E78DBC8256970E700013629 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E78DBC7256970E700013629 /* GoogleService-Info.plist */; };
 		7C00DB4F757D028FE9D7BE90 /* libPods-asia_insurance-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 31A32C05E1363000F2349000 /* libPods-asia_insurance-tvOSTests.a */; };
 		81E7501D9C4F4FCDA79CC6DE /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A02D5866C8C74792871FF1DC /* OpenSans-SemiBold.ttf */; };
 		8EA16572FAB04E859D881133 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59F3FBD97CD43C6AED43FE1 /* AntDesign.ttf */; };
@@ -100,8 +100,8 @@
 		56E3F72372494AA1B6F2EB43 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		5DB50CF65DBD44FB8D65D0C0 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		62B32C412567088D008AD992 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = asia_insurance/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		62B32E1D256A88D3008AD992 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6E78DBB22569701400013629 /* asia_insurance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = asia_insurance.entitlements; path = asia_insurance/asia_insurance.entitlements; sourceTree = "<group>"; };
-		6E78DBC7256970E700013629 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../asia/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		798CE238F0D34852803DA24D /* icomoon.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = icomoon.ttf; path = ../src/assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		7DFC81C058BB4B7D89B8BF2A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		7E0B1CA4F7F64D2CACCA42C0 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
@@ -233,7 +233,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				6E78DBC7256970E700013629 /* GoogleService-Info.plist */,
+				62B32E1D256A88D3008AD992 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* asia_insurance */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* asia_insuranceTests */,
@@ -452,7 +452,7 @@
 				975A798853774234BBE8D4D4 /* Octicons.ttf in Resources */,
 				9BFDFAADACB046DB933FB33A /* SimpleLineIcons.ttf in Resources */,
 				A0E1E399FDFC4BBE8ABF51C4 /* Zocial.ttf in Resources */,
-				6E78DBC8256970E700013629 /* GoogleService-Info.plist in Resources */,
+				62B32E1E256A88D3008AD992 /* GoogleService-Info.plist in Resources */,
 				CEC782D302664D4687736CD7 /* icomoon.ttf in Resources */,
 				62B32C422567088D008AD992 /* LaunchScreen.storyboard in Resources */,
 				EA87780474884A99BE21B37F /* OpenSans-Bold.ttf in Resources */,
