@@ -37,12 +37,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Приложению необходим доступ к фото-библиотеке для загрузки фотографий документов и изображений пользователя</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Application need access to location to send server, so that other users can locate them</string>
+	<string>Приложению требуется доступ к местоположению для отправки сервера, чтобы другие пользователи могли их найти</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Application need access to location to send server, so that other users can locate them</string>
+	<string>Приложению требуется доступ к местоположению для отправки сервера, чтобы другие пользователи могли их найти</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Application need access to photo library to upload photos of documents and user picture</string>
+	<string>Приложению необходим доступ к фото-библиотеке для загрузки фотографий документов и изображений пользователя.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
