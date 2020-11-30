@@ -133,6 +133,7 @@ const CarSteps = ({
 	// 		</View>
 	// 	);
 	// };
+
 	const CarStepThree = ({ navigation }: any) => {
 		const [carTypeList, setCarTypeList] = useState([]);
 		const onStepThreePress = (item) => {
@@ -146,6 +147,8 @@ const CarSteps = ({
 					`SELECT VehicleTypeName as name,VehicleTypeId as id,tariff as tariff FROM tbVehicleType `,
 					[],
 					(tx, results) => {
+						console.log(results);
+
 						setCarTypeList(results.rows.raw());
 						hideSelectionLoading();
 					},

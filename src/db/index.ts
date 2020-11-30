@@ -1,20 +1,21 @@
 import SQLite from "react-native-sqlite-storage";
 
 const errorCB = (err) => {
-	console.warn("SQL Error: " + err);
+	console.log("SQL Error: " + err);
 };
 
 const successCB = () => {
-	console.warn("SQL executed fine");
+	console.log("SQL executed fine");
 };
 
 const openCB = () => {
-	// console.warn("Database OPENED");
+	console.log("Database OPENED");
 };
 
 export const db = SQLite.openDatabase(
 	{
 		name: "osgo_uz.db",
+		// createFromLocation: 1,
 		createFromLocation: "~www/osgo_uz.db",
 		location: "default",
 	},

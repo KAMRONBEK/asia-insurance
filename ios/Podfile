@@ -85,6 +85,8 @@ target 'asia_insurance' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
+
   target 'asia_insuranceTests' do
     inherit! :complete
     # Pods for testing
