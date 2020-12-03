@@ -132,8 +132,8 @@ android {
         applicationId "com.asia_insurance"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 6
+        versionName "1.0.6"
 		multiDexEnabled true
 //image-crop-picker
 		vectorDrawables.useSupportLibrary = true
