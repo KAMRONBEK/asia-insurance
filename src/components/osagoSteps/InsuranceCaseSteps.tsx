@@ -20,7 +20,9 @@ import {
 	showSelectionLoading,
 	hideSelectionLoading,
 	setCurrentStep,
+	hideLoading,
 } from "../../redux/actions";
+import { requests } from "../../api/requests";
 
 const InsuranceCaseSteps = ({
 	setInsurance,
@@ -45,23 +47,34 @@ const InsuranceCaseSteps = ({
 			}
 			setAvailableInsurance(item);
 		};
-		useEffect(() => {
-			showSelectionLoading();
-			db.transaction((tx) => {
-				tx.executeSql(
-					"SELECT InsuranceCaseTypeName as name, priority as id,tariff as tariff FROM tbInsuranceCaseType ORDER by priority ",
-					[],
-					(tx, results) => {
-						setInsuranceCasesList(results.rows.raw());
-						setTimeout(() => {
-							hideSelectionLoading();
-						}, 200);
-					},
-					(err) => {
-						// console.warn(err);
-					}
-				);
+
+		const getInsuranceCaseTypes = async () => {
+			let res = await requests.dictionary.getInsuranceCaseTypes();
+			let temp = res.data;
+			temp.map((item, index) => {
+				item.name = item.text;
 			});
+			setInsuranceCasesList(temp);
+		};
+
+		useEffect(() => {
+			getInsuranceCaseTypes();
+			// showSelectionLoading();
+			// db.transaction((tx) => {
+			// 	tx.executeSql(
+			// 		"SELECT InsuranceCaseTypeName as name, priority as id,tariff as tariff FROM tbInsuranceCaseType ORDER by priority ",
+			// 		[],
+			// 		(tx, results) => {
+			// 			setInsuranceCasesList(results.rows.raw());
+			// 			setTimeout(() => {
+			// 				hideSelectionLoading();
+			// 			}, 200);
+			// 		},
+			// 		(err) => {
+			// 			// console.warn(err);
+			// 		}
+			// 	);
+			// });
 		}, []);
 
 		return (

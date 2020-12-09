@@ -121,6 +121,15 @@ export let requests = {
 			),
 		getTravelDictionary: () =>
 			axios.get(`${asiaUrl}/api/Travel/GetTravelDictionaries`),
+		getCarTypes: () =>
+			axios.get(`${asiaUrl}/api/Dictionaries/VehicleTypesList`),
+		getTerritories: () =>
+			axios.get(`${asiaUrl}/api/Dictionaries/TerretoriesList`),
+		getInsuranceCaseTypes: () =>
+			axios.get(`${asiaUrl}/api/Dictionaries/InsuranceCaseTypesList`),
+		getLgots: () => axios.get(`${asiaUrl}/api/Dictionaries/LgotsList`),
+		getSrok: () => axios.get(`${asiaUrl}/api/Dictionaries/SroksList`),
+		getPeriod: () => axios.get(`${asiaUrl}/api/Dictionaries/PeriodsList`),
 	},
 	policy: {
 		checkPolicy: (credentials) =>

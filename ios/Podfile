@@ -82,10 +82,15 @@ target 'asia_insurance' do
   pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'  # Uncomment this line if you want to support GoogleMaps on iOS
+  pod 'GoogleMaps'  # Uncomment this line if you want to support GoogleMaps on iOS
+  pod 'Google-Maps-iOS-Utils' # Uncomment this line if you want to support GoogleMaps on iOS
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
   pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
+
+  pod 'ReactNativeLocalization', :path => '../node_modules/react-native-localization'
 
   target 'asia_insuranceTests' do
     inherit! :complete

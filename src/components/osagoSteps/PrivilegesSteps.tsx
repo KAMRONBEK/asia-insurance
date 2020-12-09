@@ -14,6 +14,7 @@ import {
 	setCurrentStep,
 } from "../../redux/actions";
 import { connect } from "react-redux";
+import { requests } from "../../api/requests";
 
 const PrivilegesSteps = ({
 	showSelectionLoading,
@@ -51,22 +52,38 @@ const PrivilegesSteps = ({
 				params: {},
 			});
 		};
+
+		const getLgots = async () => {
+			showSelectionLoading();
+
+			try {
+				let res = await requests.dictionary.getLgots();
+				let temp = res.data;
+				temp.map((item, index) => {
+					item.name = item.text;
+				});
+				setPrivilegesList(temp);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				hideSelectionLoading();
+			}
+		};
+
 		useEffect(() => {
 			db.transaction((tx) => {
-				showSelectionLoading();
-				tx.executeSql(
-					"SELECT LgotyId as id, LgotyName as name,tariff_f as tariff FROM tbLgoty",
-					[],
-					(tx, results) => {
-						setPrivilegesList(results.rows.raw());
-						setTimeout(() => {
-							hideSelectionLoading();
-						}, 300);
-					},
-					(err) => {
-						console.warn(err);
-					}
-				);
+				getLgots();
+				// tx.executeSql(
+				// 	"SELECT LgotyId as id, LgotyName as name,tariff_f as tariff FROM tbLgoty",
+				// 	[],
+				// 	(tx, results) => {
+				// 		setPrivilegesList(results.rows.raw());
+				// 		setTimeout(() => {}, 300);
+				// 	},
+				// 	(err) => {
+				// 		console.warn(err);
+				// 	}
+				// );
 			});
 		}, []);
 

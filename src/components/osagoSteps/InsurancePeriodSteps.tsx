@@ -14,6 +14,7 @@ import {
 } from "../../redux/actions";
 import { connect } from "react-redux";
 import { navigate } from "../../utils/NavigationService";
+import { requests } from "../../api/requests";
 
 const InsurancePeriodSteps = ({
 	setInsurance,
@@ -53,25 +54,80 @@ const InsurancePeriodSteps = ({
 			});
 		};
 
-		useEffect(() => {
-			db.transaction((tx) => {
-				showSelectionLoading();
-				tx.executeSql(
-					isResidence
-						? "SELECT periodid as id,periodname as name,days as days,fondid as fondId,tariff as tariff FROM tbPeriod "
-						: "SELECT SrokName as name, srokid as id, tariff as tariff,days as days FROM tbSrok ",
-					[],
-					(tx, results) => {
-						setPeriodList(results.rows.raw());
-						setTimeout(() => {
-							hideSelectionLoading();
-						}, 200);
-					},
-					(err) => {
-						console.warn(err);
+		const getPeriod = async () => {
+			showSelectionLoading();
+
+			try {
+				let res = await requests.dictionary.getPeriod();
+				let temp = res.data;
+				console.log(res.data);
+
+				temp.map((item, index) => {
+					if (item.id == 1) {
+						item.days = 15;
 					}
-				);
-			});
+					if (item.id == 2) {
+						item.days = 60;
+					}
+					if (item.id == 3) {
+						item.days = 365;
+					}
+					item.name = item.text;
+				});
+				setPeriodList(temp);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				hideSelectionLoading();
+			}
+		};
+
+		const getSrok = async () => {
+			showSelectionLoading();
+			try {
+				let res = await requests.dictionary.getSrok();
+				let temp = res.data;
+				console.log(res.data);
+
+				temp.map((item, index) => {
+					if (item.id == 1) {
+						item.days = 233;
+					}
+					if (item.id == 2) {
+						item.days = 365;
+					}
+					if (item.id == 3) {
+						item.days = 20;
+					}
+					item.name = item.text;
+				});
+				setPeriodList(temp);
+			} catch (error) {
+				console.log(error.response);
+			} finally {
+				hideSelectionLoading();
+			}
+		};
+
+		useEffect(() => {
+			isResidence ? getPeriod() : getSrok();
+			// db.transaction((tx) => {
+			// 	tx.executeSql(
+			// 		isResidence
+			// 			? "SELECT periodid as id,periodname as name,days as days,fondid as fondId,tariff as tariff FROM tbPeriod "
+			// 			: "SELECT SrokName as name, srokid as id, tariff as tariff,days as days FROM tbSrok ",
+			// 		[],
+			// 		(tx, results) => {
+			// 			setPeriodList(results.rows.raw());
+			// 			setTimeout(() => {
+			// 				hideSelectionLoading();
+			// 			}, 200);
+			// 		},
+			// 		(err) => {
+			// 			console.warn(err);
+			// 		}
+			// 	);
+			// });
 		}, []);
 
 		return (

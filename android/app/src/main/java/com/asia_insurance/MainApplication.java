@@ -4,6 +4,8 @@ import androidx.multidex.MultiDexApplication;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 import io.liteglue.SQLitePluginPackage;
 import io.liteglue.SQLitePluginPackage;
 import io.liteglue.SQLitePluginPackage;

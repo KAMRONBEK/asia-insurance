@@ -46,7 +46,7 @@ const Map = ({
 	// let { latitude, longitude } = route.params;
 
 	useEffect(() => {
-		showLoading(strings.loadingMap);
+		// showLoading(strings.loadingMap);
 		if (Platform.OS === "ios") {
 			// this.callLocation(that);
 		} else {
@@ -117,6 +117,8 @@ const Map = ({
 					console.log("err", err);
 					showFlashMessage(strings.locationDetermined);
 					console.warn(err);
+				} finally {
+					// hideLoading();
 				}
 			}
 			requestLocationPermission();
@@ -137,7 +139,7 @@ const Map = ({
 				showsMyLocationButton={true}
 				showsTraffic={true}
 				showsUserLocation={true}
-				provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+				// provider={PROVIDER_GOOGLE} // remove if not using Google Maps
 				style={styles.map}
 				region={mapState.myLocation}
 				onMapReady={() => {

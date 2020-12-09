@@ -16,6 +16,7 @@ import {
 	setCurrentStep,
 } from "../../redux/actions";
 import { connect } from "react-redux";
+import { requests } from "../../api/requests";
 
 const CarSteps = ({
 	setInsurance,
@@ -140,23 +141,34 @@ const CarSteps = ({
 			setIndex(index + 1);
 			setCarType(item);
 		};
-		useEffect(() => {
-			showSelectionLoading();
-			db.transaction((tx) => {
-				tx.executeSql(
-					`SELECT VehicleTypeName as name,VehicleTypeId as id,tariff as tariff FROM tbVehicleType `,
-					[],
-					(tx, results) => {
-						console.log(results);
 
-						setCarTypeList(results.rows.raw());
-						hideSelectionLoading();
-					},
-					(err) => {
-						// console.warn(err);
-					}
-				);
+		const getCarType = async () => {
+			let res = await requests.dictionary.getCarTypes();
+			let temp = res.data;
+			temp.map((item, index) => {
+				item.name = item.text;
 			});
+			setCarTypeList(temp);
+		};
+
+		useEffect(() => {
+			// showSelectionLoading();
+			getCarType();
+			// db.transaction((tx) => {
+			// 	tx.executeSql(
+			// 		`SELECT VehicleTypeName as name,VehicleTypeId as id,tariff as tariff FROM tbVehicleType `,
+			// 		[],
+			// 		(tx, results) => {
+			// 			console.log(results);
+
+			// 			setCarTypeList(results.rows.raw());
+			// 			hideSelectionLoading();
+			// 		},
+			// 		(err) => {
+			// 			// console.warn(err);
+			// 		}
+			// 	);
+			// });
 		}, []);
 		return (
 			<View style={styles.content}>
@@ -199,37 +211,47 @@ const CarSteps = ({
 			});
 		};
 
-		useEffect(() => {
-			db.transaction((tx) => {
-				tx.executeSql(
-					// `SELECT TerretoryName as name, TerretoryId as id, tariff as tariff FROM tbTerretory order by terretoryid `,
-					`SELECT oblastid as id, oblastname as name, terretoryid as terretoryid  FROM tbOblast  `,
-					[],
-					(tx, results) => {
-						var len = results.rows.length;
-						for (let i = 0; i < len; i++) {
-							let row = results.rows.item(i);
-							console.log(row.name, row.id, row.terretoryid);
-						}
-
-						let temp = results.rows.raw();
-						temp = temp.map((oblast) => {
-							let tariff = oblast.terretoryid == 1 ? 1.4 : 1;
-							return {
-								...oblast,
-								tariff: tariff,
-							};
-						});
-						console.log(temp);
-						setCarRegisterPlaceList(temp);
-						// hideSelectionLoading();
-						hideSelectionLoading();
-					},
-					(err) => {
-						//console.warn(err);
-					}
-				);
+		const getTerritory = async () => {
+			let res = await requests.dictionary.getTerritories();
+			let temp = res.data;
+			temp.map((item, index) => {
+				item.name = item.text;
 			});
+			setCarRegisterPlaceList(temp);
+		};
+
+		useEffect(() => {
+			getTerritory();
+
+			// db.transaction((tx) => {
+			// 	tx.executeSql(
+			// 		// `SELECT TerretoryName as name, TerretoryId as id, tariff as tariff FROM tbTerretory order by terretoryid `,
+			// 		`SELECT oblastid as id, oblastname as name, terretoryid as terretoryid  FROM tbOblast  `,
+			// 		[],
+			// 		(tx, results) => {
+			// 			var len = results.rows.length;
+			// 			for (let i = 0; i < len; i++) {
+			// 				let row = results.rows.item(i);
+			// 				console.log(row.name, row.id, row.terretoryid);
+			// 			}
+			// 			let temp = results.rows.raw();
+			// 			temp = temp.map((oblast) => {
+			// 				let tariff = oblast.terretoryid == 1 ? 1.4 : 1;
+			// 				return {
+			// 					...oblast,
+			// 					tariff: tariff,
+			// 				};
+			// 			});
+			// 			console.log(temp);
+			// 			setCarRegisterPlaceList(temp);
+			// 			// hideSelectionLoading();
+			// 			hideSelectionLoading();
+			// 		},
+			// 		(err) => {
+			// 			//console.warn(err);
+			// 		}
+			// 	);
+			// });
 		}, []);
 
 		return (

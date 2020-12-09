@@ -26,6 +26,8 @@
 		62B32C432567088D008AD992 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62B32C412567088D008AD992 /* LaunchScreen.storyboard */; };
 		62B32E1E256A88D3008AD992 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62B32E1D256A88D3008AD992 /* GoogleService-Info.plist */; };
 		62B32F9F2574E180008AD992 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 62B32F9E2574E180008AD992 /* www */; };
+		62B33678257A6723008AD992 /* ReactNativeLocalization.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 62B33677257A6723008AD992 /* ReactNativeLocalization.podspec */; };
+		62B3367E257A6742008AD992 /* libReactNativeLocalization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62B3367D257A6742008AD992 /* libReactNativeLocalization.a */; };
 		63EEF96746C24F29B10CBE17 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E91DBDED3BB74778A5749033 /* OpenSans-Regular.ttf */; };
 		6643AC175B2545D58A278EBF /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1C35BB511DF44FCB2003EB4 /* OpenSans-Italic.ttf */; };
 		665EDCAA5E49482B91894167 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 319596ED11A14B2180A0850E /* OpenSans-Light.ttf */; };
@@ -103,6 +105,8 @@
 		62B32C412567088D008AD992 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = asia_insurance/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		62B32E1D256A88D3008AD992 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		62B32F9E2574E180008AD992 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = asia_insurance/www; sourceTree = "<group>"; };
+		62B33677257A6723008AD992 /* ReactNativeLocalization.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ReactNativeLocalization.podspec; path = "../node_modules/react-native-localization/ReactNativeLocalization.podspec"; sourceTree = "<group>"; };
+		62B3367D257A6742008AD992 /* libReactNativeLocalization.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReactNativeLocalization.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E78DBB22569701400013629 /* asia_insurance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = asia_insurance.entitlements; path = asia_insurance/asia_insurance.entitlements; sourceTree = "<group>"; };
 		798CE238F0D34852803DA24D /* icomoon.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = icomoon.ttf; path = ../src/assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		7DFC81C058BB4B7D89B8BF2A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62B3367E257A6742008AD992 /* libReactNativeLocalization.a in Frameworks */,
 				A3C55B933DA57BB2E0C9AC14 /* libPods-asia_insurance.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -216,6 +221,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				62B3367D257A6742008AD992 /* libReactNativeLocalization.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				4D290B1BEDF33BC8A3A77E43 /* libPods-asia_insurance.a */,
@@ -229,6 +235,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				62B33677257A6723008AD992 /* ReactNativeLocalization.podspec */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -464,6 +471,7 @@
 				D6028E9A51DB4F798F728146 /* OpenSans-ExtraBold.ttf in Resources */,
 				5D3DE9538EEC46B296B17441 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				6643AC175B2545D58A278EBF /* OpenSans-Italic.ttf in Resources */,
+				62B33678257A6723008AD992 /* ReactNativeLocalization.podspec in Resources */,
 				665EDCAA5E49482B91894167 /* OpenSans-Light.ttf in Resources */,
 				9072D87B92E74D2AB39BBFC3 /* OpenSans-LightItalic.ttf in Resources */,
 				63EEF96746C24F29B10CBE17 /* OpenSans-Regular.ttf in Resources */,
@@ -548,12 +556,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-asia_insurance/Pods-asia_insurance-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
@@ -636,6 +646,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-asia_insurance-asia_insuranceTests/Pods-asia_insurance-asia_insuranceTests-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -658,6 +669,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
