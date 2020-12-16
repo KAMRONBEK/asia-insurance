@@ -15,7 +15,7 @@ let Stack = createStackNavigator();
 
 export const ProductStack = () => {
 	return (
-		<Stack.Navigator>
+		<Stack.Navigator headerMode="screen">
 			<Stack.Screen
 				options={{
 					header: ({ navigation }) => (

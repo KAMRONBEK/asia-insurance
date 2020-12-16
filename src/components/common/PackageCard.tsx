@@ -37,7 +37,7 @@ const PackageCard = ({ item, onPress, selected, showModal, modalChild }) => {
 
 	return (
 		<>
-			<Touchable
+			<TouchableOpacity
 				onPress={() => {
 					onPress();
 					onRadioPress();
@@ -72,7 +72,7 @@ const PackageCard = ({ item, onPress, selected, showModal, modalChild }) => {
 						/>
 					</View>
 				</View>
-			</Touchable>
+			</TouchableOpacity>
 		</>
 	);
 };

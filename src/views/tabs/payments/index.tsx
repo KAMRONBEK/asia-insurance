@@ -9,7 +9,7 @@ let Stack = createStackNavigator();
 
 let PaymentStack = () => {
 	return (
-		<Stack.Navigator>
+		<Stack.Navigator headerMode="screen">
 			<Stack.Screen
 				name={SCREENS.payments}
 				component={Payments}

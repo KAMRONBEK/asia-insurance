@@ -19,6 +19,8 @@ import Select from "../common/Select";
 import { requests } from "../../api/requests";
 import DatePicker from "react-native-datepicker";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import DateInput from "../common/DateInput";
+import moment from "moment";
 
 const InsuredPeopleSteps = ({
 	hideSelectionLoading,
@@ -41,8 +43,8 @@ const InsuredPeopleSteps = ({
 		let [midName, setMidName] = useState();
 		let [lastName, setLastName] = useState();
 		let [birthDate, setBirthDate] = useState();
-		let [country, setCountry] = useState();
-		let [region, setRegion] = useState();
+		// let [country, setCountry] = useState();
+		// let [region, setRegion] = useState();
 
 		let [countryList, setCountryList] = useState([]);
 		let [regionList, setRegionList] = useState([]);
@@ -57,8 +59,8 @@ const InsuredPeopleSteps = ({
 							name: name,
 							midName: midName,
 							lastName: lastName,
-							country: country,
-							region: region,
+							// country: country,
+							// region: region,
 							birthDate: birthDate,
 						},
 					},
@@ -73,8 +75,8 @@ const InsuredPeopleSteps = ({
 					name: name,
 					midName: midName,
 					lastName: lastName,
-					country: country,
-					region: region,
+					// country: country,
+					// region: region,
 					birthDate: birthDate,
 				});
 				setIndex(index + 1);
@@ -152,7 +154,12 @@ const InsuredPeopleSteps = ({
 							value={state.midName}
 							setValue={setMidName}
 						/>
-						<DatePicker
+						<DateInput
+							setValue={setBirthDate}
+							value={birthDate}
+							placeholder={strings.pickBirthDate}
+						/>
+						{/* <DatePicker
 							style={{
 								borderRadius: BORDER_RADIUS,
 								backgroundColor: colors.white,
@@ -198,8 +205,8 @@ const InsuredPeopleSteps = ({
 							onDateChange={(date) => {
 								setBirthDate(date);
 							}}
-						/>
-						<Select
+						/> */}
+						{/* <Select
 							placeholder={strings.country}
 							options={countryList}
 							key={"country"}
@@ -212,7 +219,7 @@ const InsuredPeopleSteps = ({
 							key={"region"}
 							icon="flag"
 							selectValue={setRegion}
-						/>
+						/> */}
 					</ScrollView>
 				</View>
 				<View style={{ paddingHorizontal: 40 }}>
@@ -220,13 +227,7 @@ const InsuredPeopleSteps = ({
 						text={strings.next}
 						gradient
 						onPress={onNextPress}
-						passive={
-							!name ||
-							!lastName ||
-							!birthDate ||
-							!region ||
-							!country
-						}
+						passive={!name || !lastName || !birthDate}
 					/>
 				</View>
 			</View>

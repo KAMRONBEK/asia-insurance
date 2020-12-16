@@ -58,7 +58,7 @@ const Profile = ({
 			console.warn(temp.length, "oblasts");
 			setRegionList(temp);
 		} catch (error) {
-			console.log(error);
+			console.log(error, "profile");
 			showFlashMessage({ type: colors.red, message: error });
 		} finally {
 			hideLoading();

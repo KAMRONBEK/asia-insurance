@@ -11,6 +11,7 @@ import Text from "../common/Text";
 import { strings } from "../../locales/strings";
 import { BIG_BORDER_RADIUS } from "../../constants";
 import { navigate } from "../../utils/NavigationService";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 interface HeaderProps {
 	title: string;
@@ -49,6 +50,13 @@ const Header = ({
 		});
 	};
 
+	const onHomePress = () => {
+		navigate(SCREENS.productsStack, {
+			name: SCREENS.products,
+			params: {},
+		});
+	};
+
 	return (
 		<View style={[styles.plane]}>
 			<LinearGradient
@@ -71,21 +79,66 @@ const Header = ({
 			>
 				{back || close ? (
 					back ? (
-						<TouchableOpacity onPress={onBackPress}>
-							<View style={styles.iconWrapper}>
-								<Icons name="arrow-left" color={colors.white} />
-							</View>
-						</TouchableOpacity>
+						<View
+							style={{
+								flexDirection: "row",
+								alignItems: "center",
+							}}
+						>
+							<TouchableOpacity onPress={onBackPress}>
+								<View style={styles.iconWrapper}>
+									<Icons
+										name="arrow-left"
+										color={colors.white}
+									/>
+								</View>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={onHomePress}>
+								<View
+									style={{
+										paddingLeft: -20,
+										paddingRight: 10,
+									}}
+								>
+									<AntDesign
+										size={20}
+										name="home"
+										color={colors.white}
+									/>
+								</View>
+							</TouchableOpacity>
+						</View>
 					) : (
-						<TouchableOpacity onPress={onBackPress}>
-							<View style={styles.iconWrapper}>
-								<Icons
-									name="x"
-									color={colors.white}
-									size={25}
-								/>
-							</View>
-						</TouchableOpacity>
+						<View
+							style={{
+								flexDirection: "row",
+								alignItems: "center",
+							}}
+						>
+							<TouchableOpacity onPress={onBackPress}>
+								<View style={styles.iconWrapper}>
+									<Icons
+										name="x"
+										color={colors.white}
+										size={25}
+									/>
+								</View>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={onHomePress}>
+								<View
+									style={{
+										paddingLeft: -20,
+										paddingRight: 10,
+									}}
+								>
+									<AntDesign
+										size={20}
+										name="home"
+										color={colors.white}
+									/>
+								</View>
+							</TouchableOpacity>
+						</View>
 					)
 				) : (
 					<TouchableOpacity onPress={onMenuPress}>
@@ -160,7 +213,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		color: colors.white,
-		fontSize: 17,
+		fontSize: 14,
 	},
 	iconWrapper: {
 		paddingRight: 20,
