@@ -42,6 +42,8 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 		switch (insuranceType) {
 			case strings.osago: {
 				setBoxList(extractNames(osago, "osago"));
+				console.log(typeof extractNames(osago, "osago"));
+				break;
 			}
 			case strings.vzr: {
 				let selectedCountries;
@@ -101,6 +103,10 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 			}
 		}
 	}, [osago, vzr]);
+
+	useEffect(() => {
+		console.log(boxList, "box");
+	}, [boxList]);
 
 	const RenderStep = () => {
 		switch (insuranceType) {

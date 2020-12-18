@@ -8,10 +8,15 @@ import moment from "moment";
 import { navigate } from "../../utils/NavigationService";
 import { connect } from "react-redux";
 import { setInsurance } from "../../redux/actions";
+import DateInput from "../common/DateInput";
 
 const PeriodSteps = ({ setInsurance }) => {
-	let [beginDate, setBeginDate] = useState(moment(new Date(), "DD.MM.YYYY"));
-	let [endDate, setEndDate] = useState(moment(new Date(), "DD.MM.YYYY"));
+	let [beginDate, setBeginDate] = useState(
+		moment(new Date(), "DD.MM.YYYY").format("DD.MM.YYYY")
+	);
+	let [endDate, setEndDate] = useState(
+		moment(new Date(), "DD.MM.YYYY").format("DD.MM.YYYY")
+	);
 
 	let [diffDays, setDiffDays] = useState(0);
 
@@ -49,7 +54,9 @@ const PeriodSteps = ({ setInsurance }) => {
 		<View style={styles.content}>
 			<View>
 				<InPageHeader title={strings.enterTripDate} />
-				<DatePicker
+				<DateInput value={beginDate} setValue={setBeginDate} />
+				<DateInput value={endDate} setValue={setEndDate} />
+				{/* <DatePicker
 					style={{
 						borderRadius: BORDER_RADIUS,
 						backgroundColor: colors.white,
@@ -134,7 +141,7 @@ const PeriodSteps = ({ setInsurance }) => {
 						setEndDate(date);
 						console.log(date);
 					}}
-				/>
+				/> */}
 				{diffDays != 0 && (
 					<View
 						style={{

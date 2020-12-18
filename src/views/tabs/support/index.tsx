@@ -12,7 +12,7 @@ let Stack = createStackNavigator();
 
 export const SupportStack = () => {
 	return (
-		<Stack.Navigator>
+		<Stack.Navigator headerMode="screen">
 			<Stack.Screen
 				name={SCREENS.support}
 				component={Support}

@@ -45,24 +45,15 @@ const ImageUploadCard = ({
 		})
 			.then((pictures) => {
 				setImages([...pictures, ...images]);
-				// setData([...data, { passport: pictures }]);
 				pictures.map((picture) => {
 					setData([
 						...data,
 						{
 							DocumentTypeEnum: docType,
-							// File: formData(constructFileFromUri(picture)),
 							File: picture.data,
 						},
 					]);
-					// console.log(formData(constructFileFromUri(picture)));
 				});
-				// pictures.map((picture) => {
-				// 	setDocuments({
-				// 		DocumentTypeEnum: docType,
-				// 		File: formData(constructFileFromUri(picture)),
-				// 	});
-				// });
 			})
 			.catch((err) => console.warn(err));
 	};
@@ -78,16 +69,9 @@ const ImageUploadCard = ({
 					...data,
 					{
 						DocumentTypeEnum: docType,
-						// File: formData(constructFileFromUri(picture)),
 						File: picture.data,
 					},
 				]);
-				// setDocuments({
-				// 	DocumentTypeEnum: docType,
-				// 	File: formData(constructFileFromUri(picture)),
-				// });
-				// console.log(formData(constructFileFromUri(picture)));
-				// setData([...data, { passport: images }]);
 			})
 			.catch((err) => console.warn(err));
 	};

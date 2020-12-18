@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		margin: 50,
 		marginVertical: 10,
+		marginTop: 50,
 		position: "absolute",
 		backgroundColor: "red",
 		justifyContent: "center",

@@ -8,7 +8,17 @@
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 
-	<application android:name=".MainApplication" android:largeHeap="true" android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="false" android:theme="@style/AppTheme" android:usesCleartextTraffic="true">
+	<application 
+	android:name=".MainApplication" 
+	android:largeHeap="true" 
+	android:label="@string/app_name" 
+	android:icon="@mipmap/ic_launcher" 
+	android:roundIcon="@mipmap/ic_launcher_round" 
+	android:allowBackup="false" 
+	android:theme="@style/AppTheme"  
+	android:usesCleartextTraffic="true"
+	android:screenOrientation="portrait"
+	>
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAbI94kGVXviZKmvBCLkNj4zkxX5MilzUM"/>
 
 		<meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name" android:value="YOUR NOTIFICATION CHANNEL NAME"/>

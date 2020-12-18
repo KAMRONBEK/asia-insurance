@@ -13,7 +13,7 @@ let Stack = createStackNavigator();
 
 export const SosStack = () => {
 	return (
-		<Stack.Navigator>
+		<Stack.Navigator headerMode="screen">
 			<Stack.Screen
 				name={SCREENS.sos}
 				component={Sos}

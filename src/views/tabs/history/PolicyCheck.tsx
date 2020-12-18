@@ -7,8 +7,10 @@ import images from "../../../assets/images";
 import Input from "../../../components/common/Input";
 import { onChange } from "react-native-reanimated";
 import { requests } from "../../../api/requests";
+import { hideLoading, showLoading } from "../../../redux/actions";
+import { connect } from "react-redux";
 
-const PolicyCheck = () => {
+const PolicyCheck = ({ showLoading, hideLoading }) => {
 	let [inputMode, setInputMode] = useState(false);
 	const onKeyboardDidShow = (e: KeyboardEvent): void => {
 		setInputMode(true);
@@ -29,14 +31,28 @@ const PolicyCheck = () => {
 
 	let [input, setInput] = useState("");
 	let [result, setResult] = useState("");
+	let [expireDate, setExpireDate] = useState("");
 
 	const onCheckPress = async () => {
-		let res = await requests.policy.checkPolicy({
-			PolicySery: input.substring(0, 2),
-			PolicyNumber: input.substring(3, input.length),
-		});
-		console.log(res.data);
-		setResult(res.data.message);
+		showLoading(strings.checkingPolicy);
+		try {
+			console.log({
+				PolicySery: input.substring(0, 3),
+				PolicyNumber: input.substring(3, input.length),
+			});
+
+			let res = await requests.policy.checkPolicy({
+				PolicySery: input.substring(0, 3),
+				PolicyNumber: input.substring(3, input.length),
+			});
+			console.log(res.data);
+			setResult(res.data.message);
+			setExpireDate(res.data.policyExpireDate);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			hideLoading();
+		}
 	};
 
 	return (
@@ -51,15 +67,43 @@ const PolicyCheck = () => {
 					iconColor={colors.gray}
 					textColor={colors.black}
 				/>
-				{!!result && (
-					<View
-						style={{
-							padding: 10,
-						}}
-					>
+
+				<View
+					style={{
+						padding: 10,
+					}}
+				>
+					{!!result ? (
 						<Text>{result}</Text>
-					</View>
-				)}
+					) : (
+						<View
+							style={{
+								flexDirection: "row",
+								// flex: 1,
+								justifyContent: "space-between",
+							}}
+						>
+							<Text
+								style={{
+									fontSize: 16,
+									color: colors.grayText,
+								}}
+							>
+								{strings.expireDate}
+							</Text>
+							<Text
+								style={{
+									fontSize: 16,
+									color: colors.grayText,
+									fontWeight: "600",
+								}}
+							>
+								{expireDate}
+							</Text>
+						</View>
+					)}
+				</View>
+
 				<View style={styles.buttonWrapper}>
 					<RoundButton
 						onPress={onCheckPress}
@@ -99,4 +143,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PolicyCheck;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+	showLoading,
+	hideLoading,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PolicyCheck);

@@ -702,9 +702,10 @@ const Checkout = ({
 								osago.privilege.availablePrivilege.tariff -
 							Math.round(cost),
 						BeginDate: checkout.insurancePeriod.beginDate,
-						ExtraData: JSON.stringify(osago),
 						EndDate: checkout.insurancePeriod.endDate,
+						ExtraData: JSON.stringify(osago),
 					},
+					// DocsInBytes: checkout.documents,
 				});
 
 				let res = await requests.order.createOrder({
@@ -733,36 +734,40 @@ const Checkout = ({
 
 				console.log(res.data);
 
-				let orderConfirmRespose = await requests.orderConfirm.confirmOrder(
-					{
-						type: "osgo",
-						order_number: res.data.orderNumber,
-						order_id: res.data.orderId,
-						price: Math.ceil(cost / 100) * 100,
-						discount: 0,
-					}
-				);
+				try {
+					let orderConfirmRespose = await requests.orderConfirm.confirmOrder(
+						{
+							type: "osgo",
+							order_number: res.data.orderNumber,
+							order_id: res.data.orderId,
+							price: Math.ceil(cost / 100) * 100,
+							discount: 0,
+						}
+					);
 
-				console.log(orderConfirmRespose.data.data);
+					console.log(orderConfirmRespose.data.data);
 
-				showFlashMessage({
-					type: colors.green,
-					message:
-						strings.yourOrderAccepted +
-						"\n" +
-						strings.orderId +
-						res.data.orderId,
-				});
-				// navigation.navigate(SCREENS.products);
-				navigate(SCREENS.tabs, {
-					name: SCREENS.historyStack,
-					params: {
-						screen: SCREENS.payments,
+					showFlashMessage({
+						type: colors.green,
+						message:
+							strings.yourOrderAccepted +
+							"\n" +
+							strings.orderId +
+							res.data.orderId,
+					});
+					// navigation.navigate(SCREENS.products);
+					navigate(SCREENS.tabs, {
+						name: SCREENS.historyStack,
 						params: {
-							paymentData: orderConfirmRespose.data.data,
+							screen: SCREENS.payments,
+							params: {
+								paymentData: orderConfirmRespose.data.data,
+							},
 						},
-					},
-				});
+					});
+				} catch (error) {
+					console.log(error.request._response, "raul");
+				}
 			} catch (error) {
 				console.log(error.request._response, "checkout");
 				showFlashMessage({

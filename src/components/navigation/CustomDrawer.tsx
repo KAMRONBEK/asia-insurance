@@ -98,7 +98,7 @@ const CustomDrawer = ({
 	};
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<SafeAreaView forceInset={{ top: "always" }} style={{ flex: 1 }}>
 			<LinearGradient
 				start={{ x: 0, y: 1 }}
 				end={{ x: 1, y: 0 }}
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
 		left: 20,
 		bottom: 0,
 		justifyContent: "space-between",
-		paddingVertical:20
+		paddingVertical: 20,
 	},
 	avatarContainer: {
 		flexDirection: "row",
