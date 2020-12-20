@@ -53,7 +53,26 @@ const HelpRequest = ({
 		if (useLocation) {
 			setLoadingLocation(true);
 			if (Platform.OS === "ios") {
-				// this.callLocation(that);
+				Geolocation.getCurrentPosition(
+					//Will give you the current location
+					(position) => {
+						console.log(position.coords);
+						console.log("coords");
+
+						setHelpLocation(position.coords);
+						setLoadingLocation(false);
+						showFlashMessage(strings.locationDetermined);
+					},
+					(error) => {
+						setLoadingLocation(false);
+						console.log(error.message);
+					},
+					{
+						enableHighAccuracy: false,
+						timeout: 20000,
+						maximumAge: 1000,
+					}
+				);
 			} else {
 				async function requestLocationPermission() {
 					try {
@@ -173,7 +192,7 @@ const HelpRequest = ({
 					passive={helpContent.length <= 5 || loadingLocation}
 				/>
 			</View>
-			{loadingLocation && (
+			{/* {loadingLocation && (
 				<View style={styles.loading}>
 					<LottieView
 						source={lotties.locating}
@@ -188,7 +207,7 @@ const HelpRequest = ({
 						loop
 					/>
 				</View>
-			)}
+			)} */}
 		</ScrollView>
 	);
 };
