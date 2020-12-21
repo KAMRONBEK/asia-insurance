@@ -18,7 +18,7 @@ const PeriodSteps = ({ setInsurance }) => {
 		moment(new Date(), "DD.MM.YYYY").format("DD.MM.YYYY")
 	);
 
-	let [diffDays, setDiffDays] = useState(0);
+	let [diffDays, setDiffDays] = useState(1);
 
 	const onNextPress = () => {
 		setInsurance({
@@ -46,7 +46,7 @@ const PeriodSteps = ({ setInsurance }) => {
 			moment(endDate, "DD.MM.YYYY").diff(
 				moment(beginDate, "DD.MM.YYYY"),
 				"days"
-			)
+			) + 1
 		);
 	}, [endDate, beginDate]);
 
@@ -164,26 +164,11 @@ const PeriodSteps = ({ setInsurance }) => {
 				style={[
 					styles.nextWrapper,
 					{
-						backgroundColor:
-							moment(endDate, "DD.MM.YYYY").diff(
-								moment(beginDate, "DD.MM.YYYY"),
-								"days"
-							) > 0
-								? colors.lightBlue
-								: colors.gray,
+						backgroundColor: colors.lightBlue,
 					},
 				]}
 			>
-				<TouchableOpacity
-					onPress={
-						moment(endDate, "DD.MM.YYYY").diff(
-							moment(beginDate, "DD.MM.YYYY"),
-							"days"
-						) > 0
-							? onNextPress
-							: undefined
-					}
-				>
+				<TouchableOpacity onPress={onNextPress}>
 					<Text style={styles.next}>{strings.next}</Text>
 				</TouchableOpacity>
 			</View>

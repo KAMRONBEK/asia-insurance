@@ -262,8 +262,8 @@ const CustomDrawer = ({
 					overflow: "hidden",
 					borderRadius,
 					transform: [{ scale }, { translateX }],
-					borderBottomLeftRadius: BIG_BORDER_RADIUS,
-					borderBottomRightRadius: BIG_BORDER_RADIUS,
+					// borderBottomLeftRadius: BIG_BORDER_RADIUS,
+					// borderBottomRightRadius: BIG_BORDER_RADIUS,
 				}}
 			>
 				{children}

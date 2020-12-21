@@ -40,7 +40,8 @@ const InsuranceCaseSteps = ({
 	const InsuranceStepOne = () => {
 		const [insuranceCasesList, setInsuranceCasesList] = useState([]);
 		const onStepOnePress = (item) => {
-			if (item.id == 1) {
+			// i==4 no insurance
+			if (item.id == 4) {
 				setIndex(index + 2);
 			} else {
 				setIndex(index + 1);
