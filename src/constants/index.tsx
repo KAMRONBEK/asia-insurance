@@ -87,17 +87,17 @@ export { Icons, colors, SCREENS };
 //insurance-menus
 export const aboutDatas = [
 	{
-		insuranceType: strings.osago,
-		desc: strings.osagoInfo,
+		insuranceType: strings.osagoInfo,
+		// desc: strings.osagoInfo,
 		image: images.carHand,
-		firstTitle: strings.insuranceTerms,
+		firstTitle: strings.whatWeOffer,
 		firstDesc: strings.insuranceTermsInfo,
 		secondTitle: strings.additionalInfo,
 		secondDesc: strings.insuranceAdditionalInfo,
 	},
 	{
-		insuranceType: strings.vzr,
-		desc: strings.vzrInfo,
+		insuranceType: strings.vzrInfo,
+		// desc: strings.vzrInfo,
 		image: images.planeHand,
 		firstTitle: strings.whatWeOffer,
 		firstDesc: strings.whatWeOfferInfo,

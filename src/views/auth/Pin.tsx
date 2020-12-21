@@ -28,6 +28,7 @@ import {
 	profileLoadRedux,
 } from "../../redux/actions";
 import AsyncStorage from "@react-native-community/async-storage";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Pin = ({
 	navigation,
@@ -103,89 +104,91 @@ const Pin = ({
 	};
 
 	return (
-		<View style={{ flex: 1 }}>
-			<ScrollView style={{ flex: 1 }}>
-				<View style={styles.container}>
-					<View style={styles.top}>
-						<Image source={images.logo} style={styles.logo} />
-						<Image
-							source={images.shield}
-							style={styles.languageImage}
-						/>
-					</View>
-					<View style={styles.middle}>
-						<Text style={styles.title}>{strings.enterPin}</Text>
-						<Text style={styles.content}>
-							{strings.enterPinInfo}
-						</Text>
-						<Icons
-							name="code"
-							color={colors.darkBlue}
-							size={20}
-							style={{ paddingTop: 10 }}
-						/>
-					</View>
-					<View style={[styles.bottom]}>
-						<View style={styles.multiInput}>
-							<SingleInput
-								code={pinCode}
-								setCode={setPin}
-								inputRef={inputRefs[0]}
-								onEnter={() => {
-									inputRefs[1].current.focus();
-								}}
-								onErase={() => inputRefs[0].current.focus()}
-								index={0}
+		<SafeAreaView style={{ flex: 1 }}>
+			<View style={{ flex: 1 }}>
+				<ScrollView style={{ flex: 1 }}>
+					<View style={styles.container}>
+						<View style={styles.top}>
+							<Image source={images.logo} style={styles.logo} />
+							<Image
+								source={images.shield}
+								style={styles.languageImage}
 							/>
-							<SingleInput
-								code={pinCode}
-								setCode={setPin}
-								inputRef={inputRefs[1]}
-								onEnter={() => {
-									inputRefs[2].current.focus();
-								}}
-								onErase={() => inputRefs[0].current.focus()}
-								index={1}
+						</View>
+						<View style={styles.middle}>
+							<Text style={styles.title}>{strings.enterPin}</Text>
+							<Text style={styles.content}>
+								{strings.enterPinInfo}
+							</Text>
+							<Icons
+								name="code"
+								color={colors.darkBlue}
+								size={20}
+								style={{ paddingTop: 10 }}
 							/>
-							<SingleInput
-								code={pinCode}
-								setCode={setPin}
-								inputRef={inputRefs[2]}
-								onEnter={() => {
-									inputRefs[3].current.focus();
-								}}
-								onErase={() => inputRefs[1].current.focus()}
-								index={2}
-							/>
-							<SingleInput
-								code={pinCode}
-								setCode={setPin}
-								inputRef={inputRefs[3]}
-								onErase={() => inputRefs[2].current.focus()}
-								onEnter={() => {
-									Keyboard.dismiss();
-								}}
-								index={3}
+						</View>
+						<View style={[styles.bottom]}>
+							<View style={styles.multiInput}>
+								<SingleInput
+									code={pinCode}
+									setCode={setPin}
+									inputRef={inputRefs[0]}
+									onEnter={() => {
+										inputRefs[1].current.focus();
+									}}
+									onErase={() => inputRefs[0].current.focus()}
+									index={0}
+								/>
+								<SingleInput
+									code={pinCode}
+									setCode={setPin}
+									inputRef={inputRefs[1]}
+									onEnter={() => {
+										inputRefs[2].current.focus();
+									}}
+									onErase={() => inputRefs[0].current.focus()}
+									index={1}
+								/>
+								<SingleInput
+									code={pinCode}
+									setCode={setPin}
+									inputRef={inputRefs[2]}
+									onEnter={() => {
+										inputRefs[3].current.focus();
+									}}
+									onErase={() => inputRefs[1].current.focus()}
+									index={2}
+								/>
+								<SingleInput
+									code={pinCode}
+									setCode={setPin}
+									inputRef={inputRefs[3]}
+									onErase={() => inputRefs[2].current.focus()}
+									onEnter={() => {
+										Keyboard.dismiss();
+									}}
+									index={3}
+								/>
+							</View>
+						</View>
+						<View
+							style={{
+								alignItems: "center",
+								paddingTop: 40,
+							}}
+						>
+							<RoundButton
+								text={strings.confirm}
+								backgroundColor={colors.darkBlue}
+								color={colors.white}
+								fontWeight="400"
+								onPress={onPress}
 							/>
 						</View>
 					</View>
-					<View
-						style={{
-							alignItems: "center",
-							paddingTop: 40,
-						}}
-					>
-						<RoundButton
-							text={strings.confirm}
-							backgroundColor={colors.darkBlue}
-							color={colors.white}
-							fontWeight="400"
-							onPress={onPress}
-						/>
-					</View>
-				</View>
-			</ScrollView>
-		</View>
+				</ScrollView>
+			</View>
+		</SafeAreaView>
 	);
 };
 let logoWidth = deviceWidth - 100;

@@ -27,7 +27,15 @@ const InsuredEvents = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			{events.length == 0 ? (
-				<Text style={styles.grayText}>скоро доступно</Text>
+				<View
+					style={{
+						flex: 1,
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					<Text style={styles.grayText}>скоро доступно</Text>
+				</View>
 			) : (
 				// <View style={styles.content}>
 				<FlatList

@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 	},
 	title: {
-		fontSize: 25,
+		fontSize: 21,
 		fontWeight: "bold",
 		paddingVertical: 10,
 	},

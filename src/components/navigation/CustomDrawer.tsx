@@ -11,7 +11,13 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { connect } from "react-redux";
-import { colors, Icons, BORDER_RADIUS, SCREENS } from "../../constants";
+import {
+	colors,
+	Icons,
+	BORDER_RADIUS,
+	SCREENS,
+	BIG_BORDER_RADIUS,
+} from "../../constants";
 import { AppState } from "../../redux/types";
 import { toggleMenu } from "../../redux/actions";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -101,7 +107,7 @@ const CustomDrawer = ({
 		<SafeAreaView forceInset={{ top: "always" }} style={{ flex: 1 }}>
 			<LinearGradient
 				start={{ x: 0, y: 1 }}
-				end={{ x: 1, y: 0 }}
+				end={{ x: 0, y: 0 }}
 				style={StyleSheet.absoluteFillObject}
 				colors={[colors.lightBlue, colors.darkBlue]}
 			/>
@@ -256,6 +262,8 @@ const CustomDrawer = ({
 					overflow: "hidden",
 					borderRadius,
 					transform: [{ scale }, { translateX }],
+					borderBottomLeftRadius: BIG_BORDER_RADIUS,
+					borderBottomRightRadius: BIG_BORDER_RADIUS,
 				}}
 			>
 				{children}
