@@ -35,13 +35,13 @@ let loginData = [
 		content: strings.enterCodeInfo,
 		logo: "password",
 		multiInput: true,
-		countDown: 30,
+		countDown: 60,
 	},
 ];
 
 export const Login = ({ index, navigation, setPhoneNumber, code, setCode }) => {
 	let [counter, setCounter] = useState(
-		!!loginData[index].countDown ? loginData[index].countDown : 30
+		!!loginData[index].countDown ? loginData[index].countDown : 60
 	);
 	let [inputMode, setInputMode] = useState(false);
 

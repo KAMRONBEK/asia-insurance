@@ -143,16 +143,22 @@ const CarSteps = ({
 		};
 
 		const getCarType = async () => {
-			let res = await requests.dictionary.getCarTypes();
-			let temp = res.data;
-			temp.map((item, index) => {
-				item.name = item.text;
-			});
-			setCarTypeList(temp);
+			try {
+				let res = await requests.dictionary.getCarTypes();
+				let temp = res.data;
+				temp.map((item, index) => {
+					item.name = item.text;
+				});
+				setCarTypeList(temp);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				hideSelectionLoading();
+			}
 		};
 
 		useEffect(() => {
-			// showSelectionLoading();
+			showSelectionLoading();
 			getCarType();
 			// db.transaction((tx) => {
 			// 	tx.executeSql(
@@ -212,12 +218,18 @@ const CarSteps = ({
 		};
 
 		const getTerritory = async () => {
-			let res = await requests.dictionary.getTerritories();
-			let temp = res.data;
-			temp.map((item, index) => {
-				item.name = item.text;
-			});
-			setCarRegisterPlaceList(temp);
+			try {
+				let res = await requests.dictionary.getTerritories();
+				let temp = res.data;
+				temp.map((item, index) => {
+					item.name = item.text;
+				});
+				setCarRegisterPlaceList(temp);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				hideSelectionLoading();
+			}
 		};
 
 		useEffect(() => {

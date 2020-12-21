@@ -42,8 +42,9 @@ const AboutInsurance = ({ navigation, route }: AboutInsuranceProps) => {
 			>
 				<View style={styles.top}>
 					<View style={styles.titleWrapper}>
-						<Text style={styles.title}>{item.insuranceType}</Text>
-						<Text style={styles.desc}>{item.desc}</Text>
+						{/* <Text style={styles.title}>{item.insuranceType}</Text> */}
+						<Text style={styles.title}>{item.desc}</Text>
+						{/* <Text style={styles.desc}>{item.desc}</Text> */}
 					</View>
 					<Image style={styles.image} source={item.image} />
 				</View>
