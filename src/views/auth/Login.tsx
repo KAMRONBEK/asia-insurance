@@ -23,6 +23,7 @@ import { Icons } from "../../constants/index";
 import PreValueInput from "../../components/common/PreValueInput";
 import MultiInputWrapper from "../../components/common/MultiInputWrapper";
 import SingleInput from "../../components/common/SingleInput";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 let loginData = [
 	{
@@ -187,6 +188,9 @@ export const Login = ({ index, navigation, setPhoneNumber, code, setCode }) => {
 									/>
 								</View>
 							)}
+							<View style={{
+								paddingTop:30
+							}}>
 							{loginData[index].countDown && counter != 0 ? (
 								<Text style={styles.count}>
 									{strings.askAnotherCode}{" "}
@@ -211,11 +215,13 @@ export const Login = ({ index, navigation, setPhoneNumber, code, setCode }) => {
 									</TouchableOpacity>
 								)
 							)}
+							</View>
 						</View>
 					</View>
 				</ScrollView>
 			</View>
 		</KeyboardAvoidingView>
+
 	);
 };
 
@@ -238,6 +244,7 @@ const styles = StyleSheet.create({
 	logo: {
 		width: logoWidth,
 		height: logoWidth / 8.8,
+		marginTop:30
 	},
 	languageImage: {
 		width: imageWidth,
