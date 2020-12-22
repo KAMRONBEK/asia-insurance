@@ -35,6 +35,7 @@ import { requests } from "../../../api/requests";
 import moment from "moment";
 import DatePicker from "react-native-datepicker";
 import { navigate } from "../../../utils/NavigationService";
+import DateInput from "../../../components/common/DateInput";
 
 const limDriverForm = {
 	first: strings.driverPassport,
@@ -285,7 +286,18 @@ const Checkout = ({
 					placeholder={strings.realisationDate}
 					options={[{ label: "label", value: "value" }]}
 				/> */}
-				<DatePicker
+				<DateInput
+					value={beginDate}
+					setValue={setBeginDate}
+					placeholder={strings.pickStartDate}
+				/>
+				<DateInput
+					value={endDate}
+					setValue={setBeginDate}
+					passive
+					placeholder={strings.pickEndDate}
+				/>
+				{/* <DatePicker
 					style={{
 						borderRadius: BORDER_RADIUS,
 						backgroundColor: colors.white,
@@ -371,7 +383,7 @@ const Checkout = ({
 					onDateChange={(date) => {
 						setEndDate(date);
 					}}
-				/>
+				/> */}
 				<View style={styles.buttonWrapper}>
 					<RoundButton
 						text={strings.next}

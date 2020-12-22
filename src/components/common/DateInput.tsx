@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { TextInputMask, TextInputMaskProps } from "react-native-masked-text";
 import { BORDER_RADIUS, colors } from "../../constants";
 
-const DateInput = ({ value, setValue, placeholder }) => {
+const DateInput = ({ value, setValue, placeholder, passive }) => {
 	let _dateInput = useRef(null);
 	let [isValid, setIsValid] = useState(true);
 
@@ -27,6 +27,7 @@ const DateInput = ({ value, setValue, placeholder }) => {
 			]}
 		>
 			<TextInputMask
+				editable={!passive}
 				ref={_dateInput}
 				type={"datetime"}
 				options={{
