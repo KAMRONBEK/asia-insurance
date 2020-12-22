@@ -219,14 +219,13 @@ const TripPurposeSteps = ({
 		useEffect(() => {
 			requests.dictionary.getTravelDictionary().then((res) => {
 				let array = [];
+				console.log(res.data.travelGroupTypes2);
 
-				Object.keys(res.data.travelGroupTypes).map((index, value) => {
-					if (index.split(",")[0] == 1 || index.split(",")[0] == 2) {
-						array.push({
-							name: res.data.travelGroupTypes[index],
-							id: index,
-						});
-					}
+				Object.keys(res.data.travelGroupTypes2).map((index, value) => {
+					array.push({
+						name: res.data.travelGroupTypes2[index],
+						id: index,
+					});
 					// console.warn(index);
 				});
 
