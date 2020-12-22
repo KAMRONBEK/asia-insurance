@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const url = "http://asiainsurance.uz";
+// export const asiaUrl = "http://81.95.238.187:5002";
 export const asiaUrl = "http://81.95.229.2:5000";
 
 export let configureAxios = (store) => {

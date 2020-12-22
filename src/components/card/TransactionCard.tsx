@@ -1,12 +1,15 @@
 import React from "react";
 import { StyleSheet, View, ImageSourcePropType, Image } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import {
 	colors,
 	BORDER_RADIUS,
 	Icons,
 	CONTAINER_PADDING,
+	SCREENS,
 } from "../../constants";
 import { strings } from "../../locales/strings";
+import { navigate } from "../../utils/NavigationService";
 import Text from "../common/Text";
 
 interface TransactionCardProps {
@@ -18,6 +21,7 @@ interface TransactionCardProps {
 	transactionId: string;
 	currency: string;
 	assignedOperator: any;
+	item: any;
 }
 
 const TransactionCard = ({
@@ -29,7 +33,20 @@ const TransactionCard = ({
 	transactionId,
 	currency,
 	assignedOperator,
+	item,
 }: TransactionCardProps) => {
+	const onPay = () => {
+		navigate(SCREENS.tabs, {
+			name: SCREENS.historyStack,
+			params: {
+				screen: SCREENS.payments,
+				params: {
+					paymentData: item,
+				},
+			},
+		});
+	};
+
 	return (
 		<View style={styles.container}>
 			<View
@@ -42,7 +59,7 @@ const TransactionCard = ({
 			>
 				<Text style={styles.status}>{strings.status}</Text>
 				<View style={styles.statusWrapper}>
-					{status !== "НОВЫЙ" ? (
+					{status !== strings.notPaid ? (
 						<View style={styles.iconWrapper}>
 							<Icons
 								name="check1"
@@ -58,7 +75,7 @@ const TransactionCard = ({
 							styles.bold,
 							{
 								color:
-									status !== "НОВЫЙ"
+									status !== strings.notPaid
 										? colors.green
 										: colors.red,
 								paddingLeft: 10,
@@ -96,8 +113,29 @@ const TransactionCard = ({
 						<Text style={styles.text}>{strings.orderId}</Text>
 						<Text style={styles.bold}>{orderId}</Text>
 					</View>
-					<Text style={styles.text}>{strings.transactionsId}</Text>
-					<Text style={styles.bold}>{assignedOperator}</Text>
+					{/* <Text style={styles.text}>{strings.transactionsId}</Text> */}
+					{/* <Text style={styles.bold}>{assignedOperator}</Text> */}
+
+					{status == strings.notPaid && (
+						<TouchableOpacity onPress={onPay}>
+							<View
+								style={{
+									borderWidth: 1,
+									backgroundColor: colors.darkBlue,
+									borderRadius: 20,
+									padding: 10,
+								}}
+							>
+								<Text
+									style={{
+										color: colors.white,
+									}}
+								>
+									{strings.pay}
+								</Text>
+							</View>
+						</TouchableOpacity>
+					)}
 				</View>
 			</View>
 		</View>

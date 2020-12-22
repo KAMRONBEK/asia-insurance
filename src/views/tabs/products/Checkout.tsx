@@ -723,7 +723,7 @@ const Checkout = ({
 				let res = await requests.order.createOrder({
 					CustomerId: user.customerId,
 					ContactPhone: user.user.phone,
-					InsuranceType: 0,
+					InsuranceType: 0, //OSAGO
 					DeliveryOblastId: checkout.locationInfo.region.id,
 					DeliveryRayonId: checkout.locationInfo.district.id,
 					InsuranceParams: {

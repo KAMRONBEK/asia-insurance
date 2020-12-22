@@ -123,31 +123,30 @@ const Auth = ({
 					phone: phoneNumber,
 					device_token: user.user.device_token,
 				});
-				console.log(res.data.data);
+				console.log(res.data.data, "Raul");
 				let profileRes = await requests.user.profile(
 					res.data.data.token
 				);
 				if (profileRes) {
 					userLoaded(profileRes.data.data);
 				}
-				console.log(profileRes.data.data);
+				console.log(profileRes.data.data, "Raul");
 			} catch (error) {
-				console.log(error.response.data);
+				console.log(error.response.data, "error in login Raul");
 			}
 		}
 		if (loginIndex == 1) {
 			showLoading(strings.verifyingCode);
 			try {
 				let res = await requests.auth.verifyCode({ code: code });
-				console.log("res.data");
-				console.log(res.data.data);
+				console.log("verify code", res.data.data);
 				//code verified
 				try {
 					let resAsia = await requests.authAsia.registerUser({
 						PhoneNumber: phoneNumber,
 						ActivationCode: code,
 					});
-					console.log(resAsia.data);
+					console.log(resAsia.data, "Asia");
 					userLoggedIn({
 						user: res.data.data,
 						id: resAsia.data.customerId,

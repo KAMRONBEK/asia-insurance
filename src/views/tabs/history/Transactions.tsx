@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, ScrollView, StatusBar } from "react-native";
+import {
+	StyleSheet,
+	View,
+	ScrollView,
+	StatusBar,
+	RefreshControl,
+} from "react-native";
 import TransactionCard from "../../../components/card/TransactionCard";
 import { colors, CONTAINER_PADDING } from "../../../constants";
 import images from "../../../assets/images";
@@ -30,11 +36,10 @@ const Transactions = ({
 
 	const boot = async () => {
 		try {
-			let res = await requests.order.getOrders({
-				CustomerId: user.customerId,
-			});
+			let res = await requests.orderConfirm.myOrders();
+			console.log(res.data.data);
 
-			setOrders(res.data.orders);
+			setOrders(res.data.data);
 		} catch (error) {
 			showFlashMessage({
 				type: colors.red,
@@ -72,6 +77,21 @@ const Transactions = ({
 			boot();
 		}, 300);
 	}, []);
+
+	let temper = {
+		date: "2020-12-22 09:19:32",
+		discount: "0",
+		id: 72,
+		order_id: "b03c1df7-7f9a-4105-865d-3f6ba175f56e",
+		order_number: "193120122209",
+		price: "56000",
+		status: 0,
+		type: "osgo",
+		user_id: 387,
+	};
+
+	let [refreshing, setRefreshing] = useState(false);
+
 	return (
 		<View style={styles.container}>
 			{/* <Text style={styles.title}>{strings.orderList}</Text> */}
@@ -92,22 +112,37 @@ const Transactions = ({
 					style={{ flex: 1 }}
 					contentContainerStyle={styles.plane}
 					showsVerticalScrollIndicator={false}
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={boot}
+						/>
+					}
 				>
 					<FlatList
 						data={orders}
 						renderItem={({ item }) => (
 							<TransactionCard
 								image={
-									item.insuranceType == "ОСГО ВТС"
+									item.type == "osgo"
 										? images.carShield
 										: images.planeShield
 								}
-								title={item.insuranceType}
-								orderId={item.orderNumber}
+								title={
+									item.type == "osgo"
+										? strings.osago
+										: strings.vzr
+								}
+								orderId={item.id}
 								assignedOperator={item.assignedOperator + ""}
-								price={item.premia}
+								price={item.price}
 								currency="сум"
-								status={item.status}
+								status={
+									item.status == 0
+										? strings.notPaid
+										: strings.paid
+								}
+								item={item}
 							/>
 						)}
 					/>

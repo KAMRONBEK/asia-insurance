@@ -2,6 +2,8 @@ import LocalizedStrings from "react-native-localization";
 
 export let strings = new LocalizedStrings({
 	ru: {
+		paid: "Оплачен",
+		notPaid: "Не оплачено",
 		expireDate: "Дата истечения срока годности",
 		checkingPolicy: "Проверка полиса",
 		address: "Адрес",
