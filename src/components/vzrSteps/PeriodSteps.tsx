@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import { setInsurance } from "../../redux/actions";
 import DateInput from "../common/DateInput";
 
+//adapt to 720 ekran
+
 const PeriodSteps = ({ setInsurance }) => {
 	let [beginDate, setBeginDate] = useState(
 		moment(new Date(), "DD.MM.YYYY").format("DD.MM.YYYY")

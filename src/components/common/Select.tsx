@@ -28,8 +28,11 @@ const Select = ({
 	placeholder,
 	selectValue,
 	onValueChange,
+	passive,
 }: SelectProps) => {
-	let [value, setValue] = useState("");
+	let [value, setValue] = useState(
+		preValue && preValue.value ? preValue.value : null
+	);
 	let [containerWidth, setContainerWidth] = useState(0);
 	return (
 		<RNPickerSelect

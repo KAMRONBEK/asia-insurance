@@ -6,6 +6,7 @@ import {
 	View,
 	BackHandler,
 	StatusBar,
+	KeyboardAvoidingView,
 } from "react-native";
 //@ts-ignore
 import RoundButton from "../../components/common/RoundButton";
@@ -198,43 +199,49 @@ const Auth = ({
 	}, [user]);
 
 	return (
-		<View style={styles.plane}>
-			<ScrollView
-				{...{ ref }}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				pagingEnabled
-				scrollEnabled={false}
-			>
-				{/**
-				 * Intros
-				 */}
-				<View style={styles.fullWidth}>
-					<Intros {...{ current, scroll, introsData }} />
-				</View>
-				{/**
-				 * * Since we have bottom button Login should not have button
-				 */}
-				<View style={styles.fullWidth}>
-					<Login
-						index={loginIndex}
-						navigation={navigation}
-						setPhoneNumber={setPhoneNumber}
-						code={code}
-						setCode={setCode}
-					/>
-				</View>
-			</ScrollView>
-			<RoundButton
-				// * Since login does not have button we implement login logic here
-				text={buttonText}
-				backgroundColor={colors.darkBlue}
-				color={colors.white}
-				fontWeight="400"
-				onPress={!isLogin ? proceed : login}
-				passive={isLogin && phoneNumber.length < 9}
-			/>
-		</View>
+		<KeyboardAvoidingView
+			style={{
+				flex: 1,
+			}}
+		>
+			<View style={styles.plane}>
+				<ScrollView
+					{...{ ref }}
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					pagingEnabled
+					scrollEnabled={false}
+				>
+					{/**
+					 * Intros
+					 */}
+					<View style={styles.fullWidth}>
+						<Intros {...{ current, scroll, introsData }} />
+					</View>
+					{/**
+					 * * Since we have bottom button Login should not have button
+					 */}
+					<View style={styles.fullWidth}>
+						<Login
+							index={loginIndex}
+							navigation={navigation}
+							setPhoneNumber={setPhoneNumber}
+							code={code}
+							setCode={setCode}
+						/>
+					</View>
+				</ScrollView>
+				<RoundButton
+					// * Since login does not have button we implement login logic here
+					text={buttonText}
+					backgroundColor={colors.darkBlue}
+					color={colors.white}
+					fontWeight="400"
+					onPress={!isLogin ? proceed : login}
+					passive={isLogin && phoneNumber.length < 9}
+				/>
+			</View>
+		</KeyboardAvoidingView>
 	);
 };
 

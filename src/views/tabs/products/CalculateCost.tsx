@@ -8,7 +8,7 @@ import OptionCard from "../../../components/card/OptionCard";
 import images from "../../../assets/images";
 import { connect } from "react-redux";
 import { isEmpty } from "../../../utils/functions";
-import insurance from "../../../redux/reducers/insurance";
+import { refreshInsurance } from "../../../redux/actions/insurance";
 
 interface CalculateCostProps {
 	route: any;
@@ -20,6 +20,7 @@ const CalculateCost = ({
 	navigation,
 	osago,
 	vzr,
+	refreshInsurance,
 }: CalculateCostProps) => {
 	let { car, insuranceCases, privilege, insurancePeriod, driver } = osago;
 	let { destinationCountry, tripDuration, tripPurpose, insuredPerson } = vzr;
@@ -148,7 +149,7 @@ const CalculateCost = ({
 	let { insuranceType } = route.params;
 
 	let isButtonPassive = () => {
-		console.log(insuranceType);
+		console.log(insuranceType, "from param");
 
 		switch (insuranceType) {
 			case strings.osago:
@@ -162,6 +163,20 @@ const CalculateCost = ({
 
 			case strings.vzr:
 				return false;
+			default:
+				break;
+		}
+	};
+
+	let onRefreshPress = () => {
+		switch (insuranceType) {
+			case strings.osago:
+				console.log("here");
+				refreshInsurance("osago");
+				break;
+			case strings.vzr:
+				refreshInsurance("vzr");
+				break;
 			default:
 				break;
 		}
@@ -216,6 +231,13 @@ const CalculateCost = ({
 						/>
 					)}
 				/>
+				<View style={styles.buttonWrapper}>
+					<RoundButton
+						text={strings.refresh}
+						gradient
+						onPress={onRefreshPress}
+					/>
+				</View>
 			</ScrollView>
 			<View style={styles.buttonWrapper}>
 				<RoundButton
@@ -254,4 +276,8 @@ const mapStateToProps = ({ insurance: { osago, vzr } }) => ({
 	vzr,
 });
 
-export default connect(mapStateToProps)(CalculateCost);
+const mapDispatchToProps = {
+	refreshInsurance,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CalculateCost);

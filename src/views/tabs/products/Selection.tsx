@@ -197,7 +197,6 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 				)}
 			</View>
 			<RenderStep />
-
 			<SelectionLoading />
 		</View>
 	);

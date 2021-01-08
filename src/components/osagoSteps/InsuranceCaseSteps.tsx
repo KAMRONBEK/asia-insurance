@@ -42,7 +42,20 @@ const InsuranceCaseSteps = ({
 		const onStepOnePress = (item) => {
 			// i==4 no insurance
 			if (item.id == 4) {
-				setIndex(index + 2);
+				// setIndex(index + 2);
+				setInsurance({
+					parent: "osago",
+					child: "insuranceCases",
+					data: {
+						availableInsurance: item,
+						// insuranceSeries: insuranceSeries,
+						// haveViolation: item,
+					},
+				});
+				navigate(SCREENS.calculateCost, {
+					name: SCREENS.calculateCost,
+					params: {},
+				});
 			} else {
 				setIndex(index + 1);
 			}
@@ -106,8 +119,21 @@ const InsuranceCaseSteps = ({
 
 	const InsuranceStepTwo = ({ navigation }: any) => {
 		const onStepTwoPress = (value) => {
-			setIndex(index + 1);
-			setInsuranceSeries(value);
+			// setIndex(index + 1);
+			// setInsuranceSeries(value);
+			setInsurance({
+				parent: "osago",
+				child: "insuranceCases",
+				data: {
+					availableInsurance: availableInsurance,
+					insuranceSeries: value,
+					// haveViolation: item,
+				},
+			});
+			navigate(SCREENS.calculateCost, {
+				name: SCREENS.calculateCost,
+				params: {},
+			});
 		};
 
 		return (
@@ -122,8 +148,19 @@ const InsuranceCaseSteps = ({
 				<View style={styles.nextWrapper}>
 					<TouchableOpacity
 						onPress={() => {
-							setIndex(index + 1);
-							setInsuranceSeries("");
+							setInsurance({
+								parent: "osago",
+								child: "insuranceCases",
+								data: {
+									availableInsurance: availableInsurance,
+									insuranceSeries: "",
+									// haveViolation: item,
+								},
+							});
+							navigate(SCREENS.calculateCost, {
+								name: SCREENS.calculateCost,
+								params: {},
+							});
 						}}
 					>
 						<Text style={styles.next}>{strings.next}</Text>

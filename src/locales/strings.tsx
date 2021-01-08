@@ -2,6 +2,9 @@ import LocalizedStrings from "react-native-localization";
 
 export let strings = new LocalizedStrings({
 	ru: {
+		refresh: "Обновить",
+		passport: "Паспорт",
+		isTraveller: "Стахователь является путешетвенником",
 		paid: "Оплачен",
 		notPaid: "Не оплачено",
 		expireDate: "Дата истечения срока годности",
@@ -13,7 +16,7 @@ export let strings = new LocalizedStrings({
 		days: "дней",
 		series: "Серия",
 		addMember: "Добавить участников",
-		member: "УЧАСТНИК",
+		member: "Путешественник",
 		enterInsuredPersonData: "УКАЖИТЕ ДАННЫЕ СТРАХОВАТЕЛЯ",
 		additionalTripMembers: "ДОПОЛНИТЕЛЬНЫЙ УЧАСТНИК ПОЕЗДКИ",
 		payment: "Оплата",
@@ -62,9 +65,9 @@ export let strings = new LocalizedStrings({
 		relative: "Родственник",
 		metric: "Метрика/Свидетельство о браке",
 		attorneyPower: "Доверенность",
-		driverLicense: "Водительское удостоверение (2 стороны)",
-		relativePassport: "Паспорт родственника",
-		driverPassport: "Паспорт водителя",
+		driverLicense: "Водительское удостоверение ",
+		relativePassport: "Паспорт родственника (2 стороны)",
+		driverPassport: "Паспорт водителя (2 стороны)",
 		ru: "Русский ",
 		uz: "O`zbek",
 		sliderText1: "Страхование выезжающих за рубеж",
@@ -91,7 +94,7 @@ export let strings = new LocalizedStrings({
 		enterPhoneInfo:
 			"Введите свой номер телефона и мы вам вышлем код для подтверждения Вашего номера телефона",
 		enterCode: "Введите код",
-		enterCodeInfo: "Введите код высланный вам по смс для подтвержедния",
+		enterCodeInfo: "Введите код высланный вам по смс для подтверждения",
 		askAnotherCode: "Запросить новый код можно через",
 		sek: "сек",
 		insuranceProducts: "Страховые продукты",
@@ -100,7 +103,7 @@ export let strings = new LocalizedStrings({
 		online: "Online",
 		osago: "ОСГО ВТС",
 		osagoInfo:
-			"Обязательное страхование гражданской ответственности владельцев транспортных средств (ОСГО ВТС)",
+			"Обязательное страхование гражданской ответственности владельцев транспортных средств",
 		vzr: "Путешественникам",
 		vzrInfo: "Страхование выезжающих за рубеж ( ВЗР)",
 		news: "Новости",
@@ -247,7 +250,7 @@ export let strings = new LocalizedStrings({
 		noSelectedItem: "Нет выбранного элемента",
 		areYouOwnerOfCar: "ВЫ ЯВЛЯЕТЕСЬ СОБСТВЕННИКОМ ТС?",
 		areYouDriverOfCar: "ВЫ ЯВЛЯЕТЕСЬ ВОДИТЕЛЕМ ТС?",
-		ownerPassport: "ПАСПОРТ ВЛАДЕЛЬЦА ТС",
-		techPassport: "ТЕХПАСПОРТ ТС",
+		ownerPassport: "ПАСПОРТ ВЛАДЕЛЬЦА ТС (2 стороны)",
+		techPassport: "ТЕХПАСПОРТ ТС (2 стороны)",
 	},
 });

@@ -98,7 +98,7 @@ const Card = ({
 									fontWeight: "300",
 								},
 							]}
-							numberOfLines={2}
+							numberOfLines={10}
 						>
 							{desc}
 						</Text>

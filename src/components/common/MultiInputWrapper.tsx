@@ -10,8 +10,6 @@ const MultiInputWrapper = ({ children, inputs, ...rest }) => {
 			if (child.type.name !== "TextInput") return child;
 
 			return React.cloneElement(child, {
-				
-
 				// inputRef: (ref) =>
 				// 	setInputs([...inputs, (inputs[index] = ref)]),
 				// inputRef: (ref) => (this.inputs[index] = ref),

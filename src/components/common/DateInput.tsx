@@ -27,6 +27,8 @@ const DateInput = ({ value, setValue, placeholder, passive }) => {
 			]}
 		>
 			<TextInputMask
+				//input type iOS
+				keyboardType="number-pad"
 				editable={!passive}
 				ref={_dateInput}
 				type={"datetime"}
@@ -41,6 +43,8 @@ const DateInput = ({ value, setValue, placeholder, passive }) => {
 					textAlign: "center",
 					fontSize: 16,
 					color: isValid ? colors.black : colors.red,
+					padding: 0,
+					margin: 0,
 				}}
 			/>
 		</View>

@@ -57,7 +57,9 @@ const TransactionCard = ({
 					},
 				]}
 			>
-				<Text style={styles.status}>{strings.status}</Text>
+				<Text style={styles.title}>{title}</Text>
+
+				{/* <Text style={styles.status}>{strings.status}</Text> */}
 				<View style={styles.statusWrapper}>
 					{status !== strings.notPaid ? (
 						<View style={styles.iconWrapper}>
@@ -95,8 +97,7 @@ const TransactionCard = ({
 								paddingLeft: 5,
 							}}
 						>
-							<Text style={styles.text}>{strings.policy}</Text>
-							<Text style={styles.title}>{title}</Text>
+							{/* <Text style={styles.text}>{strings.policy}</Text> */}
 						</View>
 					</View>
 					<Text style={styles.text}>{strings.summ}</Text>
@@ -107,7 +108,9 @@ const TransactionCard = ({
 				<View style={styles.column}>
 					<View
 						style={{
-							paddingBottom: 20,
+							// paddingBottom: 20,
+							flexDirection: "row",
+							justifyContent: "space-between",
 						}}
 					>
 						<Text style={styles.text}>{strings.orderId}</Text>

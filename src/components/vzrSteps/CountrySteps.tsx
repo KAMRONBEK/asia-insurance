@@ -138,7 +138,7 @@ const CountrySteps = ({
 			console.log(levelsStr);
 			let res = await requests.dictionary.getProgram(levelsStr);
 			console.log(res.data);
-			setProgramList(res.data.data);
+			setProgramList(res.data.data.reverse());
 		};
 
 		useEffect(() => {

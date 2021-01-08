@@ -68,6 +68,30 @@ const Cost = ({
 			console.log("cost");
 
 			let currency = await requests.travel.getCurrency();
+			console.log({
+				PeriodType:
+					vzr?.tripPurpose?.isMulti?.id ==
+					"48a977e0-c657-4cdb-b0bf-1b9342bfbaa8"
+						? 0
+						: 1,
+				MultiPeriodId: vzr?.tripPurpose?.selectedPeriod?.id.split(
+					";"
+				)[1],
+				CurrencyValue: currency.data.currency_value,
+				DaysCount:
+					moment(vzr.tripDuration.endDate, "DD.MM.YYYY").diff(
+						moment(vzr.tripDuration.startDate, "DD.MM.YYYY"),
+						"days"
+					) + 1,
+				InsuranceProgramId:
+					vzr?.destinationCountry?.program?.insuranceProgramId,
+				InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,
+				AntiCovidCoverage: vzr?.antiCovid ? 1 : 0,
+				PersonsBirthDates: [
+					vzr?.insuredPerson?.insuredPerson?.birthDate,
+				],
+				GroupTypeId: vzr?.tripPurpose?.peopleCount?.id.split(";")[1],
+			});
 
 			let response = await requests.travel.calculate({
 				PeriodType:
@@ -79,10 +103,11 @@ const Cost = ({
 					";"
 				)[1],
 				CurrencyValue: currency.data.currency_value,
-				DaysCount: moment(vzr.tripDuration.endDate, "DD.MM.YYYY").diff(
-					moment(vzr.tripDuration.startDate, "DD.MM.YYYY"),
-					"days"
-				),
+				DaysCount:
+					moment(vzr.tripDuration.endDate, "DD.MM.YYYY").diff(
+						moment(vzr.tripDuration.startDate, "DD.MM.YYYY"),
+						"days"
+					) + 1,
 				InsuranceProgramId:
 					vzr?.destinationCountry?.program?.insuranceProgramId,
 				InsuranceGoalId: vzr?.tripPurpose?.purpose?.id,

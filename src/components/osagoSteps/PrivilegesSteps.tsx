@@ -71,20 +71,21 @@ const PrivilegesSteps = ({
 		};
 
 		useEffect(() => {
-			db.transaction((tx) => {
-				getLgots();
-				// tx.executeSql(
-				// 	"SELECT LgotyId as id, LgotyName as name,tariff_f as tariff FROM tbLgoty",
-				// 	[],
-				// 	(tx, results) => {
-				// 		setPrivilegesList(results.rows.raw());
-				// 		setTimeout(() => {}, 300);
-				// 	},
-				// 	(err) => {
-				// 		console.warn(err);
-				// 	}
-				// );
-			});
+			getLgots();
+
+			// db.transaction((tx) => {
+			// tx.executeSql(
+			// 	"SELECT LgotyId as id, LgotyName as name,tariff_f as tariff FROM tbLgoty",
+			// 	[],
+			// 	(tx, results) => {
+			// 		setPrivilegesList(results.rows.raw());
+			// 		setTimeout(() => {}, 300);
+			// 	},
+			// 	(err) => {
+			// 		console.warn(err);
+			// 	}
+			// );
+			// });
 		}, []);
 
 		return (

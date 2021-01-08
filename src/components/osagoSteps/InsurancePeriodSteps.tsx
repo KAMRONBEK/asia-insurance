@@ -64,13 +64,13 @@ const InsurancePeriodSteps = ({
 
 				temp.map((item, index) => {
 					if (item.id == 1) {
-						item.days = 15;
+						item.days = 233;
 					}
 					if (item.id == 2) {
-						item.days = 60;
-					}
-					if (item.id == 3) {
 						item.days = 365;
+					}
+					if (item.id == 1001) {
+						item.days = 20;
 					}
 					item.name = item.text;
 				});
@@ -91,13 +91,13 @@ const InsurancePeriodSteps = ({
 
 				temp.map((item, index) => {
 					if (item.id == 1) {
-						item.days = 233;
+						item.days = 15;
 					}
 					if (item.id == 2) {
-						item.days = 365;
+						item.days = 60;
 					}
 					if (item.id == 3) {
-						item.days = 20;
+						item.days = 365;
 					}
 					item.name = item.text;
 				});

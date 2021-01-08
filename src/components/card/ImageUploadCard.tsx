@@ -19,7 +19,7 @@ import Text from "../common/Text";
 import ImagePicker from "react-native-image-crop-picker";
 import { formData, constructFileFromUri } from "../../api/requests";
 import { connect } from "react-redux";
-import { setDocuments } from "../../redux/actions";
+import { isEmpty } from "../../utils/functions";
 
 interface ImageUploadCardProps {
 	name: string;
@@ -33,7 +33,7 @@ const ImageUploadCard = ({
 	data,
 	setData,
 	docType,
-	setDocuments,
+	setSingleDocument,
 }: ImageUploadCardProps) => {
 	let [images, setImages] = useState([]);
 	let [fileName, setFileName] = useState(name);
@@ -46,13 +46,20 @@ const ImageUploadCard = ({
 			.then((pictures) => {
 				setImages([...pictures, ...images]);
 				pictures.map((picture) => {
-					setData([
-						...data,
-						{
+					if (setSingleDocument) {
+						setSingleDocument({
 							DocumentTypeEnum: docType,
 							File: picture.data,
-						},
-					]);
+						});
+					} else {
+						setData([
+							...data,
+							{
+								DocumentTypeEnum: docType,
+								File: picture.data,
+							},
+						]);
+					}
 				});
 			})
 			.catch((err) => console.warn(err));
@@ -65,13 +72,20 @@ const ImageUploadCard = ({
 		})
 			.then((picture) => {
 				setImages([picture, ...images]);
-				setData([
-					...data,
-					{
+				if (typeof data == "object" || isEmpty(data)) {
+					setData({
 						DocumentTypeEnum: docType,
 						File: picture.data,
-					},
-				]);
+					});
+				} else {
+					setData([
+						...data,
+						{
+							DocumentTypeEnum: docType,
+							File: picture.data,
+						},
+					]);
+				}
 			})
 			.catch((err) => console.warn(err));
 	};
@@ -171,8 +185,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ checkout }) => ({});
 
-const mapDispatchToProps = {
-	setDocuments,
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImageUploadCard);

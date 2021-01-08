@@ -86,6 +86,8 @@ const Checkout = ({
 		}, [driversDocuments]);
 
 		const onPress = () => {
+			console.log("nextpress");
+
 			setDocuments(driversDocuments);
 			setIndex(index + 1);
 		};
@@ -125,6 +127,17 @@ const Checkout = ({
 						setData={setDriversDocuments}
 						docType={3}
 					/>
+
+					{/* check for pension */}
+					{osago.privilege.availablePrivilege.name !==
+						"БЕЗ ЛЬГОТ" && (
+						<ImageUploadCard
+							name={osago.privilege.availablePrivilege.name}
+							data={driversDocuments}
+							setData={setDriversDocuments}
+							docType={8}
+						/>
+					)}
 					{driverDocumentList.map((driver, index) => (
 						<>
 							<Text style={styles.bold}>
@@ -249,9 +262,15 @@ const Checkout = ({
 		);
 	};
 	let InsurancePeriod = () => {
-		let [beginDate, setBeginDate] = useState();
+		let [beginDate, setBeginDate] = useState(
+			moment(new Date(), "DD.MM.YYYY").format("DD.MM.YYYY")
+		);
 		// moment(new Date(), "DD.MM.YYYY")
-		let [endDate, setEndDate] = useState();
+		let [endDate, setEndDate] = useState(
+			moment(beginDate, "DD.MM.YYYY")
+				.add(osago.insurancePeriod.period.days, "days")
+				.format("DD.MM.YYYY")
+		);
 		// moment(beginDate, "DD.MM.YYYY")
 		// 	.add(osago.insurancePeriod.period.days, "days")
 		// 	.format("DD.MM.YYYY")
@@ -530,6 +549,11 @@ const Checkout = ({
 							placeholder={strings.country}
 							options={countryList}
 							selectValue={setCountry}
+							preValue={{
+								label: "УЗБЕКИСТАН",
+								value: { id: 184, text: "УЗБЕКИСТАН" },
+							}}
+							passive
 						/>
 						<Select
 							selectValue={setRegion}
@@ -666,10 +690,10 @@ const Checkout = ({
 				title: strings.availableInsuranceCases,
 				value: osago.insuranceCases.availableInsurance.name,
 			},
-			{
-				title: strings.availableViolance,
-				value: osago.insuranceCases.haveViolation.name,
-			},
+			// {
+			// 	title: strings.availableViolance,
+			// 	value: osago.insuranceCases.haveViolation.name,
+			// },
 			{
 				title: strings.availablePrivileges,
 				value: osago.privilege.availablePrivilege.name,

@@ -188,40 +188,45 @@ export const Login = ({ index, navigation, setPhoneNumber, code, setCode }) => {
 									/>
 								</View>
 							)}
-							<View style={{
-								paddingTop:30
-							}}>
-							{loginData[index].countDown && counter != 0 ? (
-								<Text style={styles.count}>
-									{strings.askAnotherCode}{" "}
-									<Text style={styles.countColored}>
-										{counter} {strings.sek}
-									</Text>
-								</Text>
-							) : (
-								loginData[index].countDown && (
-									<TouchableOpacity>
-										<Text
-											style={[
-												styles.count,
-												{
-													paddingTop: 20,
-													color: colors.darkBlue,
-												},
-											]}
-										>
-											{strings.askForCode}
+							<View
+								style={{
+									paddingTop: 30,
+								}}
+							>
+								{loginData[index].countDown && counter != 0 ? (
+									<Text style={styles.count}>
+										{strings.askAnotherCode}{" "}
+										<Text style={styles.countColored}>
+											{counter} {strings.sek}
 										</Text>
-									</TouchableOpacity>
-								)
-							)}
+									</Text>
+								) : (
+									loginData[index].countDown && (
+										<TouchableOpacity
+											onPress={() => {
+												setCounter(60);
+											}}
+										>
+											<Text
+												style={[
+													styles.count,
+													{
+														paddingTop: 20,
+														color: colors.darkBlue,
+													},
+												]}
+											>
+												{strings.askForCode}
+											</Text>
+										</TouchableOpacity>
+									)
+								)}
 							</View>
 						</View>
 					</View>
 				</ScrollView>
 			</View>
 		</KeyboardAvoidingView>
-
 	);
 };
 
@@ -244,7 +249,7 @@ const styles = StyleSheet.create({
 	logo: {
 		width: logoWidth,
 		height: logoWidth / 8.8,
-		marginTop:30
+		marginTop: 30,
 	},
 	languageImage: {
 		width: imageWidth,

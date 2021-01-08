@@ -31,6 +31,11 @@ const SingleInput = ({
 						if (onEnter) onEnter();
 					}
 				}}
+				// secureTextEntry={true}
+				onFocus={() => {
+					setValue("");
+					setCode(replaceAt(code, index, ""));
+				}}
 				value={value}
 				onKeyPress={({ nativeEvent }) => {
 					nativeEvent.key === "Backspace"

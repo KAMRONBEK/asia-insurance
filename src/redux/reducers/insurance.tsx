@@ -4,6 +4,7 @@ import {
 	REMOVE_INSURANCE_DATA,
 	SET_INSURANCE_COST,
 	SET_ANTI_COVID,
+	REFRESH_INCURANCE,
 } from "../types";
 
 const INITIAL_STATE = {
@@ -58,7 +59,6 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 					[payload.child]: {},
 				},
 			};
-
 		case SET_CURRENT_STEP:
 			return {
 				...state,
@@ -74,6 +74,35 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 				...state,
 				vzr: { ...state.vzr, antiCovid: !state.vzr.antiCovid },
 			};
+
+		case REFRESH_INCURANCE:
+			if (payload == "osago") {
+				console.log("osago");
+
+				return {
+					...state,
+					osago: {
+						car: {},
+						insuranceCases: {},
+						privilege: {},
+						insurancePeriod: {},
+						driver: {},
+					},
+				};
+			} else {
+				console.log("vzr");
+
+				return {
+					...state,
+					vzr: {
+						destinationCountry: {},
+						tripDuration: {},
+						tripPurpose: {},
+						insuredPerson: {},
+						antiCovid: false,
+					},
+				};
+			}
 		default:
 			return state;
 	}

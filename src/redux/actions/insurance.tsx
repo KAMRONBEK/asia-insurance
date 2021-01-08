@@ -4,6 +4,7 @@ import {
 	REMOVE_INSURANCE_DATA,
 	SET_INSURANCE_COST,
 	SET_ANTI_COVID,
+	REFRESH_INCURANCE,
 } from "../types";
 
 export const setInsurance = (payload) => ({
@@ -28,4 +29,9 @@ export const removeInsuranceData = (payload) => ({
 
 export const setAntiCovid = () => ({
 	type: SET_ANTI_COVID,
+});
+
+export const refreshInsurance = (payload) => ({
+	type: REFRESH_INCURANCE,
+	payload,
 });

@@ -7,6 +7,7 @@ import {
 	Dimensions,
 	Clipboard,
 	Linking,
+	Keyboard,
 } from "react-native";
 import { colors } from "../../constants";
 import Text from "./Text";
@@ -63,73 +64,98 @@ const RoundButton = ({
 	let [buttonText, setButtonText] = useState(text);
 	let [buttonTextColor, setButtonTextColor] = useState(color);
 
-	return (
-		// <View>
-		<TouchableOpacity
-			onPressIn={onPressIn}
-			onPress={
-				!passive
-					? !number
-						? onPress
-						: () => {
-								if (buttonText == number) {
-									Linking.openURL(`tel:${number}`);
-								}
-								setButtonBorderColor(colors.darkBlue);
-								setBackColor(colors.white);
-								setButtonText(number);
-								setButtonTextColor(colors.darkBlue);
-								Clipboard.setString(number);
-								showFlashMessage({
-									message:
-										strings.copiedToClipboard +
-										":" +
-										number,
-									type: colors.green,
-								});
-						  }
-					: undefined
-			}
-		>
-			<View
-				style={[
-					styles.plane,
-					!!radius && {
-						borderRadius: radius,
-					},
-					buttonBorderColor != colors.white && {
-						borderColor: buttonBorderColor,
-						borderWidth: 2,
-					},
-				]}
-			>
-				<LinearGradient
-					start={{ x: 0, y: 1 }}
-					end={{ x: 1, y: 0 }}
-					colors={
-						!passive
-							? gradient
-								? [colors.lightBlue, colors.darkBlue]
-								: [backColor, backColor]
-							: [colors.gray, colors.grayText]
-					}
-					style={{ ...styles.container, backgroundColor: backColor }}
-				>
-					<Text
-						style={{
-							...styles.text,
+	const [show, setShow] = useState(true);
 
-							fontWeight,
-							fontSize,
-							color: buttonTextColor,
-						}}
+	useEffect(() => {
+		Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+		Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+		return () => {
+			Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+			Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+		};
+	}, []);
+
+	const _keyboardDidShow = () => {
+		setShow(false);
+	};
+
+	const _keyboardDidHide = () => {
+		setShow(true);
+	};
+
+	return (
+		<View>
+			{show && (
+				<TouchableOpacity
+					onPressIn={onPressIn}
+					onPress={
+						!passive
+							? !number
+								? onPress
+								: () => {
+										if (buttonText == number) {
+											Linking.openURL(`tel:${number}`);
+										}
+										setButtonBorderColor(colors.darkBlue);
+										setBackColor(colors.white);
+										setButtonText(number);
+										setButtonTextColor(colors.darkBlue);
+										Clipboard.setString(number);
+										showFlashMessage({
+											message:
+												strings.copiedToClipboard +
+												":" +
+												number,
+											type: colors.green,
+										});
+								  }
+							: undefined
+					}
+				>
+					<View
+						style={[
+							styles.plane,
+							!!radius && {
+								borderRadius: radius,
+							},
+							buttonBorderColor != colors.white && {
+								borderColor: buttonBorderColor,
+								borderWidth: 2,
+							},
+						]}
 					>
-						{buttonText}
-					</Text>
-				</LinearGradient>
-			</View>
-		</TouchableOpacity>
-		// </View>
+						<LinearGradient
+							start={{ x: 0, y: 1 }}
+							end={{ x: 1, y: 0 }}
+							colors={
+								!passive
+									? gradient
+										? [colors.lightBlue, colors.darkBlue]
+										: [backColor, backColor]
+									: [colors.gray, colors.grayText]
+							}
+							style={{
+								...styles.container,
+								backgroundColor: backColor,
+							}}
+						>
+							<Text
+								style={{
+									...styles.text,
+
+									fontWeight,
+									fontSize,
+									color: buttonTextColor,
+								}}
+							>
+								{buttonText}
+							</Text>
+						</LinearGradient>
+					</View>
+				</TouchableOpacity>
+			)}
+		</View>
 	);
 };
 const styles = StyleSheet.create({
