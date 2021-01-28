@@ -575,7 +575,7 @@ const Checkout = ({
 							setValue={setHouse}
 						/>
 						<Input
-							placeholder={strings.phone}
+							placeholder={strings.secondPhone}
 							setValue={setPhone}
 						/>
 					</View>
@@ -803,6 +803,7 @@ const Checkout = ({
 					});
 				} catch (error) {
 					console.log(error.request._response, "raul");
+					showFlashMessage(error.request._response);
 				}
 			} catch (error) {
 				console.log(error.request._response, "checkout");

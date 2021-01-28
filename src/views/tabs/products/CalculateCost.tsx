@@ -2,13 +2,20 @@ import React, { useEffect } from "react";
 import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
 import Header from "../../../components/navigation/Header";
 import { strings } from "../../../locales/strings";
-import { colors, SCREENS, CONTAINER_PADDING } from "../../../constants";
+import {
+	colors,
+	SCREENS,
+	CONTAINER_PADDING,
+	deviceWidth,
+} from "../../../constants";
 import RoundButton from "../../../components/common/RoundButton";
 import OptionCard from "../../../components/card/OptionCard";
 import images from "../../../assets/images";
 import { connect } from "react-redux";
 import { isEmpty } from "../../../utils/functions";
 import { refreshInsurance } from "../../../redux/actions/insurance";
+import reactotron from "../../../redux/ReactotronConfig";
+import CustomButton from "../../../components/common/CustomButton";
 
 interface CalculateCostProps {
 	route: any;
@@ -21,13 +28,17 @@ const CalculateCost = ({
 	osago,
 	vzr,
 	refreshInsurance,
+	language,
 }: CalculateCostProps) => {
 	let { car, insuranceCases, privilege, insurancePeriod, driver } = osago;
 	let { destinationCountry, tripDuration, tripPurpose, insuredPerson } = vzr;
-
+	reactotron.logImportant({
+		destinationCountry,
+		isEmpty: isEmpty(destinationCountry),
+	});
 	let insuranceList = [
 		{
-			insuranceType: strings.osago,
+			insuranceType: "osago",
 			menuList: [
 				{
 					title: strings.car,
@@ -41,7 +52,7 @@ const CalculateCost = ({
 				},
 				{
 					title: strings.insuranceCases,
-					desc: "Наличие предыдущих полисов",
+					desc: strings.previousPolicies,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -53,7 +64,7 @@ const CalculateCost = ({
 				{
 					mainIcon: images.flag,
 					title: strings.availablePrivileges,
-					desc: "Имеете ли вы право на льготу",
+					desc: strings.canYouGetPrivilege,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -65,7 +76,7 @@ const CalculateCost = ({
 				{
 					mainIcon: images.calendar,
 					title: strings.insurancePeriod,
-					desc: "Годовое или сезонное",
+					desc: strings.yearOrSeason,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -80,7 +91,7 @@ const CalculateCost = ({
 				{
 					mainIcon: images.umbrellaCoin,
 					title: strings.driver,
-					desc: "Укажите количество водителей",
+					desc: strings.numberOfDrivers,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -96,12 +107,12 @@ const CalculateCost = ({
 			],
 		},
 		{
-			insuranceType: strings.vzr,
+			insuranceType: "vzr",
 			menuList: [
 				{
 					mainIcon: images.carChecked,
 					title: strings.destinationCountry,
-					desc: "Укажите страну назначения",
+					desc: strings.selectDestinationCountry,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -112,7 +123,7 @@ const CalculateCost = ({
 				{
 					mainIcon: images.userChecked,
 					title: strings.tripPeriod,
-					desc: "Даты вашего путешествия",
+					desc: strings.travelDates,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -123,7 +134,7 @@ const CalculateCost = ({
 				{
 					mainIcon: images.flag,
 					title: strings.tripPurpose,
-					desc: "Указание целей поездки",
+					desc: strings.specifyTripPurpose,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -134,7 +145,7 @@ const CalculateCost = ({
 				{
 					mainIcon: images.flag,
 					title: strings.insuredPerson,
-					desc: "Индивидуальное или групповое",
+					desc: strings.individualOrGroup,
 					onPress: () => {
 						console.warn("pressed");
 					},
@@ -147,12 +158,13 @@ const CalculateCost = ({
 	];
 
 	let { insuranceType } = route.params;
+	let insurance = insuranceType == "osago" ? strings.osago : strings.vzr;
 
 	let isButtonPassive = () => {
 		console.log(insuranceType, "from param");
 
 		switch (insuranceType) {
-			case strings.osago:
+			case "osago":
 				return (
 					isEmpty(car) ||
 					isEmpty(insuranceCases) ||
@@ -161,7 +173,7 @@ const CalculateCost = ({
 					isEmpty(driver)
 				);
 
-			case strings.vzr:
+			case "vzr":
 				return false;
 			default:
 				break;
@@ -170,11 +182,11 @@ const CalculateCost = ({
 
 	let onRefreshPress = () => {
 		switch (insuranceType) {
-			case strings.osago:
+			case "osago":
 				console.log("here");
 				refreshInsurance("osago");
 				break;
-			case strings.vzr:
+			case "vzr":
 				refreshInsurance("vzr");
 				break;
 			default:
@@ -194,7 +206,10 @@ const CalculateCost = ({
 				back
 				alignLeft
 				navigation={navigation}
-				title={strings.costCalculation + " " + insuranceType}
+				title={
+					// strings.costCalculation + " " +
+					insurance
+				}
 				round
 			/>
 			<ScrollView
@@ -205,12 +220,20 @@ const CalculateCost = ({
 					<Text style={styles.topText}>
 						{strings.fillInfoForCostCalculation}
 					</Text>
+
+					<CustomButton
+						text={strings.resetData}
+						onPress={onRefreshPress}
+						backgroundColor={colors.white}
+						color={colors.red}
+						border
+					/>
 				</View>
 				<FlatList
 					scrollEnabled={true}
 					contentContainerStyle={styles.cardWrapper}
 					data={
-						insuranceType === strings.osago
+						insuranceType === "osago"
 							? insuranceList[0].menuList
 							: insuranceList[1].menuList
 					}
@@ -231,13 +254,6 @@ const CalculateCost = ({
 						/>
 					)}
 				/>
-				<View style={styles.buttonWrapper}>
-					<RoundButton
-						text={strings.refresh}
-						gradient
-						onPress={onRefreshPress}
-					/>
-				</View>
 			</ScrollView>
 			<View style={styles.buttonWrapper}>
 				<RoundButton
@@ -259,9 +275,12 @@ const styles = StyleSheet.create({
 	content: {},
 	top: {
 		padding: 20,
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
 	topText: {
 		fontSize: 16,
+		maxWidth: (2 * deviceWidth) / 3,
 	},
 	cardWrapper: {
 		paddingHorizontal: 25,
@@ -269,11 +288,20 @@ const styles = StyleSheet.create({
 	},
 	buttonWrapper: {
 		paddingHorizontal: CONTAINER_PADDING * 3,
+		backgroundColor: "transparent",
+	},
+	topButtonWrapper: {
+		paddingLeft: (2 * deviceWidth) / 3,
+		paddingRight: 20,
 	},
 });
-const mapStateToProps = ({ insurance: { osago, vzr } }) => ({
+const mapStateToProps = ({
+	insurance: { osago, vzr },
+	user: { language },
+}) => ({
 	osago,
 	vzr,
+	language,
 });
 
 const mapDispatchToProps = {

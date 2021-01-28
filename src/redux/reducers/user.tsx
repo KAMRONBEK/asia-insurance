@@ -11,8 +11,9 @@ import {
 } from "../types";
 import AsyncStorage from "@react-native-community/async-storage";
 import PlainText from "../../components/common/PlainText";
+import reactotron from "../ReactotronConfig";
 
-const initialState = {
+let initialState = {
 	settings: {},
 	//* Backend has user field
 	user: {
@@ -27,13 +28,10 @@ export default (state = initialState, { type, payload }) => {
 	switch (type) {
 		case INIT_USER_STATE:
 			return payload;
-
 		case PROFILE_STORED:
-			console.log("profile", payload);
 			let newProfile = payload;
 			AsyncStorage.setItem("@profile", JSON.stringify(newProfile));
 			return { ...state, profile: newProfile };
-
 		case PROFILE_LOAD_REDUX:
 			return { ...state, profile: payload };
 		case USER_LOADED:

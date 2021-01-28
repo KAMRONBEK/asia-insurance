@@ -1,5 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Image, StyleSheet, View, StatusBar } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+	Dimensions,
+	Image,
+	StyleSheet,
+	View,
+	StatusBar,
+	DevSettings,
+} from "react-native";
 import {
 	Transition,
 	Transitioning,
@@ -7,7 +14,7 @@ import {
 } from "react-native-reanimated";
 //@ts-ignore
 import RoundButton from "../../components/common/RoundButton";
-import { colors, SCREENS } from "../../constants";
+import { colors, Locale, SCREENS } from "../../constants";
 import { strings } from "../../locales/strings";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthStackParams } from "../";
@@ -18,6 +25,7 @@ import {
 	hideLoading,
 	initUserState,
 	profileLoadRedux,
+	setLanguage,
 } from "../../redux/actions";
 import AsyncStorage from "@react-native-community/async-storage";
 import { connect } from "react-redux";
@@ -31,6 +39,13 @@ type Props = {
 	navigation: DefaultNavigationProps;
 };
 
+function useForceUpdate() {
+	let [value, setState] = useState(true);
+	return () => setState(!value);
+}
+
+let count = 0;
+
 const Loader = ({
 	navigation,
 	showLoading,
@@ -39,6 +54,7 @@ const Loader = ({
 	userLoaded,
 	initUserState,
 	profileLoadRedux,
+	setLanguage,
 }: Props) => {
 	useEffect(() => {
 		StatusBar.setBarStyle("dark-content");
@@ -62,6 +78,11 @@ const Loader = ({
 		// showLoading(strings.loading);
 		try {
 			let profile = await AsyncStorage.getItem("@profile");
+			let language = await AsyncStorage.getItem("locale");
+
+			if (!!language) {
+				setLanguage(language);
+			}
 
 			if (!!profile) {
 				let parsedProfile = JSON.parse(profile);
@@ -113,9 +134,13 @@ const Loader = ({
 		}, 1000);
 	}, []);
 
-	let defaultPressHandle = () => {
+	let forceUpdate = useForceUpdate();
+
+	let languageChangeHandle = () => {
+		forceUpdate();
 		navigation.navigate(SCREENS.auth);
 	};
+
 	return (
 		<Transitioning.View
 			// ref={transition}
@@ -129,14 +154,20 @@ const Loader = ({
 				<>
 					<View>
 						<RoundButton
-							onPress={defaultPressHandle}
+							onPress={() => {
+								setLanguage(Locale.ru);
+								languageChangeHandle();
+							}}
 							text={strings.ru}
 							color={colors.lightBlue}
 							fontWeight="500"
 							fontSize={18}
 						/>
 						<RoundButton
-							onPress={defaultPressHandle}
+							onPress={() => {
+								setLanguage(Locale.uz);
+								languageChangeHandle();
+							}}
 							text={strings.uz}
 							color={colors.red}
 							fontWeight="500"
@@ -179,6 +210,7 @@ const mapDispatchToProps = {
 	initUserState,
 	userLoaded,
 	profileLoadRedux,
+	setLanguage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Loader);

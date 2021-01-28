@@ -11,7 +11,6 @@ import {
 	colors,
 	CONTAINER_PADDING,
 	SCREENS,
-	aboutDatas,
 	deviceWidth,
 } from "../../../constants";
 import { strings } from "../../../locales/strings";
@@ -26,6 +25,27 @@ import { connect } from "react-redux";
 
 //example
 const Products = ({ navigation, hideLoading, showLoading, customerId }) => {
+	const aboutDatas = [
+		{
+			insuranceType: "osago", //dont change it
+			desc: strings.osagoInfo,
+			image: images.carHand,
+			firstTitle: strings.insuranceTerms,
+			firstDesc: strings.insuranceTermsInfo,
+			secondTitle: strings.additionalInfo,
+			secondDesc: strings.insuranceAdditionalInfo,
+		},
+		{
+			insuranceType: "vzr", //dont change it
+			desc: strings.vzrInfo,
+			image: images.planeHand,
+			firstTitle: strings.whatWeOffer,
+			firstDesc: strings.whatWeOfferInfo,
+			secondTitle: strings.additionalInfo,
+			secondDesc: strings.foreignInsuranceAdditionalInfo,
+		},
+	];
+
 	let [newsList, setNewsList] = useState([]);
 
 	useEffect(() => {

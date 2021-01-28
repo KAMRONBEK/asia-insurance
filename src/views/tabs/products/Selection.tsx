@@ -40,7 +40,7 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 
 	useEffect(() => {
 		switch (insuranceType) {
-			case strings.osago: {
+			case "osago": {
 				setBoxList(extractNames(osago, "osago"));
 				console.log(typeof extractNames(osago, "osago"));
 				break;
@@ -110,7 +110,7 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 
 	const RenderStep = () => {
 		switch (insuranceType) {
-			case strings.osago: {
+			case "osago": {
 				console.log(insuranceType);
 				switch (title) {
 					case strings.car:
@@ -132,7 +132,7 @@ const Selection = ({ navigation, route, currentStep, osago, vzr }) => {
 				}
 			}
 
-			case strings.vzr: {
+			case "vzr": {
 				console.log(insuranceType);
 				switch (title) {
 					case strings.destinationCountry:

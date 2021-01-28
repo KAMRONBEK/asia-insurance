@@ -25,22 +25,21 @@ import MultiInputWrapper from "../../components/common/MultiInputWrapper";
 import SingleInput from "../../components/common/SingleInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-let loginData = [
-	{
-		title: strings.enterPhone,
-		content: strings.enterPhoneInfo,
-		input: true,
-	},
-	{
-		title: strings.enterCode,
-		content: strings.enterCodeInfo,
-		logo: "password",
-		multiInput: true,
-		countDown: 60,
-	},
-];
-
 export const Login = ({ index, navigation, setPhoneNumber, code, setCode }) => {
+	let loginData = [
+		{
+			title: strings.enterPhone,
+			content: strings.enterPhoneInfo,
+			input: true,
+		},
+		{
+			title: strings.enterCode,
+			content: strings.enterCodeInfo,
+			logo: "password",
+			multiInput: true,
+			countDown: 60,
+		},
+	];
 	let [counter, setCounter] = useState(
 		!!loginData[index].countDown ? loginData[index].countDown : 60
 	);

@@ -28,20 +28,6 @@ import { navigate } from "../../utils/NavigationService";
 import { requests, formData } from "../../api/requests";
 
 //* Our staticly typed intros
-let introsData: Intro[] = [
-	{
-		content: strings.sliderNote1,
-		title: strings.sliderText1,
-		imageSource: images.slider1,
-		imageRatio: 0.92,
-	},
-	{
-		content: strings.sliderNote2,
-		title: strings.sliderText2,
-		imageSource: images.slider2,
-		imageRatio: 1.04,
-	},
-];
 
 const Auth = ({
 	toggleMenu,
@@ -54,6 +40,21 @@ const Auth = ({
 	device_token,
 	profileStored,
 }) => {
+	let introsData: Intro[] = [
+		{
+			content: strings.sliderNote1,
+			title: strings.sliderText1,
+			imageSource: images.slider1,
+			imageRatio: 0.92,
+		},
+		{
+			content: strings.sliderNote2,
+			title: strings.sliderText2,
+			imageSource: images.slider2,
+			imageRatio: 1.04,
+		},
+	];
+
 	useEffect(() => {
 		StatusBar.setBarStyle("dark-content");
 		StatusBar.setBackgroundColor(colors.ultraLightDark);

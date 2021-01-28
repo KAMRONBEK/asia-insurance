@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		marginBottom: 15,
-		
 	},
 	icon: {
 		marginRight: 10,
@@ -93,6 +92,7 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		padding: 0,
 		width: "100%",
+		textTransform: "capitalize",
 	},
 });
 

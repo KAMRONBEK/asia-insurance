@@ -187,7 +187,8 @@ const Header = ({
 									fontWeight: "bold",
 								}}
 							>
-								{strings.step} {step[0]} {strings.of} {step[1]}
+								{/* {strings.step}  */}
+								{step[0]} {strings.of} {step[1]}
 							</Text>
 						</View>
 					)}

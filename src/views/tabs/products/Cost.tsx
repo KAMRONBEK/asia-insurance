@@ -49,7 +49,7 @@ const Cost = ({
 
 	let tariffList;
 	let osagoTariff;
-	if (insuranceType == strings.osago) {
+	if (insuranceType == "osago") {
 		tariffList = extractTariffs(osago, "osago");
 		osagoTariff =
 			tariffList.reduce((prev, current) => {
@@ -117,6 +117,7 @@ const Cost = ({
 				],
 				GroupTypeId: vzr?.tripPurpose?.peopleCount?.id.split(";")[1],
 			});
+
 			console.log(response.data.data, "cost");
 
 			setVzrCost(response.data.data);
@@ -128,7 +129,7 @@ const Cost = ({
 	};
 
 	useEffect(() => {
-		if (insuranceType == strings.osago) {
+		if (insuranceType == "osago") {
 			setCost((osagoTariff * 40000000) / 100);
 			setCostDiscounted(
 				(osagoTariff *
@@ -143,7 +144,7 @@ const Cost = ({
 					100
 			);
 		}
-		if (insuranceType == strings.vzr) {
+		if (insuranceType == "vzr") {
 			setLoading(true);
 			// console.log({
 			// 	PeriodType:
@@ -191,8 +192,33 @@ const Cost = ({
 	// {"endDate": "Invalid date", "startDate": "Invalid date"} tripDuration
 	// {"isMulti": {"id": "48a977e0-c657-4cdb-b0bf-1b9342bfbaa8", "name": "ОДНОКРАТНОЕ ПУТЕШЕСТВИЕ"}, "multiPeriods": undefined, "peopleCount": {"id": "2,50;5f44f84f-bb20-447f-8616-74bd68c6daab", "name": "СЕМЬЯ (ОТ 3 ДО 6 ЧЕЛОВЕК)"}, "purpose": {"id": "1e4e1009-6296-4866-8c6b-03191da79d59", "name": "СПОРТ"}, "selectedPeriod": undefined} tripPurpose
 
+	let docs = [];
+	console.log(vzr.insuredPerson, "insured");
+
+	vzr.insuredPerson &&
+		vzr.insuredPerson.extraPeople &&
+		vzr.insuredPerson.extraPeople.map((item, index) => {
+			item.passport &&
+				item.passport.map((pass, key) => {
+					docs.push(pass);
+				});
+		});
+
+	let allDocs = docs.concat(
+		vzr.insuredPerson &&
+			vzr.insuredPerson.insuredPerson &&
+			vzr.insuredPerson.insuredPerson.passport
+			? vzr.insuredPerson.insuredPerson.passport
+			: []
+	);
+	console.log(allDocs.length, "docs");
+
+	console.log(user);
+
 	let createOrder = async () => {
 		console.log(user);
+
+		let docs = vzr.insuredPerson.passport;
 
 		try {
 			let res = await requests.order.createOrder({
@@ -211,7 +237,7 @@ const Cost = ({
 					ExtraData: JSON.stringify(vzr),
 				},
 				// Docs: checkout.documents,
-				Docs: [],
+				DocsInBytes: docs,
 				// DocsInBytes: checkout.documents,
 			});
 			console.log({
@@ -229,7 +255,10 @@ const Cost = ({
 					EndDate: vzr.tripDuration.endDate,
 					ExtraData: JSON.stringify(vzr),
 				},
-				Docs: [],
+				DocsInBytes:
+					vzr.insuredPerson.passport && vzr.insuredPerson.passport
+						? [vzr.insuredPerson.passport]
+						: [],
 			});
 
 			console.log(res.data);
@@ -264,13 +293,14 @@ const Cost = ({
 			});
 		} catch (error) {
 			console.log(error.response.data, "error in create order VZR");
+			showFlashMessage(error.response.data.message);
 		} finally {
 			hideLoading();
 		}
 	};
 
 	const onButtonPress = () => {
-		if (insuranceType == strings.osago) {
+		if (insuranceType == "osago") {
 			navigation.navigate(SCREENS.checkout);
 		} else {
 			console.log("vzr");
@@ -311,7 +341,7 @@ const Cost = ({
 				<LoadingCost />
 			) : (
 				<View style={styles.content}>
-					{insuranceType == strings.osago ? (
+					{insuranceType == "osago" ? (
 						<>
 							<View>
 								<Text style={styles.title}>
@@ -338,7 +368,7 @@ const Cost = ({
 								<RoundButton
 									onPress={onButtonPress}
 									gradient
-									text={strings.checkout + " ONLINE"}
+									text={strings.checkout}
 								/>
 							</View>
 						</>
@@ -396,7 +426,7 @@ const Cost = ({
 			)}
 			<Image
 				source={
-					insuranceType === strings.osago
+					insuranceType === "osago"
 						? images.handHoldingCard
 						: images.slider1
 				}

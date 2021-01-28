@@ -7,12 +7,13 @@ import { strings } from "../../locales/strings";
 import moment from "moment";
 import { navigate } from "../../utils/NavigationService";
 import { connect } from "react-redux";
-import { setInsurance } from "../../redux/actions";
+import { setInsurance, setCurrentStep } from "../../redux/actions";
 import DateInput from "../common/DateInput";
 
 //adapt to 720 ekran
 
-const PeriodSteps = ({ setInsurance }) => {
+const PeriodSteps = ({ setInsurance, setCurrentStep }) => {
+	setCurrentStep(2);
 	let [beginDate, setBeginDate] = useState(
 		moment(new Date(), "DD.MM.YYYY").format("DD.MM.YYYY")
 	);
@@ -182,6 +183,7 @@ const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = {
 	setInsurance,
+	setCurrentStep,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PeriodSteps);

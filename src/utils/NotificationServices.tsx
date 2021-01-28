@@ -1,14 +1,21 @@
 import PushNotification from "react-native-push-notification";
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import { setDeviceToken } from "../redux/actions";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import { initUserState, setDeviceToken } from "../redux/actions";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export let init = (store) => {
 	// Must be outside of any component LifeCycle (such as `componentDidMount`).
 	PushNotification.configure({
 		// (optional) Called when Token is generated (iOS and Android)
-		onRegister: function (token) {
+		onRegister: async function (token) {
+			let storage = await AsyncStorage.getItem("@user");
+			if (storage) {
+				let parsedStore = JSON.parse(storage);
+				parsedStore.user.device_token = token.token;
+				store.dispatch(initUserState(parsedStore));
+			}
 			console.log("TOKEN:", token);
-			store.dispatch(setDeviceToken(token.token));
+			// store.dispatch(setDeviceToken(token.token));
 		},
 
 		// (required) Called when a remote is received or opened, or local notification is opened

@@ -71,6 +71,11 @@ enum SCREENS {
 	insuredEventPage = "InsuredEventPage",
 }
 
+enum Locale {
+	uz = "uz",
+	ru = "ru",
+}
+
 export const deviceWidth = Dimensions.get("window").width;
 export const deviceHeight = Dimensions.get("window").height;
 
@@ -82,12 +87,12 @@ export const BOX_HEIGHT = 130;
 export const LATITUDE_DELTA = 0.01;
 export const LONGITUDE_DELTA = 0.01;
 
-export { Icons, colors, SCREENS };
+export { Icons, colors, SCREENS, Locale };
 
 //insurance-menus
 export const aboutDatas = [
 	{
-		insuranceType: strings.osago, //dont change it
+		insuranceType: "osago", //dont change it
 		desc: strings.osagoInfo,
 		image: images.carHand,
 		firstTitle: strings.insuranceTerms,
@@ -96,7 +101,7 @@ export const aboutDatas = [
 		secondDesc: strings.insuranceAdditionalInfo,
 	},
 	{
-		insuranceType: strings.vzr, //dont change it
+		insuranceType: "vzr", //dont change it
 		desc: strings.vzrInfo,
 		image: images.planeHand,
 		firstTitle: strings.whatWeOffer,

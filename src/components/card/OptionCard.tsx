@@ -57,8 +57,7 @@ const OptionCard = ({
 							navigation.navigate(SCREENS.selection, {
 								insuranceType: insuranceType,
 								title: title,
-								stepCount:
-									insuranceType == strings.osago ? 5 : 4,
+								stepCount: insuranceType == "osago" ? 5 : 4,
 							});
 					  }
 					: undefined

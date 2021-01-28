@@ -37,12 +37,15 @@ import moment from "moment";
 import CustomSwitch from "../common/CustomSwitch";
 import DocUploadCard from "../card/DocUploadCard";
 import ImageUploadCard from "../card/ImageUploadCard";
+import DocumentUploadCard from "../card/DocumentUploadCard";
 
 const InsuredPeopleSteps = ({
 	hideSelectionLoading,
 	setInsurance,
 	peopleCount,
+	setCurrentStep,
 }) => {
+	setCurrentStep(4);
 	//insured person data
 
 	useEffect(() => {
@@ -59,13 +62,18 @@ const InsuredPeopleSteps = ({
 		let [midName, setMidName] = useState();
 		let [lastName, setLastName] = useState();
 		let [birthDate, setBirthDate] = useState();
-		let [passport, setPassport] = useState();
+		let [passport, setPassport] = useState([]);
 		let [isTraveller, setIsTraveller] = useState(false);
+		let [secondPhone, setSecondPhone] = useState(state);
 		// let [country, setCountry] = useState();
 		// let [region, setRegion] = useState();
 
 		let [countryList, setCountryList] = useState([]);
 		let [regionList, setRegionList] = useState([]);
+
+		useEffect(() => {
+			console.log(passport, "passport");
+		}, [passport]);
 
 		const onNextPress = (item) => {
 			if (
@@ -79,9 +87,9 @@ const InsuredPeopleSteps = ({
 							name: name,
 							midName: midName,
 							lastName: lastName,
-							// country: country,
-							// region: region,
 							birthDate: birthDate,
+							passport: passport,
+							secondPhone: secondPhone,
 						},
 					},
 				});
@@ -95,9 +103,9 @@ const InsuredPeopleSteps = ({
 					name: name,
 					midName: midName,
 					lastName: lastName,
-					// country: country,
-					// region: region,
 					birthDate: birthDate,
+					passport: passport,
+					secondPhone: secondPhone,
 				});
 				setIndex(index + 1);
 			}
@@ -157,27 +165,31 @@ const InsuredPeopleSteps = ({
 					>
 						<Input
 							placeholder={strings.lastName}
-							value={state.lastName}
+							value={lastName}
 							setValue={setLastName}
 						/>
 						<Input
 							placeholder={strings.firstName}
-							value={state.firstName}
+							value={name}
 							setValue={setName}
 						/>
 						<Input
 							placeholder={strings.midName}
-							value={state.midName}
+							value={midName}
 							setValue={setMidName}
+						/>
+						<Input
+							placeholder={strings.secondPhone}
+							value={secondPhone}
+							setValue={setSecondPhone}
 						/>
 						<DateInput
 							setValue={setBirthDate}
 							value={birthDate}
 							placeholder={strings.pickBirthDate}
 						/>
-						<ImageUploadCard
+						<DocumentUploadCard
 							name={strings.passport}
-							setSingleDocument={setPassport}
 							data={passport}
 							setData={setPassport}
 							docType={8}
@@ -415,9 +427,9 @@ const InsuredPeopleSteps = ({
 										}}
 										placeholder={strings.pickBirthDate}
 									/>
-									<ImageUploadCard
+									<DocumentUploadCard
 										name={strings.passport}
-										setSingleDocument={(data) => {
+										setData={(data) => {
 											const newValues = {
 												...extraPeopleData[index],
 												passport: data,

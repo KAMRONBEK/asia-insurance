@@ -9,6 +9,7 @@ import {
 	PROFILE_LOADED,
 	PROFILE_STORED,
 	PROFILE_LOAD_REDUX,
+	SET_LANGUAGE,
 } from "../types";
 
 export const initUserState = (payload) => ({
@@ -53,5 +54,10 @@ export const setPinCode = (payload) => ({
 
 export const setDeviceToken = (payload) => ({
 	type: SET_DEVICE_TOKEN,
+	payload,
+});
+
+export const setLanguage = (payload) => ({
+	type: SET_LANGUAGE,
 	payload,
 });

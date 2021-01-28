@@ -4,6 +4,7 @@ export const USER_LOADED = "USER_LOADED";
 export const CUSTOMER_LOADED = "CUSTOMER_LOADED";
 export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
 export const SET_PIN_CODE = "SET_PIN_CODE";
+export const SET_LANGUAGE = "SET_LANGUAGE";
 
 export const PROFILE_STORED = "PROFILE_STORED";
 export const PROFILE_LOAD_REDUX = "PROFILE_LOAD_REDUX";

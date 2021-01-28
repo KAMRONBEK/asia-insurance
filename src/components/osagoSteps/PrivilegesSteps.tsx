@@ -133,7 +133,7 @@ const PrivilegesSteps = ({
 					title={
 						strings.doYouHaveResidence +
 						" " +
-						strings.uzbekistan +
+						// strings.uzbekistan +
 						"?"
 					}
 				/>

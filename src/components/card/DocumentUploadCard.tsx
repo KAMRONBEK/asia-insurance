@@ -21,20 +21,19 @@ import { formData, constructFileFromUri } from "../../api/requests";
 import { connect } from "react-redux";
 import { isEmpty } from "../../utils/functions";
 
-interface ImageUploadCardProps {
+interface DocumentUploadCardProps {
 	name: string;
 	data: never[];
 	setData: any;
 	docType: number;
 }
 
-const ImageUploadCard = ({
+const DocumentUploadCard = ({
 	name,
 	data,
 	setData,
 	docType,
-	setSingleDocument,
-}: ImageUploadCardProps) => {
+}: DocumentUploadCardProps) => {
 	let [images, setImages] = useState([]);
 	let [fileName, setFileName] = useState(name);
 
@@ -46,13 +45,22 @@ const ImageUploadCard = ({
 			.then((pictures) => {
 				setImages([...pictures, ...images]);
 				pictures.map((picture) => {
-					setData([
-						...data,
-						{
-							DocumentTypeEnum: docType,
-							File: picture.data,
-						},
-					]);
+					if (!!data && data.length !== 0) {
+						setData([
+							...data,
+							{
+								DocumentTypeEnum: docType,
+								File: picture.data,
+							},
+						]);
+					} else {
+						setData([
+							{
+								DocumentTypeEnum: docType,
+								File: picture.data,
+							},
+						]);
+					}
 				});
 			})
 			.catch((err) => console.warn(err));
@@ -64,14 +72,23 @@ const ImageUploadCard = ({
 			multiple: true,
 		})
 			.then((picture) => {
-				setImages([picture, ...images]);
-				setData([
-					...data,
-					{
-						DocumentTypeEnum: docType,
-						File: picture.data,
-					},
-				]);
+				setImages([...images, picture]);
+				if (!!data && data.length !== 0) {
+					setData([
+						...data,
+						{
+							DocumentTypeEnum: docType,
+							File: picture.data,
+						},
+					]);
+				} else {
+					setData([
+						{
+							DocumentTypeEnum: docType,
+							File: picture.data,
+						},
+					]);
+				}
 			})
 			.catch((err) => console.warn(err));
 	};
@@ -173,4 +190,4 @@ const mapStateToProps = ({ checkout }) => ({});
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImageUploadCard);
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentUploadCard);
