@@ -2,6 +2,7 @@ import LocalizedStrings from "react-native-localization";
 
 export let strings = new LocalizedStrings({
 	ru: {
+		soonAvailable: "Скоро будет доступно",
 		resetData: "Сбросить",
 		individualOrGroup: "Индивидуальное или групповое",
 		specifyTripPurpose: "Указание целей поездки",
@@ -263,6 +264,7 @@ export let strings = new LocalizedStrings({
 		secondPhone: "ДОПОЛНИТЕЛЬНЫЙ ТЕЛЕФОН",
 	},
 	uz: {
+		soonAvailable: "Tez orada amalda",
 		resetData: "O'chirish",
 		individualOrGroup: "Bir kishi yoki guruh",
 		specifyTripPurpose: "Sayohatning maqsadini kiriting",

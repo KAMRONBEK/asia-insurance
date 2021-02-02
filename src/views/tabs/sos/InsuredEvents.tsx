@@ -5,6 +5,7 @@ import { requests } from "../../../api/requests";
 import PlainCard from "../../../components/card/PlainCard";
 import EventCard from "../../../components/common/EventCard";
 import { colors, CONTAINER_PADDING, Icons } from "../../../constants";
+import { strings } from "../../../locales/strings";
 import { init } from "../../../utils/NotificationServices";
 
 const InsuredEvents = ({ navigation }) => {
@@ -34,7 +35,7 @@ const InsuredEvents = ({ navigation }) => {
 						alignItems: "center",
 					}}
 				>
-					<Text style={styles.grayText}>скоро доступно</Text>
+					<Text style={styles.grayText}>{strings.soonAvailable}</Text>
 				</View>
 			) : (
 				// <View style={styles.content}>

@@ -155,21 +155,21 @@ const Loader = ({
 					<View>
 						<RoundButton
 							onPress={() => {
-								setLanguage(Locale.ru);
-								languageChangeHandle();
-							}}
-							text={strings.ru}
-							color={colors.lightBlue}
-							fontWeight="500"
-							fontSize={18}
-						/>
-						<RoundButton
-							onPress={() => {
 								setLanguage(Locale.uz);
 								languageChangeHandle();
 							}}
 							text={strings.uz}
 							color={colors.red}
+							fontWeight="500"
+							fontSize={18}
+						/>
+						<RoundButton
+							onPress={() => {
+								setLanguage(Locale.ru);
+								languageChangeHandle();
+							}}
+							text={strings.ru}
+							color={colors.lightBlue}
 							fontWeight="500"
 							fontSize={18}
 						/>
