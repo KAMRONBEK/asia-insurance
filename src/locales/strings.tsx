@@ -261,7 +261,8 @@ export let strings = new LocalizedStrings({
 		areYouDriverOfCar: "ВЫ ЯВЛЯЕТЕСЬ ВОДИТЕЛЕМ ТС?",
 		ownerPassport: "ПАСПОРТ ВЛАДЕЛЬЦА ТС (2 стороны)",
 		techPassport: "ТЕХПАСПОРТ ТС (2 стороны)",
-		secondPhone: "ДОПОЛНИТЕЛЬНЫЙ ТЕЛЕФОН",
+		secondPhone: "ДОПОЛНИТЕЛЬНЫЙ ТЕЛЕФОН +998",
+		inputTypeWarning: "Заполнять английскими буквами, как в документе",
 	},
 	uz: {
 		soonAvailable: "Tez orada amalda",
@@ -524,6 +525,8 @@ export let strings = new LocalizedStrings({
 		areYouDriverOfCar: "SIZ TRANSPORT VOSITASINING HAYDOVCHISIMISIZ?",
 		ownerPassport: "TRANSPORT VOSITASI EGASINING PASPORTI (2 tomoni)",
 		techPassport: "TRANSPORT VOSITASINING TEXPASPORTI (2 tomoni)",
-		secondPhone: "Qo'shimcha raqam",
+		secondPhone: "Qo'shimcha raqam +998",
+		inputTypeWarning:
+			"Hujjatda bo'lgani kabi inglizcha harflarda to'ldiring",
 	},
 });

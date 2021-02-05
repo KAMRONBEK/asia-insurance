@@ -217,6 +217,9 @@ const Checkout = ({
 						<Text style={[styles.bold, styles.textCenter]}>
 							{strings.pleaseFillPersonalData}
 						</Text>
+						<Text style={styles.text}>
+							{strings.inputTypeWarning}
+						</Text>
 						{/* <Input placeholder={strings.pinfl} setValue={setPin} /> */}
 						<Input
 							placeholder={strings.lastName}
@@ -545,6 +548,9 @@ const Checkout = ({
 						<Text style={[styles.bold, styles.textCenter]}>
 							{strings.pleaseFillPersonalData}
 						</Text>
+						<Text style={styles.text}>
+							{strings.inputTypeWarning}
+						</Text>
 						<Select
 							placeholder={strings.country}
 							options={countryList}
@@ -590,8 +596,7 @@ const Checkout = ({
 							!region ||
 							!district ||
 							!street ||
-							!house ||
-							!phone
+							!house
 						}
 					/>
 				</View>
@@ -626,6 +631,9 @@ const Checkout = ({
 					<View style={styles.shippingContent}>
 						<Text style={[styles.bold, styles.textCenter]}>
 							{strings.pleaseFillShippingData}
+						</Text>
+						<Text style={styles.text}>
+							{strings.inputTypeWarning}
 						</Text>
 						<PlainText
 							radio
@@ -1089,6 +1097,11 @@ const styles = StyleSheet.create({
 	confirmation: {
 		flex: 1,
 		padding: CONTAINER_PADDING,
+	},
+	text: {
+		color: colors.grayText,
+		fontSize: 11,
+		paddingBottom: 10,
 	},
 });
 

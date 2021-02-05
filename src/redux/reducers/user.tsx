@@ -8,10 +8,13 @@ import {
 	PROFILE_LOADED,
 	PROFILE_STORED,
 	PROFILE_LOAD_REDUX,
+	SET_LANGUAGE,
 } from "../types";
 import AsyncStorage from "@react-native-community/async-storage";
 import PlainText from "../../components/common/PlainText";
 import reactotron from "../ReactotronConfig";
+import { Locale } from "../../constants";
+import { strings } from "../../locales/strings";
 
 let initialState = {
 	settings: {},
@@ -22,6 +25,7 @@ let initialState = {
 	pinCode: "",
 	customerId: "",
 	profile: {},
+	language: Locale.ru,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -52,6 +56,9 @@ export default (state = initialState, { type, payload }) => {
 			let newStatePin = { ...state, pinCode: payload };
 			AsyncStorage.setItem("@user", JSON.stringify(newStatePin));
 			return newStatePin;
+		case SET_LANGUAGE:
+			strings.setLanguage(payload);
+			return { ...state, language: payload };
 		default:
 			return state;
 	}
